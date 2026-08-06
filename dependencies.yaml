@@ -1,0 +1,26 @@
+# vcstool 依赖清单：克隆除 multimap_nav_simulation 之外的所有源码仓库
+#
+# 使用方式：
+#   vcs import src < dependencies.yaml
+#
+# 说明：
+#   - multimap_nav_simulation 为本项目本体，不在此清单中。
+#   - octomap_mapping 的构建依赖 octomap_ros 已由 apt 提供
+#     (ros-humble-octomap-ros)，无需在此克隆。
+repositories:
+  FASTLIO2_ROS2:
+    type: git
+    url: https://github.com/liangheming/FASTLIO2_ROS2.git
+    version: main
+  livox_laser_simulation_RO2:
+    type: git
+    url: https://github.com/stm32f303ret6/livox_laser_simulation_RO2.git
+    version: main
+  livox_ros_driver2:
+    type: git
+    url: https://github.com/Livox-SDK/livox_ros_driver2.git
+    version: master
+  octomap_mapping:
+    type: git
+    url: https://github.com/OctoMap/octomap_mapping.git
+    version: ros2
