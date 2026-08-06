@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================
+       imu - 6轴 IMU 传感器 (Gazebo IMU 插件)
+       发布话题: /livox/imu (sensor_msgs/Imu)
+       宏参数:
+         parent  - 父 link
+         xyz     - 安装位置偏移
+         rpy     - 安装姿态
+  ==================================================================== -->
+
+  <xacro:property name="imu_mass"   value="0.05"/>
+  <xacro:property name="imu_size"   value="0.03"/>  <!-- 小方块边长 -->
+  <xacro:property name="imu_hz"     value="200.0"/> <!-- IMU 更新频率 -->
+
+  <xacro:macro name="imu" params="parent:=base_link xyz:='0 0 0.3' rpy:='0 0 0'">
+    <link name="imu_link">
+      <inertial>
+        <mass value="${imu_mass}"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia
+          ixx="${imu_mass * imu_size * imu_size / 6.0}"
+          iyy="${imu_mass * imu_size * imu_size / 6.0}"
+          izz="${imu_mass * imu_size * imu_size / 6.0}"
+          ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${imu_size} ${imu_size} ${imu_size}"/>
+        </geometry>
+        <material name="red">
+          <color rgba="0.8 0.1 0.1 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${imu_size} ${imu_size} ${imu_size}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="imu_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="imu_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+    <!-- Gazebo IMU 传感器插件 -->
+    <gazebo reference="imu_link">
+      <sensor name="imu_sensor" type="imu">
+        <always_on>true</always_on>
+        <pose>0 0 0 0 0 0</pose>
+        <update_rate>${imu_hz}</update_rate>
+
+        <imu>
+          <angular_velocity>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.0003</stddev>  <!-- ~0.017°/s -->
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.0003</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.0003</stddev>
+              </noise>
+            </z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.01</stddev>   <!-- ~0.01 m/s² -->
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.01</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>0.01</stddev>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+
+        <plugin name="imu_controller" filename="libgazebo_ros_imu_sensor.so">
+          <ros>
+            <!-- 话题适配建图功能包: /livox/imu -->
+            <remapping>~/out:=/livox/imu</remapping>
+          </ros>
+          <frame_name>imu_link</frame_name>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

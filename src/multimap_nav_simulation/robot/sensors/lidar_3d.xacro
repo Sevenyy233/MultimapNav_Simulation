@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================
+       lidar_3d - 多线 3D 激光雷达 (Gazebo ray sensor 插件)
+       仿真 Velodyne VLP-16 风格多线雷达
+       发布话题: /livox/mid360_PointCloud2 (sensor_msgs/PointCloud2)
+       与 octomap_mapping.launch.py 默认输入 cloud_in 一致，
+       因此替换传感器后配置文件和启动文件无需修改。
+       宏参数:
+         parent  - 父 link
+         xyz     - 安装位置偏移
+         rpy     - 安装姿态
+  ==================================================================== -->
+
+  <xacro:property name="lidar_mass"     value="0.83"/>
+  <xacro:property name="lidar_radius"   value="0.052"/>
+  <xacro:property name="lidar_height"   value="0.072"/>
+
+  <!-- 激光雷达扫描参数 -->
+  <xacro:property name="lidar_samples"        value="1800"/>   <!-- 每圈采样数 -->
+  <xacro:property name="lidar_min_angle"      value="-3.14159"/> <!-- 水平起始角 (rad) -->
+  <xacro:property name="lidar_max_angle"      value="3.14159"/>  <!-- 水平终止角 (rad) -->
+  <xacro:property name="lidar_min_range"      value="0.1"/>      <!-- 最小测距 (m) -->
+  <xacro:property name="lidar_max_range"      value="10.0"/>     <!-- 最大测距 (m)，与 octomap max_range 一致 -->
+  <xacro:property name="lidar_range_res"      value="0.02"/>     <!-- 距离分辨率 -->
+  <xacro:property name="lidar_hz"             value="100.0"/>     <!-- 扫描频率 (Hz) -->
+  <xacro:property name="lidar_vert_rays"      value="16"/>       <!-- 垂直线数 -->
+  <xacro:property name="lidar_vert_min_angle" value="-0.2618"/>  <!-- 垂直最小角 -15° -->
+  <xacro:property name="lidar_vert_max_angle" value="0.2618"/>   <!-- 垂直最大角 +15° -->
+
+  <xacro:macro name="lidar_3d" params="parent:=base_link xyz:='0 0 0' rpy:='0 0 0'">
+    <link name="lidar_link">
+      <inertial>
+        <mass value="${lidar_mass}"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia
+          ixx="${lidar_mass * (3.0 * lidar_radius * lidar_radius + lidar_height * lidar_height) / 12.0}"
+          iyy="${lidar_mass * (3.0 * lidar_radius * lidar_radius + lidar_height * lidar_height) / 12.0}"
+          izz="${lidar_mass * lidar_radius * lidar_radius / 2.0}"
+          ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${lidar_radius}" length="${lidar_height}"/>
+        </geometry>
+        <material name="silver">
+          <color rgba="0.7 0.7 0.75 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${lidar_radius}" length="${lidar_height}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="lidar_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="lidar_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+    <!-- Gazebo 多线激光雷达插件 -->
+    <gazebo reference="lidar_link">
+      <sensor name="lidar_sensor" type="ray">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>false</visualize>
+        <update_rate>${lidar_hz}</update_rate>
+
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>${lidar_samples}</samples>
+              <resolution>1</resolution>
+              <min_angle>${lidar_min_angle}</min_angle>
+              <max_angle>${lidar_max_angle}</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>${lidar_vert_rays}</samples>
+              <resolution>1</resolution>
+              <min_angle>${lidar_vert_min_angle}</min_angle>
+              <max_angle>${lidar_vert_max_angle}</max_angle>
+            </vertical>
+          </scan>
+          <range>
+            <min>${lidar_min_range}</min>
+            <max>${lidar_max_range}</max>
+            <resolution>${lidar_range_res}</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.005</stddev>
+          </noise>
+        </ray>
+
+        <plugin name="lidar_controller" filename="libgazebo_ros_ray_sensor.so">
+          <ros>
+            <!-- 直接发布到 octomap 建图默认输入话题，无需改动启动文件 -->
+            <remapping>~/out:=/livox/lidar_PointCloud2</remapping>
+          </ros>
+          <output_type>sensor_msgs/PointCloud2</output_type>
+          <frame_name>lidar_link</frame_name>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

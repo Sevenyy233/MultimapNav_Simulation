@@ -12,9 +12,6 @@ find_package(rclcpp REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(geometry_msgs REQUIRED)
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
 
 add_executable(odom_tf_broadcaster src/odom_tf_broadcaster.cpp)
 ament_target_dependencies(odom_tf_broadcaster rclcpp nav_msgs tf2_ros geometry_msgs)
@@ -23,7 +20,7 @@ install(TARGETS odom_tf_broadcaster
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY config launch meshes robot worlds
+install(DIRECTORY config launch meshes robot rviz worlds
   DESTINATION share/${PROJECT_NAME}
 )
 

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="diff_drive_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================
+       robot.xacro — 差速驱动机器人顶层组装文件
+
+       部件文件:
+         part/chassis.xacro       — 底盘（圆柱体）
+         part/drive_wheel.xacro   — 驱动轮
+
+       驱动/控制:
+         drivers/diff_drive.xacro — ros2_control + transmission
+
+       传感器:
+         sensors/avia.xacro      — Livox Avia 固态激光雷达 → /livox/lidar (引用 ros2_livox_simulation)
+         sensors/imu.xacro        — IMU → /livox/imu
+         sensors/lidar_3d.xacro   — Gazebo 3D 多线雷达(ray) → /livox/mid360_PointCloud2
+                                    (备用方案，当前建图使用 Avia)
+
+       控制话题:
+         cmd_vel  → diff_drive_controller 订阅
+         odom     → diff_drive_controller 发布
+  ==================================================================== -->
+
+  <!-- ========================== 引入子文件 ========================== -->
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/part/chassis.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/part/drive_wheel.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/part/caster_wheel.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/drivers/diff_drive.xacro"/>
+
+  <xacro:include filename="$(find ros2_livox_simulation)/urdf/avia.xacro"/>
+  <xacro:include filename="$(find ros2_livox_simulation)/urdf/mid360.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/lidar_3d.xacro"/>
+ 
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/imu.xacro"/>
+
+  <!-- ========================== 底盘 ========================== -->
+  <!-- base_link 为根坐标系；离地高度由轮子/万向球的 joint 偏移 (radius - ground_clearance) 决定 -->
+  <xacro:chassis/>
+
+  <!-- ========================== 驱动轮 ========================== -->
+  <!-- 左驱动轮: y=+0.69 (wheel_separation/2) -->
+  <xacro:drive_wheel prefix="left"  y_pos="${wheel_separation / 2.0}" parent="base_link"/>
+  <!-- 右驱动轮: y=-0.69 -->
+  <xacro:drive_wheel prefix="right" y_pos="${-wheel_separation / 2.0}" parent="base_link"/>
+
+  <!-- ========================== 万向轮 ========================== -->
+  <!-- 前万向轮 -->
+  <xacro:caster_wheel prefix="front" x_pos="0.45" y_pos="0.0" parent="base_link"/>
+  <!-- 后万向轮 -->
+  <xacro:caster_wheel prefix="rear" x_pos="-0.45" y_pos="0.0" parent="base_link"/>
+
+  <!-- ========================== Livox Mid-360 激光雷达（备用方案，默认不启用） ========================== -->
+  <!--
+  <xacro:mid360 name="mid360" parent="base_link" topic="livox/mid360">
+    <origin xyz="0 0 0.57" rpy="0 0 0"/>
+  </xacro:mid360>
+  -->
+
+  <!-- ========================== Gazebo 3D 多线激光雷达（暂时注释） ========================== -->
+  <!-- Gazebo ray 传感器（VLP-16 风格），16 离散线会在平地上留下圆环痕迹，
+       当前改用 Avia 密集扫描。 -->
+  <!-- <xacro:lidar_3d parent="base_link" xyz="0 0 0.57" rpy="0 0 0"/> -->
+ 
+
+  <!-- ========================== Livox Avia 固态激光雷达 ========================== -->
+  <!-- 前装：x=0.84, z=0.57（原 0.28/0.19 的 3 倍），并向下倾斜约 20°（pitch=0.35 rad）
+       以改善近地地面覆盖。由于 Avia 仅覆盖前方约 70° 扇区，且传感器安装在
+       base_link 前侧，RViz 中看到的 octomap/点云天然会更偏向机器人前半部。
+       这属于传感器安装位与视场造成的视觉效果，不是 TF 错位。
+       注意：倾斜后 FAST-LIO 外参 r_il 需与 avia_lio.yaml 保持一致。 -->
+  <xacro:avia name="avia" parent="base_link" topic="livox/lidar">
+    <origin xyz="0.84 0 0.57" rpy="0 0.35 0"/>
+  </xacro:avia>
+
+  <!-- ========================== IMU ========================== -->
+  <!-- 安装在底盘内部中心 -->
+  <xacro:imu parent="base_link" xyz="0 0 ${0.18}" rpy="0 0 0"/>
+
+  <!-- ========================== Gazebo P3D 地面真值里程计 ========================== -->
+  <!-- gazebo_ros_p3d 插件直接读取 Gazebo 中 base_link 的真实位姿（世界系），
+       发布 nav_msgs/Odometry 到 /odom（地面真值，比轮式里程计准确），
+       由 odom_tf_broadcaster 转成 odom → base_link TF（见 gazebo_sim.launch.py）。
+       frame_name 缺省为 world（odom 消息 header.frame_id=world），
+       仿真中 odom 原点与 world 原点重合，广播节点负责映射到 odom 系。 -->
+  <gazebo>
+    <plugin name="gazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
+      <ros>
+        <!-- 插件默认话题即 odom（解析为 /odom），显式声明便于阅读 -->
+        <remapping>odom:=/odom</remapping>
+      </ros>
+      <body_name>base_link</body_name>
+      <update_rate>100</update_rate>
+    </plugin>
+  </gazebo>
+
+  <!-- ========================== ros2_control + 传动 ========================== -->
+  <!-- 驱动轮 transmission -->
+  <xacro:wheel_transmission joint_name="left_wheel_joint"/>
+  <xacro:wheel_transmission joint_name="right_wheel_joint"/>
+
+  <!-- ros2_control 硬件接口 -->
+  <xacro:diff_drive_ros2_control/>
+
+  <!-- gazebo_ros2_control 插件 -->
+  <xacro:gazebo_ros2_control_plugin/>
+
+</robot>

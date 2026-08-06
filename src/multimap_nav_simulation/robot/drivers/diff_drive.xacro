@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================
+       diff_drive - ros2_control 差速驱动配置
+       包含:
+         1. 驱动轮 transmission（传动系统）
+         2. ros2_control 硬件接口定义（GazeboSystem）
+         3. gazebo_ros2_control 插件加载
+  ==================================================================== -->
+
+  <xacro:property name="wheel_separation" value="1.38"/>  <!-- 左右轮距（原 0.46m × 3） -->
+  <xacro:property name="wheel_radius"     value="0.225"/> <!-- 驱动轮半径（原 0.075m × 3） -->
+
+  <!-- ================================================================
+       驱动轮传动定义 (transmission)
+       将 joint 的 velocity 接口映射到执行器
+  ==================================================================== -->
+  <xacro:macro name="wheel_transmission" params="joint_name">
+    <transmission name="${joint_name}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${joint_name}_motor">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <!-- ================================================================
+       ros2_control 硬件接口
+       声明需要被 controller_manager 管理的 joint 和接口类型
+  ==================================================================== -->
+  <xacro:macro name="diff_drive_ros2_control" params="">
+    <ros2_control name="GazeboSystem" type="system">
+      <hardware>
+        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      </hardware>
+
+      <joint name="left_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="right_wheel_joint">
+        <command_interface name="velocity"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
+  </xacro:macro>
+
+  <!-- ================================================================
+       Gazebo ros2_control 插件
+       由 Gazebo 在机器人生成后创建 controller_manager，并加载控制器参数
+  ==================================================================== -->
+  <xacro:macro name="gazebo_ros2_control_plugin" params="">
+    <gazebo>
+      <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+        <parameters>$(find multimap_nav_simulation)/config/diff_drive_controller.yaml</parameters>
+        <ros>
+          <remapping>/diff_drive_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
+          <!-- /odom 已由 gazebo_ros_p3d 地面真值占用（见 robot.xacro），
+               轮式里程计消息改到 /odom_diff_drive 避免双发布 -->
+          <remapping>/diff_drive_controller/odom:=/odom_diff_drive</remapping>
+        </ros>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================
+       drive_wheel - 差速驱动轮
+       半径 0.225m，宽度 0.12m   ← 原尺寸的 3 倍
+       圆柱体默认轴沿 Z，需要旋转使轴沿 Y（车宽方向）
+       宏参数:
+         prefix   - 名称前缀 (left / right)
+         y_pos    - Y 方向位置 (+左, -右)
+         parent   - 父 link 名称
+  ==================================================================== -->
+
+  <xacro:property name="wheel_radius"  value="0.225"/>
+  <xacro:property name="wheel_length"  value="0.12"/>
+  <xacro:property name="wheel_mass"    value="13.5"/>  <!-- 0.5kg × 27 -->
+  <xacro:property name="wheel_x_pos"   value="0.0"/>   <!-- 驱动轮 X 位置（与质心对齐） -->
+  <xacro:property name="ground_clearance" value="0.12"/>
+
+  <xacro:macro name="drive_wheel" params="prefix y_pos parent:=base_link">
+    <!-- joint: 绕 Y 轴旋转 -->
+    <joint name="${prefix}_wheel_joint" type="continuous">
+      <parent link="${parent}"/>
+      <child link="${prefix}_wheel_link"/>
+      <origin xyz="${wheel_x_pos} ${y_pos} ${wheel_radius - ground_clearance}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="100" velocity="100"/>
+      <dynamics damping="0.1" friction="0.01"/>
+    </joint>
+
+    <link name="${prefix}_wheel_link">
+      <inertial>
+        <mass value="${wheel_mass}"/>
+        <inertia
+          ixx="${wheel_mass * wheel_radius * wheel_radius / 2.0}"
+          iyy="${wheel_mass * (3.0 * wheel_radius * wheel_radius + wheel_length * wheel_length) / 12.0}"
+          izz="${wheel_mass * (3.0 * wheel_radius * wheel_radius + wheel_length * wheel_length) / 12.0}"
+          ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2.0} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_length}"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0.1 0.1 0.1 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2.0} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_length}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Gazebo 物理属性 -->
+    <gazebo reference="${prefix}_wheel_link">
+      <mu1>1.0</mu1>       <!-- 纵向摩擦 -->
+      <mu2>1.0</mu2>       <!-- 横向摩擦 -->
+      <kp>1e7</kp>
+      <kd>1.0</kd>
+      <minDepth>0.001</minDepth>
+      <material>Gazebo/DarkGrey</material>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

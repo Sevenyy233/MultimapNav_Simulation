@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================
+       chassis - 差速驱动机器人底盘（圆柱体）
+       半径: 0.60m (直径 1.20m)，高度: 0.36m   ← 原尺寸的 3 倍
+       base_link 为根坐标系，底盘底面距地 ground_clearance (0.12m)，
+       离地高度由轮子/万向球 joint 的 (radius - ground_clearance) 偏移保证
+  ==================================================================== -->
+
+  <xacro:property name="chassis_radius" value="0.6"/>
+  <xacro:property name="chassis_height" value="0.36"/>
+  <xacro:property name="chassis_mass"   value="216.0"/>  <!-- 8kg × 3³=27 → 216kg -->
+
+  <!-- 底盘质心在圆柱几何中心 -->
+  <xacro:macro name="chassis">
+    <link name="base_link">
+      <inertial>
+        <origin xyz="0 0 ${chassis_height / 2.0}" rpy="0 0 0"/>
+        <mass value="${chassis_mass}"/>
+        <!-- 实心圆柱绕质心惯性矩:
+             ixx = iyy = m/12 * (3*r² + h²)
+             izz = m/2 * r² -->
+        <inertia
+          ixx="${chassis_mass / 12.0 * (3.0 * chassis_radius * chassis_radius + chassis_height * chassis_height)}"
+          iyy="${chassis_mass / 12.0 * (3.0 * chassis_radius * chassis_radius + chassis_height * chassis_height)}"
+          izz="${chassis_mass / 2.0 * chassis_radius * chassis_radius}"
+          ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 ${chassis_height / 2.0}" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${chassis_radius}" length="${chassis_height}"/>
+        </geometry>
+        <material name="dark_grey">
+          <color rgba="0.3 0.3 0.35 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 ${chassis_height / 2.0}" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${chassis_radius}" length="${chassis_height}"/>
+        </geometry>
+      </collision>
+    </link>
+  </xacro:macro>
+
+</robot>

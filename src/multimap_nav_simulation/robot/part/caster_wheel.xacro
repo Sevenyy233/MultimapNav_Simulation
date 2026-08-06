@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================
+       caster_wheel - 万向轮（从动支撑轮）
+       将其改为球体，以保证全向顺滑支撑，半径 0.12m   ← 原尺寸的 3 倍
+       放置在底盘后方两侧，支撑机器人不倾倒
+       宏参数:
+         prefix   - 名称前缀 (front_left / front_right)
+         x_pos    - X 方向位置
+         y_pos    - Y 方向位置 (+左, -右)
+         parent   - 父 link 名称
+  ==================================================================== -->
+
+  <xacro:property name="caster_radius"  value="0.12"/>
+  <xacro:property name="caster_mass"    value="4.05"/>  <!-- 0.15kg × 27 -->
+  <xacro:property name="ground_clearance" value="0.12"/>
+
+  <xacro:macro name="caster_wheel" params="prefix x_pos y_pos parent:=base_link">
+    <!-- 万向球 joint: fixed（使用0摩擦力滑动模拟万向） -->
+    <joint name="${prefix}_caster_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}_caster_link"/>
+      <origin xyz="${x_pos} ${y_pos} ${caster_radius - ground_clearance}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="${prefix}_caster_link">
+      <inertial>
+        <mass value="${caster_mass}"/>
+        <!-- 实心球惯性张量: 2/5 * m * r^2 -->
+        <inertia
+          ixx="${2.0 * caster_mass * caster_radius * caster_radius / 5.0}"
+          iyy="${2.0 * caster_mass * caster_radius * caster_radius / 5.0}"
+          izz="${2.0 * caster_mass * caster_radius * caster_radius / 5.0}"
+          ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${caster_radius}"/>
+        </geometry>
+        <material name="dark_grey">
+          <color rgba="0.2 0.2 0.25 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="${caster_radius}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Gazebo 物理属性：0摩擦力的万向球，保证顺滑且不卡顿 -->
+    <gazebo reference="${prefix}_caster_link">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <kp>1e6</kp>
+      <kd>100.0</kd>
+      <minDepth>0.001</minDepth>
+      <material>Gazebo/DarkGrey</material>
+    </gazebo>
+  </xacro:macro>
+
+</robot>
