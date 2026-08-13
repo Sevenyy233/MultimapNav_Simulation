@@ -3,14 +3,14 @@
 
   <!-- ================================================================
        chassis - 差速驱动机器人底盘（圆柱体）
-       半径: 0.60m (直径 1.20m)，高度: 0.36m   ← 原尺寸的 3 倍
-       base_link 为根坐标系，底盘底面距地 ground_clearance (0.12m)，
+       半径: 0.20m (直径 0.40m)，高度: 0.12m
+       base_link 为根坐标系，底盘底面距地 ground_clearance (0.04m)，
        离地高度由轮子/万向球 joint 的 (radius - ground_clearance) 偏移保证
   ==================================================================== -->
 
-  <xacro:property name="chassis_radius" value="0.6"/>
-  <xacro:property name="chassis_height" value="0.36"/>
-  <xacro:property name="chassis_mass"   value="216.0"/>  <!-- 8kg × 3³=27 → 216kg -->
+  <xacro:property name="chassis_radius" value="0.20"/>
+  <xacro:property name="chassis_height" value="0.12"/>
+  <xacro:property name="chassis_mass"   value="8.0"/>  <!-- 尺寸缩小至 1/3，按相同密度质量为 1/27 -->
 
   <!-- 底盘质心在圆柱几何中心 -->
   <xacro:macro name="chassis">

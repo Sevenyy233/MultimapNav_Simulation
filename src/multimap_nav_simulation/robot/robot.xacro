@@ -11,11 +11,11 @@
        驱动/控制:
          drivers/diff_drive.xacro — ros2_control + transmission
 
-       传感器:
-         sensors/avia.xacro      — Livox Avia 固态激光雷达 → /livox/lidar (引用 ros2_livox_simulation)
+        传感器:
+         sensors/lidar_3d.xacro   — Gazebo 3D 多线雷达(ray) → /livox/lidar_PointCloud2
          sensors/imu.xacro        — IMU → /livox/imu
-         sensors/lidar_3d.xacro   — Gazebo 3D 多线雷达(ray) → /livox/mid360_PointCloud2
-                                    (备用方案，当前建图使用 Avia)
+         sensors/depth_camera.xacro — 前装深度相机 → /depth_camera/depth/points
+                                    （深度相机建图使用 depth_octomap_mapping.launch.py）
 
        控制话题:
          cmd_vel  → diff_drive_controller 订阅
@@ -28,54 +28,41 @@
   <xacro:include filename="$(find multimap_nav_simulation)/robot/part/caster_wheel.xacro"/>
   <xacro:include filename="$(find multimap_nav_simulation)/robot/drivers/diff_drive.xacro"/>
 
-  <xacro:include filename="$(find ros2_livox_simulation)/urdf/avia.xacro"/>
-  <xacro:include filename="$(find ros2_livox_simulation)/urdf/mid360.xacro"/>
   <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/lidar_3d.xacro"/>
- 
   <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/imu.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/depth_camera.xacro"/>
 
   <!-- ========================== 底盘 ========================== -->
   <!-- base_link 为根坐标系；离地高度由轮子/万向球的 joint 偏移 (radius - ground_clearance) 决定 -->
   <xacro:chassis/>
 
   <!-- ========================== 驱动轮 ========================== -->
-  <!-- 左驱动轮: y=+0.69 (wheel_separation/2) -->
+  <!-- 左驱动轮: y=+0.23 (wheel_separation/2) -->
   <xacro:drive_wheel prefix="left"  y_pos="${wheel_separation / 2.0}" parent="base_link"/>
-  <!-- 右驱动轮: y=-0.69 -->
+  <!-- 右驱动轮: y=-0.23 -->
   <xacro:drive_wheel prefix="right" y_pos="${-wheel_separation / 2.0}" parent="base_link"/>
 
   <!-- ========================== 万向轮 ========================== -->
   <!-- 前万向轮 -->
-  <xacro:caster_wheel prefix="front" x_pos="0.45" y_pos="0.0" parent="base_link"/>
+  <xacro:caster_wheel prefix="front" x_pos="0.15" y_pos="0.0" parent="base_link"/>
   <!-- 后万向轮 -->
-  <xacro:caster_wheel prefix="rear" x_pos="-0.45" y_pos="0.0" parent="base_link"/>
+  <xacro:caster_wheel prefix="rear" x_pos="-0.15" y_pos="0.0" parent="base_link"/>
 
-  <!-- ========================== Livox Mid-360 激光雷达（备用方案，默认不启用） ========================== -->
-  <!--
-  <xacro:mid360 name="mid360" parent="base_link" topic="livox/mid360">
-    <origin xyz="0 0 0.57" rpy="0 0 0"/>
-  </xacro:mid360>
-  -->
+  <!-- ========================== 3D 多线激光雷达 (lidar_3d) ========================== -->
+  <!-- 前装：x=0.28, z=0.19。
+       发布点云话题 /livox/lidar_PointCloud2，frame 为 lidar_link。 -->
+  <xacro:lidar_3d parent="base_link" xyz="0 0 0.19" rpy="0 0 0"/>
 
-  <!-- ========================== Gazebo 3D 多线激光雷达（暂时注释） ========================== -->
-  <!-- Gazebo ray 传感器（VLP-16 风格），16 离散线会在平地上留下圆环痕迹，
-       当前改用 Avia 密集扫描。 -->
-  <!-- <xacro:lidar_3d parent="base_link" xyz="0 0 0.57" rpy="0 0 0"/> -->
- 
-
-  <!-- ========================== Livox Avia 固态激光雷达 ========================== -->
-  <!-- 前装：x=0.84, z=0.57（原 0.28/0.19 的 3 倍），并向下倾斜约 20°（pitch=0.35 rad）
-       以改善近地地面覆盖。由于 Avia 仅覆盖前方约 70° 扇区，且传感器安装在
-       base_link 前侧，RViz 中看到的 octomap/点云天然会更偏向机器人前半部。
-       这属于传感器安装位与视场造成的视觉效果，不是 TF 错位。
-       注意：倾斜后 FAST-LIO 外参 r_il 需与 avia_lio.yaml 保持一致。 -->
-  <xacro:avia name="avia" parent="base_link" topic="livox/lidar">
-    <origin xyz="0.84 0 0.57" rpy="0 0.35 0"/>
-  </xacro:avia>
+  <!-- ========================== 深度相机 ========================== -->
+  <!-- 前装：x=0.21 = 底盘半径 0.20 + 相机厚度一半 0.01，
+       即相机后表面正好贴住底盘外壁（不嵌入本体）；
+       光心在长方体前表面中心，optical 系 +Z 朝机器人正前方，
+       深度点云话题 /depth_camera/depth/points 可直接作为 octomap 输入。 -->
+  <xacro:depth_camera name="depth_camera" parent="base_link" xyz="0.21 0 0.06" rpy="0 0 0"/>
 
   <!-- ========================== IMU ========================== -->
   <!-- 安装在底盘内部中心 -->
-  <xacro:imu parent="base_link" xyz="0 0 ${0.18}" rpy="0 0 0"/>
+  <xacro:imu parent="base_link" xyz="0 0 ${0.06}" rpy="0 0 0"/>
 
   <!-- ========================== Gazebo P3D 地面真值里程计 ========================== -->
   <!-- gazebo_ros_p3d 插件直接读取 Gazebo 中 base_link 的真实位姿（世界系），

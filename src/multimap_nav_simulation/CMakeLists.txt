@@ -7,20 +7,21 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 add_executable(odom_tf_broadcaster src/odom_tf_broadcaster.cpp)
 ament_target_dependencies(odom_tf_broadcaster rclcpp nav_msgs tf2_ros geometry_msgs)
 
-install(TARGETS odom_tf_broadcaster
+install(TARGETS
+  odom_tf_broadcaster
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY config launch meshes robot rviz worlds
+install(DIRECTORY config launch meshes robot worlds
   DESTINATION share/${PROJECT_NAME}
 )
 

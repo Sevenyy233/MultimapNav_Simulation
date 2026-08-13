@@ -27,8 +27,8 @@ diff_drive_controller:
     left_wheel_names:  ["left_wheel_joint"]
     right_wheel_names: ["right_wheel_joint"]
 
-    wheel_separation: 1.38     # 左右轮距 (m)（机器人 3 倍缩放后）
-    wheel_radius: 0.225        # 驱动轮半径 (m)（机器人 3 倍缩放后）
+    wheel_separation: 0.46     # 左右轮距 (m)
+    wheel_radius: 0.075        # 驱动轮半径 (m)
 
     # 如果 left_wheel 物理上反向安装，设置 true
     left_wheel_radius_multiplier:  1.0

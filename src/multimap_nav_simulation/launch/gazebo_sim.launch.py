@@ -8,51 +8,42 @@
 #   3. spawn 机器人模型到 Gazebo
 #   4. Gazebo 内部 ros2_control + diff_drive_controller + joint_state_broadcaster
 #
-# 传感器话题（默认建图配置）:
-#   /livox/lidar  — Avia 固态激光雷达 (livox_ros_driver2/CustomMsg)
-#   /livox/imu    — IMU 数据
+# 传感器话题（内置仿真传感器）:
+#   /livox/lidar_PointCloud2 — 3D 多线激光雷达（lidar_3d，Gazebo ray 传感器）
+#   /livox/imu_raw           — Gazebo IMU (sensor_msgs/Imu, m/s²)
 #
 # 里程计话题:
 #   /odom           — gazebo_ros_p3d 地面真值里程计（libgazebo_ros_p3d.so，机器人模型内加载）
 #   /odom_diff_drive— 轮式里程计（diff_drive_controller 发布，仅作参考，不再占用 /odom）
 #
 # TF 树结构:
-#   lidar ─FAST-LIO(可选)─> base_link ─URDF─> avia / imu_link / 轮子
+#   odom ─odom_tf_broadcaster─> base_link ─robot_state_publisher─> lidar_link / imu_link / 轮子
 #
 # 说明:
-#   - odom_tf_broadcaster（odom→base_link 真值 TF）已从本文件移出，
-#     由 octomap_mapping.launch.py 按需启动，避免与 FAST-LIO 发布的
-#     lidar→base_link 形成 base_link 双父 TF 冲突（tf2 会拒绝后插入的边）。
-#   - FAST-LIO 建图模式: 先启动本文件，再启动 fastlio2_avia.launch.py。
-#   - 真值建图模式:     先启动本文件，再启动 octomap_mapping.launch.py。
-#
-# GAZEBO_PLUGIN_PATH:
-#   必须包含工作区 install/ros2_livox_simulation/lib，否则 Gazebo 找不到
-#   libros2_livox.so，/livox/lidar 不会有数据（Avia 雷达插件无法加载）。
+#   - 本文件只启动仿真，不发布 odom→base_link（由需要真值 TF 的上层启动文件按需创建）。
 #
 # 控制话题:
 #   /cmd_vel  — 差速驱动速度指令
 #
 # 用法:
 #   ros2 launch multimap_nav_simulation gazebo_sim.launch.py
-#   ros2 launch multimap_nav_simulation gazebo_sim.launch.py world:=worlds/cabin.world
+#   ros2 launch multimap_nav_simulation gazebo_sim.launch.py world_file_name:=room
 #   ros2 launch multimap_nav_simulation gazebo_sim.launch.py headless:=true
 # ================================================================
 import re
 import os
 
-from ament_index_python.packages import get_package_prefix, get_package_share_directory
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     ExecuteProcess,
     RegisterEventHandler,
-    SetEnvironmentVariable,
     TimerAction,
 )
 from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessExit
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 import xacro
 
@@ -63,28 +54,24 @@ def generate_launch_description():
     # 路径
     # ==================================================================
     pkg_share = get_package_share_directory('multimap_nav_simulation')
-    default_world = os.path.join(pkg_share, 'worlds', 'room.world')
     xacro_file = os.path.join(pkg_share, 'robot', 'robot.xacro')
 
-    # ==================================================================
-    # GAZEBO_PLUGIN_PATH: 追加工作区 Livox 仿真插件目录（libros2_livox.so）
-    # ==================================================================
-    livox_sim_prefix = get_package_prefix('ros2_livox_simulation')
-    livox_plugin_dir = os.path.join(livox_sim_prefix, 'lib')
-    existing_gazebo_path = os.environ.get('GAZEBO_PLUGIN_PATH', '')
-    gazebo_plugin_path = os.pathsep.join(
-        [p for p in [existing_gazebo_path, livox_plugin_dir] if p]
-    )
-    set_gazebo_plugin_path = SetEnvironmentVariable(
-        'GAZEBO_PLUGIN_PATH', gazebo_plugin_path
-    )
     # ==================================================================
     # 参数声明
     # ==================================================================
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-    world_file   = LaunchConfiguration('world', default=default_world)
+    world_file_name = LaunchConfiguration('world_file_name')
+    world_file = PathJoinSubstitution([
+        pkg_share,
+        'worlds',
+        [world_file_name, '.world'],
+    ])
     use_gui      = LaunchConfiguration('gui', default='true')
     headless     = LaunchConfiguration('headless', default='false')
+    spawn_x = LaunchConfiguration('spawn_x')
+    spawn_y = LaunchConfiguration('spawn_y')
+    spawn_z = LaunchConfiguration('spawn_z')
+    spawn_yaw = LaunchConfiguration('spawn_yaw')
 
     # ==================================================================
     # robot_description (xacro → URDF)
@@ -138,9 +125,8 @@ def generate_launch_description():
     )
 
     # ==================================================================
-    # odom_tf_broadcaster 已移至 octomap_mapping.launch.py
-    # （FAST-LIO 建图模式下 base_link TF 由 FAST-LIO 提供，
-    #   避免 odom→base_link 与 lidar→base_link 双父冲突）
+    # odom_tf_broadcaster 由需要真值 TF 的上层启动文件按需创建；本文件
+    # 不创建动态 TF 发布者，避免多个启动入口重复发布 odom→base_link。
     # ==================================================================
 
     # ==================================================================
@@ -153,8 +139,8 @@ def generate_launch_description():
         arguments=[
             '-entity', 'diff_drive_robot',
             '-topic', 'robot_description',
-            '-x', '0.0', '-y', '0.0', '-z', '0.15',
-            '-Y', '0.0',
+            '-x', spawn_x, '-y', spawn_y, '-z', spawn_z,
+            '-Y', spawn_yaw,
         ],
         output='screen',
     )
@@ -194,17 +180,38 @@ def generate_launch_description():
         )
     )
 
+    odom_tf_broadcaster = Node(
+        package='multimap_nav_simulation',
+        executable='odom_tf_broadcaster',
+        output='screen',
+        parameters=[{
+            'use_sim_time': use_sim_time,
+            #'parent_frame_id': 'odom',
+            # 真值位姿使用独立子帧，不与 FAST-LIO 抢占 base_link。
+            #'child_frame_id': 'ground_truth_base_link',
+        }]
+    )
+
 
     # ==================================================================
     # 返回 LaunchDescription
     # ==================================================================
     return LaunchDescription([
         DeclareLaunchArgument('use_sim_time', default_value='true'),
-        DeclareLaunchArgument('world', default_value=default_world),
+        DeclareLaunchArgument(
+            'world_file_name',
+            default_value='cafe',
+            description=(
+                'World file basename in the worlds directory '
+                '(cabin, cafe, outdoor, room, terrain, uneven_terrain)'
+            ),
+        ),
         DeclareLaunchArgument('gui', default_value='true'),
         DeclareLaunchArgument('headless', default_value='false'),
-
-        set_gazebo_plugin_path,
+        DeclareLaunchArgument('spawn_x', default_value='0.0'),
+        DeclareLaunchArgument('spawn_y', default_value='0.0'),
+        DeclareLaunchArgument('spawn_z', default_value='0.05'),
+        DeclareLaunchArgument('spawn_yaw', default_value='0.0'),
 
         gzserver,
         gzserver_headless,
@@ -213,4 +220,5 @@ def generate_launch_description():
         robot_state_pub,
         spawn_entity,
         spawn_controllers,
+        odom_tf_broadcaster,
     ])

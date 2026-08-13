@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================
+       depth_camera - 前装深度相机（Gazebo depth 传感器）
+
+       物理外形: 细长长方体
+         - x: 0.02 m（前后厚度）
+         - y: 0.1667 m（左右长度，相机沿 y 方向细长）
+         - z: 0.02 m（高度）
+       坐标系:
+         ${name}_link         - 相机本体坐标系，与 base_link 同姿态（x 朝前）
+         ${name}_optical_link - 相机光轴坐标系（REP-103: z 朝前、x 朝右、y 朝下）
+                                optical joint 的 rpy=-pi/2,0,-pi/2 把光轴转到正前方，
+                                深度相机传感器挂在该 optical link 上，因此 FOV 朝前。
+       发布话题:
+         /depth_camera/depth/points      - sensor_msgs/PointCloud2（octomap 输入）
+         /depth_camera/color/image_raw   - 彩色图像
+         /depth_camera/depth/image_raw   - 深度图
+         /depth_camera/depth/camera_info - 相机内参
+       宏参数:
+         name   - 相机名称前缀
+         parent - 父 link（默认 base_link）
+         xyz    - 安装位置（默认前装贴住底盘外壁）
+         rpy    - 安装姿态
+  ==================================================================== -->
+
+  <xacro:property name="depth_camera_x"     value="0.02"/>          <!-- 前后厚度 [m] -->
+  <xacro:property name="depth_camera_y"     value="0.1666666667"/>  <!-- 左右长度 [m] -->
+  <xacro:property name="depth_camera_z"     value="0.02"/>          <!-- 高度 [m] -->
+  <xacro:property name="depth_camera_mass"  value="0.0111111111"/>  <!-- 0.30 / 27 kg -->
+
+  <xacro:property name="depth_camera_hfov"  value="1.3963"/> <!-- 水平视场角 80° [rad] -->
+  <xacro:property name="depth_camera_w"     value="640"/>    <!-- 图像宽度 [px] -->
+  <xacro:property name="depth_camera_h"     value="480"/>    <!-- 图像高度 [px] -->
+  <xacro:property name="depth_camera_hz"    value="10.0"/>   <!-- 更新频率 [Hz] -->
+  <xacro:property name="depth_camera_near"  value="0.05"/>   <!-- 最近有效距离 [m] -->
+  <xacro:property name="depth_camera_far"   value="8.0"/>    <!-- 最远有效距离 [m] -->
+
+  <xacro:macro name="depth_camera" params="name:='depth_camera' parent:='base_link' xyz:='0.21 0 0.06' rpy:='0 0 0'">
+
+    <!-- ========================== 相机本体 link ========================== -->
+    <link name="${name}_link">
+      <inertial>
+        <mass value="${depth_camera_mass}"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia
+          ixx="${depth_camera_mass / 12.0 * (depth_camera_y * depth_camera_y + depth_camera_z * depth_camera_z)}"
+          iyy="${depth_camera_mass / 12.0 * (depth_camera_x * depth_camera_x + depth_camera_z * depth_camera_z)}"
+          izz="${depth_camera_mass / 12.0 * (depth_camera_x * depth_camera_x + depth_camera_y * depth_camera_y)}"
+          ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${depth_camera_x} ${depth_camera_y} ${depth_camera_z}"/>
+        </geometry>
+        <material name="camera_dark">
+          <color rgba="0.12 0.12 0.14 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${depth_camera_x} ${depth_camera_y} ${depth_camera_z}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- ========================== 相机安装 joint ========================== -->
+    <joint name="${name}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+    <!-- ========================== optical link ========================== -->
+    <!-- 相对本体前移半个厚度，光心位于长方体前表面中心；
+         rpy=-pi/2,0,-pi/2 将 optical 系的 +Z 指向机器人正前方 -->
+    <link name="${name}_optical_link">
+      <inertial>
+        <mass value="0.001"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <joint name="${name}_optical_joint" type="fixed">
+      <parent link="${name}_link"/>
+      <child link="${name}_optical_link"/>
+      <origin xyz="${depth_camera_x / 2.0} 0 0" rpy="${-pi/2.0} 0 ${-pi/2.0}"/>
+    </joint>
+
+    <!-- ========================== Gazebo 深度相机传感器 ========================== -->
+    <!-- 传感器挂在 optical link 上，pose 为 0，Gazebo 沿该 link 的 +Z 出射线，
+         因此点云天然位于 camera_optical_link 系且 FOV 朝前。 -->
+    <gazebo reference="${name}_link">
+      <sensor type="depth" name="${name}_sensor">
+        <pose>0 0 0 0 0 0</pose>
+        <always_on>true</always_on>
+        <update_rate>${depth_camera_hz}</update_rate>
+        <visualize>false</visualize>
+
+        <camera>
+          <horizontal_fov>${depth_camera_hfov}</horizontal_fov>
+          <image>
+            <width>${depth_camera_w}</width>
+            <height>${depth_camera_h}</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>${depth_camera_near}</near>
+            <far>${depth_camera_far}</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.005</stddev>
+          </noise>
+        </camera>
+
+        <!-- Humble 的 depth 传感器由 libgazebo_ros_camera.so 统一支持
+             （gazebo_plugins 中没有单独的 depth 插件） -->
+        <plugin name="${name}_controller" filename="libgazebo_ros_camera.so">
+          <ros>
+            <remapping>${name}/image_raw:=/${name}/color/image_raw</remapping>
+            <remapping>${name}/depth/image_raw:=/${name}/depth/image_raw</remapping>
+            <remapping>${name}/camera_info:=/${name}/color/camera_info</remapping>
+            <remapping>${name}/depth/camera_info:=/${name}/depth/camera_info</remapping>
+            <remapping>${name}/points:=/${name}/depth/points</remapping>
+          </ros>
+          <camera_name>${name}</camera_name>
+          <frame_name>${name}_optical_link</frame_name>
+          <min_depth>${depth_camera_near}</min_depth>
+          <max_depth>${depth_camera_far}</max_depth>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

@@ -9,8 +9,8 @@
          3. gazebo_ros2_control 插件加载
   ==================================================================== -->
 
-  <xacro:property name="wheel_separation" value="1.38"/>  <!-- 左右轮距（原 0.46m × 3） -->
-  <xacro:property name="wheel_radius"     value="0.225"/> <!-- 驱动轮半径（原 0.075m × 3） -->
+  <xacro:property name="wheel_separation" value="0.46"/>  <!-- 左右轮距 -->
+  <xacro:property name="wheel_radius"     value="0.075"/> <!-- 驱动轮半径 -->
 
   <!-- ================================================================
        驱动轮传动定义 (transmission)

@@ -3,18 +3,18 @@
 
   <!-- ================================================================
        imu - 6轴 IMU 传感器 (Gazebo IMU 插件)
-       发布话题: /livox/imu (sensor_msgs/Imu)
+       发布话题: /livox/imu_raw (sensor_msgs/Imu, m/s^2)
        宏参数:
          parent  - 父 link
          xyz     - 安装位置偏移
          rpy     - 安装姿态
   ==================================================================== -->
 
-  <xacro:property name="imu_mass"   value="0.05"/>
-  <xacro:property name="imu_size"   value="0.03"/>  <!-- 小方块边长 -->
+  <xacro:property name="imu_mass"   value="0.0018518519"/> <!-- 0.05 / 27 kg -->
+  <xacro:property name="imu_size"   value="0.01"/>  <!-- 小方块边长，为原尺寸的 1/3 -->
   <xacro:property name="imu_hz"     value="200.0"/> <!-- IMU 更新频率 -->
 
-  <xacro:macro name="imu" params="parent:=base_link xyz:='0 0 0.3' rpy:='0 0 0'">
+  <xacro:macro name="imu" params="parent:=base_link xyz:='0 0 0.1' rpy:='0 0 0'">
     <link name="imu_link">
       <inertial>
         <mass value="${imu_mass}"/>
@@ -102,8 +102,7 @@
 
         <plugin name="imu_controller" filename="libgazebo_ros_imu_sensor.so">
           <ros>
-            <!-- 话题适配建图功能包: /livox/imu -->
-            <remapping>~/out:=/livox/imu</remapping>
+            <remapping>~/out:=/livox/imu_raw</remapping>
           </ros>
           <frame_name>imu_link</frame_name>
         </plugin>
