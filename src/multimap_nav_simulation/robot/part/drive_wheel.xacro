@@ -58,8 +58,8 @@
 
     <!-- Gazebo 物理属性 -->
     <gazebo reference="${prefix}_wheel_link">
-      <mu1>1.0</mu1>       <!-- 纵向摩擦 -->
-      <mu2>1.0</mu2>       <!-- 横向摩擦 -->
+      <mu1>2.0</mu1>       <!-- terrain 坡面纵向抓地力 -->
+      <mu2>2.0</mu2>       <!-- terrain 坡面横向静摩擦 -->
       <kp>1e7</kp>
       <kd>1.0</kd>
       <minDepth>0.001</minDepth>
