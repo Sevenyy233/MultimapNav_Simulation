@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="tracked_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ================================================================
+       tracked_robot.xacro — 履带式差速机器人顶层模型
+
+       外形与 robot.xacro 相当（约 0.40 m × 0.40 m），左右各 4 个承重轮，
+       同侧轮由 ros2_control 差速控制器同步驱动，模拟履带差速。
+
+       传感器（复用现有宏，frame / 话题与 MultiMapNav 对齐）:
+         lidar_3d      → /points_raw          frame=lidar_link
+         imu           → /livox/imu_raw       frame=imu_link
+         depth_camera  → /depth_camera/...    frame=depth_camera_optical_link
+
+       控制话题:
+         /cmd_vel           → diff_drive_controller
+         /odom              → gazebo_ros_p3d 地面真值
+         /odom_diff_drive   → 轮式开环里程计
+  ==================================================================== -->
+
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/lidar_3d.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/imu.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/depth_camera.xacro"/>
+
+  <!-- ========================== 尺寸与质量 ========================== -->
+  <!-- 底盘：长 0.40 m、宽 0.28 m、高 0.10 m，与圆柱差速车占地接近 -->
+  <xacro:property name="chassis_length" value="0.40"/>
+  <xacro:property name="chassis_width"  value="0.28"/>
+  <xacro:property name="chassis_height" value="0.10"/>
+  <!-- 约 0.4 m 级履带车：整车约 38 kg，避免轻质量 + 多轮大扭矩被顶飞 -->
+  <xacro:property name="chassis_mass"   value="30.0"/>
+
+  <xacro:property name="wheel_radius"     value="0.05"/>
+  <xacro:property name="wheel_length"     value="0.04"/>
+  <xacro:property name="wheel_mass"       value="1.0"/>
+  <xacro:property name="wheel_separation" value="0.36"/>  <!-- 左右轮心距 -->
+  <xacro:property name="ground_clearance" value="0.03"/>  <!-- 底盘底面离地 -->
+  <!-- 8 个速度电机同时接地；单轮力矩过大会在速度阶跃时产生不必要的俯仰力矩。 -->
+  <xacro:property name="wheel_effort"     value="1.0"/>   <!-- N·m，8 轮合力仍足够爬世界中的缓坡 -->
+  <xacro:property name="wheel_vel_limit"  value="16.0"/>  <!-- rad/s ≈ 0.8 m/s -->
+
+  <!-- 同侧 4 轮沿 x 均布，轮径 0.10 m、间距 0.09 m，互不嵌入 -->
+  <xacro:property name="wheel_x_1" value="0.135"/>
+  <xacro:property name="wheel_x_2" value="0.045"/>
+  <xacro:property name="wheel_x_3" value="-0.045"/>
+  <xacro:property name="wheel_x_4" value="-0.135"/>
+
+  <!-- ========================== 底盘 ========================== -->
+  <!-- base_link 原点在底盘底面中心；底盘几何沿 +z 长出 chassis_height -->
+  <link name="base_link">
+    <inertial>
+      <!-- 质心略低于几何中心，减少加速时抬头/翻车 -->
+      <origin xyz="0 0 ${chassis_height * 0.35}" rpy="0 0 0"/>
+      <mass value="${chassis_mass}"/>
+      <inertia
+        ixx="${chassis_mass / 12.0 * (chassis_width * chassis_width + chassis_height * chassis_height)}"
+        iyy="${chassis_mass / 12.0 * (chassis_length * chassis_length + chassis_height * chassis_height)}"
+        izz="${chassis_mass / 12.0 * (chassis_length * chassis_length + chassis_width * chassis_width)}"
+        ixy="0.0" ixz="0.0" iyz="0.0"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 ${chassis_height / 2.0}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
+      </geometry>
+      <material name="tracked_grey">
+        <color rgba="0.28 0.30 0.28 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 ${chassis_height / 2.0}" rpy="0 0 0"/>
+      <geometry>
+        <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="base_link">
+    <mu1>0.4</mu1>
+    <mu2>0.4</mu2>
+    <kp>1e5</kp>
+    <kd>200.0</kd>
+    <gravity>true</gravity>
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+
+  <!-- ========================== 履带承重轮 ========================== -->
+  <!-- 圆柱默认轴沿 z，visual/collision 绕 x 转 90° 使轴沿 y（车宽方向）。
+       惯性按 link 系（关节轴 y）给出：iyy 为自转惯量。 -->
+  <xacro:macro name="track_wheel" params="side index x_pos y_pos radius:=${wheel_radius} parent:=base_link">
+    <joint name="${side}_wheel_${index}_joint" type="continuous">
+      <parent link="${parent}"/>
+      <child link="${side}_wheel_${index}_link"/>
+      <origin xyz="${x_pos} ${y_pos} ${radius - ground_clearance}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="${wheel_effort}" velocity="${wheel_vel_limit}"/>
+      <!-- 驱动力由地面接触产生；过大关节阻尼会消耗速度电机的大部分力矩。 -->
+      <dynamics damping="0.02" friction="0.0"/>
+    </joint>
+
+    <link name="${side}_wheel_${index}_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${wheel_mass}"/>
+        <inertia
+          ixx="${wheel_mass / 12.0 * (3.0 * radius * radius + wheel_length * wheel_length)}"
+          iyy="${0.5 * wheel_mass * radius * radius}"
+          izz="${wheel_mass / 12.0 * (3.0 * radius * radius + wheel_length * wheel_length)}"
+          ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2.0} 0 0"/>
+        <geometry>
+          <cylinder radius="${radius}" length="${wheel_length}"/>
+        </geometry>
+        <material name="track_rubber">
+          <color rgba="0.08 0.08 0.08 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2.0} 0 0"/>
+        <geometry>
+          <cylinder radius="${radius}" length="${wheel_length}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <gazebo reference="${side}_wheel_${index}_link">
+      <!-- x 是轮子滚动方向；横向摩擦较低，便于履带差速转向。 -->
+      <fdir1>1 0 0</fdir1>
+      <mu1>1.0</mu1>
+      <mu2>0.4</mu2>
+      <kp>1e5</kp>
+      <kd>200.0</kd>
+      <maxVel>0.05</maxVel>
+      <minDepth>0.003</minDepth>
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- 所有受控轮必须使用同一滚动半径。否则 diff_drive_controller 下发相同
+       角速度时，不同半径会要求不同的地面速度，接触约束会互相打架并把车体顶起。 -->
+  <xacro:track_wheel side="left"  index="1" x_pos="${wheel_x_1}" y_pos="${ wheel_separation / 2.0}"/>
+  <xacro:track_wheel side="left"  index="2" x_pos="${wheel_x_2}" y_pos="${ wheel_separation / 2.0}"/>
+  <xacro:track_wheel side="left"  index="3" x_pos="${wheel_x_3}" y_pos="${ wheel_separation / 2.0}"/>
+  <xacro:track_wheel side="left"  index="4" x_pos="${wheel_x_4}" y_pos="${ wheel_separation / 2.0}"/>
+  <xacro:track_wheel side="right" index="1" x_pos="${wheel_x_1}" y_pos="${-wheel_separation / 2.0}"/>
+  <xacro:track_wheel side="right" index="2" x_pos="${wheel_x_2}" y_pos="${-wheel_separation / 2.0}"/>
+  <xacro:track_wheel side="right" index="3" x_pos="${wheel_x_3}" y_pos="${-wheel_separation / 2.0}"/>
+  <xacro:track_wheel side="right" index="4" x_pos="${wheel_x_4}" y_pos="${-wheel_separation / 2.0}"/>
+
+  <!-- 不再用贴地长方体模拟履带：Gazebo 常把 visual 当成碰撞，
+       前端铲地会把车绕前缘掀起来（前进时尾部翘起）。
+       物理只靠 8 个承重轮；外观用轮子上方一条细带，明确离地、无碰撞。 -->
+  <xacro:macro name="track_visual" params="side y_pos">
+    <xacro:property name="track_vis_mass" value="0.05"/>
+    <xacro:property name="track_vis_x"    value="0.27"/>
+    <xacro:property name="track_vis_y"    value="${wheel_length * 0.85}"/>
+    <xacro:property name="track_vis_z"    value="0.016"/>
+    <link name="${side}_track_visual_link">
+      <inertial>
+        <mass value="${track_vis_mass}"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia
+          ixx="${track_vis_mass / 12.0 * (track_vis_y * track_vis_y + track_vis_z * track_vis_z)}"
+          iyy="${track_vis_mass / 12.0 * (track_vis_x * track_vis_x + track_vis_z * track_vis_z)}"
+          izz="${track_vis_mass / 12.0 * (track_vis_x * track_vis_x + track_vis_y * track_vis_y)}"
+          ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${track_vis_x} ${track_vis_y} ${track_vis_z}"/>
+        </geometry>
+        <material name="track_belt">
+          <color rgba="0.06 0.06 0.06 1.0"/>
+        </material>
+      </visual>
+    </link>
+
+    <joint name="${side}_track_visual_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${side}_track_visual_link"/>
+      <!-- 放在轮子顶部，底面约离地 8 cm，即使误生成碰撞也不会铲地 -->
+      <origin xyz="0 ${y_pos} ${wheel_radius - ground_clearance + wheel_radius - 0.002}" rpy="0 0 0"/>
+    </joint>
+
+    <gazebo reference="${side}_track_visual_link">
+      <mu1>0.0</mu1>
+      <mu2>0.0</mu2>
+      <kp>0.0</kp>
+      <kd>0.0</kd>
+      <maxContacts>0</maxContacts>
+      <material>Gazebo/Black</material>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:track_visual side="left"  y_pos="${ wheel_separation / 2.0}"/>
+  <xacro:track_visual side="right" y_pos="${-wheel_separation / 2.0}"/>
+
+  <!-- ========================== 传感器 ========================== -->
+  <!-- 雷达坐在底盘顶面中心；话题 /points_raw，frame lidar_link -->
+  <xacro:lidar_3d parent="base_link" xyz="0 0 ${chassis_height + lidar_height / 2.0}" rpy="0 0 0"/>
+
+  <!-- 前装深度相机：底盘前端 x=0.20 + 半厚 0.01 -->
+  <xacro:depth_camera name="depth_camera" parent="base_link"
+                      xyz="${chassis_length / 2.0 + depth_camera_x / 2.0} 0 ${chassis_height * 0.55}"
+                      rpy="0 0 0"/>
+
+  <!-- IMU 在底盘内部中心；话题 /livox/imu_raw，frame imu_link -->
+  <xacro:imu parent="base_link" xyz="0 0 ${chassis_height / 2.0}" rpy="0 0 0"/>
+
+  <!-- ========================== Gazebo P3D 地面真值里程计 ========================== -->
+  <gazebo>
+    <plugin name="gazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
+      <ros>
+        <remapping>odom:=/odom</remapping>
+      </ros>
+      <body_name>base_link</body_name>
+      <update_rate>100</update_rate>
+    </plugin>
+  </gazebo>
+
+  <!-- ========================== 传动 ========================== -->
+  <xacro:macro name="wheel_transmission" params="joint_name">
+    <transmission name="${joint_name}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${joint_name}_motor">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <xacro:wheel_transmission joint_name="left_wheel_1_joint"/>
+  <xacro:wheel_transmission joint_name="left_wheel_2_joint"/>
+  <xacro:wheel_transmission joint_name="left_wheel_3_joint"/>
+  <xacro:wheel_transmission joint_name="left_wheel_4_joint"/>
+  <xacro:wheel_transmission joint_name="right_wheel_1_joint"/>
+  <xacro:wheel_transmission joint_name="right_wheel_2_joint"/>
+  <xacro:wheel_transmission joint_name="right_wheel_3_joint"/>
+  <xacro:wheel_transmission joint_name="right_wheel_4_joint"/>
+
+  <!-- ========================== ros2_control ========================== -->
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+
+    <joint name="left_wheel_1_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_wheel_2_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_wheel_3_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_wheel_4_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_1_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_2_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_3_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_4_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <parameters>$(find multimap_nav_simulation)/config/tracked_diff_drive_controller.yaml</parameters>
+      <ros>
+        <remapping>/diff_drive_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
+        <remapping>/diff_drive_controller/odom:=/odom_diff_drive</remapping>
+      </ros>
+    </plugin>
+  </gazebo>
+
+</robot>
