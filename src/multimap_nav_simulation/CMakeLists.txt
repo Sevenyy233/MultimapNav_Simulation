@@ -21,7 +21,7 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY config launch meshes robot worlds
+install(DIRECTORY config launch meshes pcd robot worlds
   DESTINATION share/${PROJECT_NAME}
 )
 
