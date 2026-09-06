@@ -37,7 +37,7 @@
   <xacro:property name="ground_clearance" value="0.03"/>  <!-- 底盘底面离地 -->
   <!-- 8 个速度电机同时接地；单轮力矩过大会在速度阶跃时产生不必要的俯仰力矩。 -->
   <xacro:property name="wheel_effort"     value="1.0"/>   <!-- N·m，8 轮合力仍足够爬世界中的缓坡 -->
-  <xacro:property name="wheel_vel_limit"  value="16.0"/>  <!-- rad/s ≈ 0.8 m/s -->
+  <xacro:property name="wheel_vel_limit"  value="40.0"/>  <!-- rad/s ≈ 2.0 m/s -->
 
   <!-- 同侧 4 轮沿 x 均布，轮径 0.10 m、间距 0.09 m，互不嵌入 -->
   <xacro:property name="wheel_x_1" value="0.135"/>
