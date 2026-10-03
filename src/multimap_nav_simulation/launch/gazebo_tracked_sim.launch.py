@@ -168,10 +168,12 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument('gui', default_value='true'),
         DeclareLaunchArgument('headless', default_value='false'),
-        DeclareLaunchArgument('spawn_x', default_value='0.0'),
-        DeclareLaunchArgument('spawn_y', default_value='0.0'),
-        # 轮子底面相对 base_link 为 -0.03 m；0.05 m 仅保留 2 cm 落下高度，
-        # 避免默认出生时过大接触冲击。
+        # terrain.stl 离线地表分析结果：此处局部坡度接近 0°，周围约
+        # 1.33 m 内没有明显陡坡；地表 z≈0，适合作为默认出生位置。
+        DeclareLaunchArgument('spawn_x', default_value='6.5'),
+        DeclareLaunchArgument('spawn_y', default_value='-3.5'),
+        # 轮子底面相对 base_link 为 -0.03 m；地表 z≈0，0.05 m 仅保留
+        # 约 2 cm 落下高度，避免默认出生时过大接触冲击。
         DeclareLaunchArgument('spawn_z', default_value='0.05'),
         DeclareLaunchArgument('spawn_yaw', default_value='0.0'),
 

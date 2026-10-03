@@ -21,9 +21,21 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY config launch meshes pcd robot worlds
+install(PROGRAMS scripts/initialize_clearing_arm.py scripts/wait_for_gazebo_clock.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY 3DModel config launch meshes models pcd robot scripts worlds
   DESTINATION share/${PROJECT_NAME}
 )
+
+# cabin.world uses model://cabin/meshes/cabin.stl. Bundle the existing mesh
+# in Gazebo's model layout so this launch does not depend on ~/.gazebo.
+install(FILES 3DModel/cabin/cabin.stl
+  DESTINATION share/${PROJECT_NAME}/models/cabin/meshes
+)
+
+install(FILES README.md DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

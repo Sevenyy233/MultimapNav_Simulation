@@ -5,6 +5,11 @@
     Footprint: 12.0 m x 9.0 m; recommended spawn: (0, 0, 0.05).
   -->
   <world name="indoor_flat">
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/gazebo</namespace>
+      </ros>
+    </plugin>
     <gravity>0 0 -9.8</gravity>
     <physics name="ode_physics" type="ode">
       <max_step_size>0.001</max_step_size>

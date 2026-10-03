@@ -1,5 +1,10 @@
 <sdf version='1.7'>
   <world name='default'>
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/gazebo</namespace>
+      </ros>
+    </plugin>
     <light name='sun' type='directional'>
       <cast_shadows>1</cast_shadows>
       <pose>0 0 10 0 -0 0</pose>
@@ -28,14 +33,16 @@
       <ode>
         <solver>
           <type>quick</type>
-          <iters>100</iters>
+          <iters>150</iters>
           <sor>1.3</sor>
+          <!-- cone_model 比默认摩擦金字塔更接近各向同性库仑摩擦，坡上更不容易侧滑。 -->
+          <friction_model>cone_model</friction_model>
         </solver>
         <constraints>
           <cfm>0.0</cfm>
           <erp>0.2</erp>
-          <contact_max_correcting_vel>10.0</contact_max_correcting_vel>
-          <contact_surface_layer>0.002</contact_surface_layer>
+          <contact_max_correcting_vel>1.0</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
         </constraints>
       </ode>
     </physics>
@@ -71,7 +78,7 @@
               <uri>model://terrain/meshes/terrain.stl</uri>
             </mesh>
           </geometry>
-          <max_contacts>20</max_contacts>
+          <max_contacts>80</max_contacts>
           <surface>
             <contact>
               <ode>
@@ -80,7 +87,7 @@
                 <kp>1e6</kp>
                 <kd>100</kd>
                 <max_vel>0.1</max_vel>
-                <min_depth>0.002</min_depth>
+                <min_depth>0.001</min_depth>
               </ode>
             </contact>
             <bounce>
@@ -89,11 +96,19 @@
             </bounce>
             <friction>
               <torsional>
-                <ode/>
+                <coefficient>1.0</coefficient>
+                <use_patch_radius>1</use_patch_radius>
+                <patch_radius>0.02</patch_radius>
+                <surface_radius>0.05</surface_radius>
+                <ode>
+                  <slip>0.0</slip>
+                </ode>
               </torsional>
               <ode>
-                <mu>4.0</mu>
-                <mu2>4.0</mu2>
+                <mu>8.0</mu>
+                <mu2>8.0</mu2>
+                <slip1>0.0</slip1>
+                <slip2>0.0</slip2>
               </ode>
             </friction>
           </surface>
@@ -102,27 +117,9 @@
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <pose>-0.214349 2.37719 0 0 -0 0</pose>
+      <!-- 与由原始 terrain.ply/STL 生成的 PCD 共用坐标原点。 -->
+      <pose>0 0 0 0 0 0</pose>
     </model>
-    <state world_name='default'>
-      <sim_time>317 922000000</sim_time>
-      <real_time>340 692577054</real_time>
-      <wall_time>1786110624 855149919</wall_time>
-      <iterations>317922</iterations>
-      <model name='terrain'>
-        <pose>4.90193 1.71695 0 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose>4.90193 1.71695 0 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
-      <light name='sun'>
-        <pose>0 0 10 0 -0 0</pose>
-      </light>
-    </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
         <pose>-30.7332 4.84065 11.2729 -0 0.267642 -0.055807</pose>

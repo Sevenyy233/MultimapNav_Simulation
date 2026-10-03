@@ -1,0 +1,1275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="clearing_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Migrated from robot_description/urdf/whc_description_gazebo.xacro.
+       Joint layout matches the original: ten wheels plus joint1..joint7.
+       arm_controller holds those seven joints at the URDF zero pose. -->
+
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/lidar_3d.xacro"/>
+  <!-- A moderate scan rate keeps the original five side sensors affordable. -->
+  <xacro:property name="lidar_hz" value="10.0"/>
+  <xacro:property name="lidar_samples" value="720"/>
+  <xacro:property name="lidar_max_range" value="30.0"/>
+
+
+  <link name="base_footprint"/>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Simulation inertias use a uniform-density convex-hull approximation
+       of each supplied STL at its original mass. The source CAD tensors were
+       up to two orders of magnitude too small for these tonne-scale bodies.
+       Wheel tensors use the exact solid-cylinder dimensions. -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.0110947986 0.0314803963 0.598827115" rpy="0 0 0"/>
+      <mass value="13000"/>
+      <inertia ixx="12116.6164" ixy="-0.0945527211" ixz="-24.048698"
+               iyy="23395.8661" iyz="8.93522898" izz="32244.8535"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find multimap_nav_simulation)/meshes/clearing_robot/base_link.STL"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <!-- The visual STL includes rigid track strips down to z=0. They must
+         not act as skid plates: the ten drive wheels provide ground contact.
+         Raised chassis proxies preserve the obstacle envelope above them. -->
+    <collision name="chassis_collision">
+      <origin xyz="0.004 0.0325 0.75" rpy="0 0 0"/>
+      <geometry><box size="4.95 3.19 0.90"/></geometry>
+    </collision>
+
+  </link>
+
+  <link name="left_wheel_back">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="left_wheel_middle">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="left_wheel_middle1">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="left_wheel_middle2">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+  <link name="left_wheel_front">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="right_wheel_back">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="right_wheel_middle">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="right_wheel_middle1">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="right_wheel_middle2">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="right_wheel_front">
+    <inertial>
+      <mass value="500.0"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="32.55" ixy="0.0" ixz="0.0"
+               iyy="57.6" iyz="0.0"
+               izz="32.55"/>
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+      <geometry>
+        <cylinder length="0.3" radius="0.48"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="left_wheel_front_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel_front"/>
+    <origin xyz="2.0 1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="left_wheel_middle_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel_middle"/>
+    <origin xyz="0 1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="left_wheel_middle1_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel_middle1"/>
+    <origin xyz="1 1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="left_wheel_middle2_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel_middle2"/>
+    <origin xyz="-1 1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="left_wheel_back_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel_back"/>
+    <origin xyz="-2.0 1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="right_wheel_back_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel_back"/>
+    <origin xyz="-2.0 -1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="right_wheel_middle_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel_middle"/>
+    <origin xyz="0 -1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="right_wheel_middle1_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel_middle1"/>
+    <origin xyz="1 -1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="right_wheel_middle2_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel_middle2"/>
+    <origin xyz="-1 -1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <joint name="right_wheel_front_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel_front"/>
+    <origin xyz="2.0 -1.4 0.47" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="2.0" friction="0.0"/>
+    <!-- velocity limit is required by rqt_joint_trajectory_controller's URDF parser -->
+    <limit effort="100" velocity="10"/>
+  </joint>
+
+  <!-- 机械臂部分 -->
+  <link name="link1">
+    <inertial>
+      <origin xyz="-0.26630551 -2.46152979e-17 -0.555507403" rpy="0 0 0"/>
+      <mass value="6000"/>
+      <inertia ixx="3404.00724" ixy="0" ixz="-689.206256"
+               iyy="11159.2513" iyz="0" izz="13988.6592"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find multimap_nav_simulation)/meshes/clearing_robot/PingTai.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <!-- STL collisions crash gzserver in ODE ray-sensor checks. The box is
+         narrower than the mesh (y +-1.4) so the rslidar_* origins stay outside. -->
+    <collision>
+      <origin xyz="-0.675 0 -0.357" rpy="0 0 0" />
+      <geometry><box size="4.95 2.3 1.013"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint1" type="revolute">
+    <origin xyz="0 0 2.313" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="link1" />
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="5" />
+  </joint>
+
+  <link name="link2">
+    <inertial>
+      <origin xyz="1.27370026 -0.124614766 1.35128923e-07" rpy="0 0 0"/>
+      <mass value="1280"/>
+      <inertia ixx="87.7149162" ixy="43.4559098" ixz="-0.000126827583"
+               iyy="704.457612" iyz="-4.32401178e-05" izz="693.266344"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find multimap_nav_simulation)/meshes/clearing_robot/DaBi.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <!-- Arm collisions (link2..link7) are the STL bounding boxes; STL
+         collisions crash gzserver in ODE ray-sensor checks. -->
+    <collision>
+      <origin xyz="1.285 -0.170 0.000" rpy="0 0 0" />
+      <geometry><box size="2.788 0.780 0.776"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint2" type="revolute">
+    <origin xyz="1.65 0 0" rpy="-1.5708 -2.760 0" />
+    <parent link="link1" />
+    <child link="link2" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="1.1687" effort="100" velocity="5" />
+  </joint>
+
+  <link name="link3">
+    <inertial>
+      <origin xyz="2.13204457 -0.0592608975 0.00440016614" rpy="0 0 0"/>
+      <mass value="1402"/>
+      <inertia ixx="77.3925584" ixy="-5.23281886" ixz="0.223344386"
+               iyy="1949.69327" iyz="-0.00727808857" izz="1940.91237"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find multimap_nav_simulation)/meshes/clearing_robot/zhongbi.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="2.250 -0.148 0.005" rpy="0 0 0" />
+      <geometry><box size="4.700 0.724 0.848"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint3" type="revolute">
+    <origin xyz="2.5 0 0" rpy="0 0 2.7263" />
+    <parent link="link2" />
+    <child link="link3" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.6895" upper="0" effort="100" velocity="5" />
+  </joint>
+
+  <link name="link4">
+    <inertial>
+      <origin xyz="0.144338 -0.627142103 -0.0396293599" rpy="0 0 0"/>
+      <mass value="700"/>
+      <inertia ixx="120.375335" ixy="-87.2852653" ixz="-18.0183481"
+               iyy="414.556747" iyz="-9.23615827" izz="485.13141"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find multimap_nav_simulation)/meshes/clearing_robot/xiaobi.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.125 -0.727 0.003" rpy="0 0 0" />
+      <geometry><box size="3.130 1.767 0.839"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint4" type="revolute">
+    <origin xyz="4.5 0 0" rpy="0 0 0.4815" />
+    <parent link="link3" />
+    <child link="link4" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="1.6265" effort="100" velocity="5" />
+  </joint>
+
+  <link name="link5">
+    <inertial>
+      <origin xyz="0.183389268 0.000891158583 0.00128422761" rpy="0 0 0"/>
+      <mass value="525"/>
+      <inertia ixx="23.7986984" ixy="-0.0985816319" ixz="0.0870947509"
+               iyy="35.612472" iyz="0.00448312687" izz="32.823992"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find multimap_nav_simulation)/meshes/clearing_robot/R2.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.235 0.000 0.000" rpy="0 0 0" />
+      <geometry><box size="0.801 0.524 0.621"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint5" type="revolute">
+    <origin xyz="1.855 -0.239 0" rpy="1.5708 0 0" />
+    <parent link="link4" />
+    <child link="link5" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.58" upper="1.58" effort="100" velocity="5" />
+  </joint>
+
+  <link name="link6">
+    <inertial>
+      <origin xyz="0.0252308586 0.17131212 -0.01393312" rpy="0 0 0"/>
+      <mass value="580"/>
+      <inertia ixx="30.4273422" ixy="-1.5814964" ixz="0.816006364"
+               iyy="24.4154256" iyz="0.786265784" izz="21.3190364"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find multimap_nav_simulation)/meshes/clearing_robot/R1.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.037 0.136 -0.023" rpy="0 0 0" />
+      <geometry><box size="0.519 0.576 0.640"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint6" type="revolute">
+    <origin xyz="0.469 0 0" rpy="-1.5708 -1.5708 0" />
+    <parent link="link5" />
+    <child link="link6" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.58" upper="1.58" effort="100" velocity="3" />
+  </joint>
+
+  <link name="link7">
+    <inertial>
+      <origin xyz="3.26484326e-05 0.186943813 0.508338592" rpy="0 0 0"/>
+      <mass value="720"/>
+      <inertia ixx="92.026891" ixy="-2.52810726e-05" ixz="-1.05435695e-05"
+               iyy="407.855369" iyz="-22.6800914" izz="358.651723"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="file://$(find multimap_nav_simulation)/meshes/clearing_robot/candou.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.000 0.116 0.618" rpy="0 0 0" />
+      <geometry><box size="2.500 0.732 1.285"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="joint7" type="revolute">
+    <origin xyz="0 0.438 0" rpy="-1.5708 -1.5708 0" />
+    <parent link="link6" />
+    <child link="link7" />
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100" velocity="3" />
+  </joint>
+
+  <!-- IMU -->
+  <link name="imu_link">
+    <visual>
+      <geometry><box size="0.05 0.05 0.05"/></geometry>
+    </visual>
+  </link>
+
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0 0 1.65" rpy="0 0 0"/>
+  </joint>
+
+  <!-- 传动系统 -->
+  <transmission name="left_back_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_wheel_back_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="left_back_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="left_middle_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_wheel_middle_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="left_middle_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="left_middle1_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_wheel_middle1_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="left_middle1_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="left_middle2_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_wheel_middle2_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="left_middle2_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="left_front_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_wheel_front_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="left_front_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="right_back_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_wheel_back_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="right_back_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="right_middle_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_wheel_middle_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="right_middle_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="right_middle1_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_wheel_middle1_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="right_middle1_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="right_middle2_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_wheel_middle2_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="right_middle2_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="right_front_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_wheel_front_joint">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+    </joint>
+    <actuator name="right_front_motor">
+      <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <xacro:macro name="arm_joint_transmission" params="name">
+    <transmission name="${name}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${name}_motor">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+  <xacro:arm_joint_transmission name="joint1"/>
+  <xacro:arm_joint_transmission name="joint2"/>
+  <xacro:arm_joint_transmission name="joint3"/>
+  <xacro:arm_joint_transmission name="joint4"/>
+  <xacro:arm_joint_transmission name="joint5"/>
+  <xacro:arm_joint_transmission name="joint6"/>
+  <xacro:arm_joint_transmission name="joint7"/>
+
+  <!-- ROS 2 控制系统 -->
+  <ros2_control name="whc_control" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+
+    <joint name="left_wheel_back_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="left_wheel_middle_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="left_wheel_middle1_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="left_wheel_middle2_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="left_wheel_front_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="right_wheel_back_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="right_wheel_middle_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="right_wheel_middle1_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="right_wheel_middle2_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="right_wheel_front_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <xacro:macro name="arm_ros2_joint" params="name">
+      <joint name="${name}">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">0.0</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+        <state_interface name="effort"/>
+      </joint>
+    </xacro:macro>
+    <xacro:arm_ros2_joint name="joint1"/>
+    <xacro:arm_ros2_joint name="joint2"/>
+    <xacro:arm_ros2_joint name="joint3"/>
+    <xacro:arm_ros2_joint name="joint4"/>
+    <xacro:arm_ros2_joint name="joint5"/>
+    <xacro:arm_ros2_joint name="joint6"/>
+    <xacro:arm_ros2_joint name="joint7"/>
+  </ros2_control>
+
+  <!-- 为每个链接添加 Gazebo 材质定义 -->
+  <gazebo reference="base_link">
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="link1">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="link2">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="link3">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="link4">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="link5">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="link6">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="link7">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="right_wheel_back">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="right_wheel_middle">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="right_wheel_middle1">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="right_wheel_middle2">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="right_wheel_front">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="left_wheel_back">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="left_wheel_middle">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="left_wheel_middle1">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="left_wheel_middle2">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+  <gazebo reference="left_wheel_front">
+    <material>Gazebo/Grey</material>
+    <!-- The collision cylinder is rotated about X; its local Z is the wheel axle.
+         Low axial/lateral friction allows the ten wheels to skid-steer.
+         Bounded penetration correction avoids impulses from the mesh floor. -->
+    <fdir1>0 0 1</fdir1>
+    <mu1>0.05</mu1>
+    <mu2>2.0</mu2>
+    <slip1>0.2</slip1>
+    <slip2>0.0</slip2>
+    <kp>10000000.0</kp>
+    <kd>10000.0</kd>
+    <maxVel>0.1</maxVel>
+    <minDepth>0.001</minDepth>
+    <maxContacts>8</maxContacts>
+    <implicitSpringDamper>true</implicitSpringDamper>
+  </gazebo>
+
+
+
+  <!-- 统一的 Gazebo 插件配置 -->
+  <gazebo>
+    <!-- Gazebo ROS 2 控制插件 -->
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <parameters>$(find multimap_nav_simulation)/config/clearing_robot_controllers.yaml</parameters>
+      <ros>
+        <remapping>/diff_drive_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
+        <remapping>/diff_drive_controller/odom:=/odom_diff_drive</remapping>
+      </ros>
+    </plugin>
+
+  </gazebo>
+
+  <gazebo reference="imu_link">
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <imu>
+        <angular_velocity>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+              <bias_mean>0.0000075</bias_mean>
+              <bias_stddev>0.0000008</bias_stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+              <bias_mean>0.0000075</bias_mean>
+              <bias_stddev>0.0000008</bias_stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+              <bias_mean>0.0000075</bias_mean>
+              <bias_stddev>0.0000008</bias_stddev>
+            </noise>
+          </z>
+        </angular_velocity>
+        <linear_acceleration>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>1.7e-2</stddev>
+              <bias_mean>0.1</bias_mean>
+              <bias_stddev>0.001</bias_stddev>
+            </noise>
+          </z>
+        </linear_acceleration>
+      </imu>
+      <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+        <ros>
+          <namespace>/</namespace>
+          <remapping>~/out:=/livox/imu_raw</remapping>
+        </ros>
+        <frame_name>imu_link</frame_name>
+        <initial_orientation_as_reference>false</initial_orientation_as_reference>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+
+
+  <!-- 包含激光雷达宏及实例化 -->
+
+  <xacro:property name="PI" value="3.14159265359"/>
+  <!-- ==================== 3D LiDAR Sensors ==================== -->
+  <xacro:macro name="lidar_3d_fov" params="index parent x y z yaw">
+    <link name="rslidar_${index}">
+      <visual>
+        <geometry>
+          <cylinder radius="0.03" length="0.05"/>
+        </geometry>
+        <material name="rslidar_${index}_color">
+          <color rgba="0.9 0.1 0.1 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="0.03" length="0.05"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="0.05"/>
+        <inertia ixx="0.00001" ixy="0" ixz="0" iyy="0.00001" iyz="0" izz="0.00001"/>
+      </inertial>
+    </link>
+
+    <joint name="rslidar_${index}_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="rslidar_${index}"/>
+      <origin xyz="${x} ${y} ${z}" rpy="0 0 ${yaw}"/>
+    </joint>
+
+    <gazebo reference="rslidar_${index}">
+      <material>Gazebo/Red</material>
+      <sensor type="ray" name="rslidar_${index}_sensor">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>false</visualize>
+        <update_rate>10</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>180</samples>
+              <resolution>1</resolution>
+              <min_angle>${-PI/2}</min_angle>
+              <max_angle>${PI/2}</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>8</samples>
+              <resolution>1</resolution>
+              <min_angle>${-15.0*PI/180.0}</min_angle>
+              <max_angle>${15.0*PI/180.0}</max_angle>
+            </vertical>
+          </scan>
+          <range>
+            <min>0.1</min>
+            <max>30.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.005</stddev>
+          </noise>
+        </ray>
+        <plugin name="rslidar_${index}_plugin" filename="libgazebo_ros_ray_sensor.so">
+          <ros>
+            <remapping>~/out:=/rslidar_points_${index}</remapping>
+          </ros>
+          <output_type>sensor_msgs/PointCloud2</output_type>
+          <frame_name>rslidar_${index}</frame_name>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- lidar_1: 后 -->
+  <xacro:lidar_3d_fov index="1" parent="link1" x="-3.2" y="0" z="-0.6" yaw="${PI}"/>
+  <!-- lidar_2: 左 -->
+  <xacro:lidar_3d_fov index="2" parent="link1" x="-0.5" y="1.2" z="-0.6" yaw="${PI/2}"/>
+  <!-- lidar_3: 前左 -->
+  <xacro:lidar_3d_fov index="3" parent="link1" x="1.5" y="1.2" z="-0.6" yaw="${PI/4}"/>
+  <!-- lidar_4: 前右 -->
+  <xacro:lidar_3d_fov index="4" parent="link1" x="1.5" y="-1.2" z="-0.6" yaw="${-PI/4}"/>
+  <!-- lidar_5: 右 -->
+  <xacro:lidar_3d_fov index="5" parent="link1" x="-0.5" y="-1.2" z="-0.6" yaw="${-PI/2}"/>
+
+  <!-- Fixed navigation LiDAR; the original five turret LiDARs remain available. -->
+  <xacro:lidar_3d parent="base_link" xyz="-1.5 0 2.6" rpy="0 0 0"/>
+
+  <!-- Ground-truth 3D odometry, consistent with the package's other robots. -->
+  <gazebo>
+    <plugin name="gazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
+      <ros>
+        <remapping>odom:=/odom</remapping>
+      </ros>
+      <body_name>base_link</body_name>
+      <update_rate>100</update_rate>
+    </plugin>
+  </gazebo>
+</robot>

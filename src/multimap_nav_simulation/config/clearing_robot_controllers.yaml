@@ -1,0 +1,80 @@
+# Controller names and wheel dimensions match robot/clearing_robot.xacro.
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    diff_drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+diff_drive_controller:
+  ros__parameters:
+    left_wheel_names:
+      - left_wheel_back_joint
+      - left_wheel_middle2_joint
+      - left_wheel_middle_joint
+      - left_wheel_middle1_joint
+      - left_wheel_front_joint
+    right_wheel_names:
+      - right_wheel_back_joint
+      - right_wheel_middle2_joint
+      - right_wheel_middle_joint
+      - right_wheel_middle1_joint
+      - right_wheel_front_joint
+
+    wheel_separation: 2.8
+    wheel_radius: 0.48
+    wheels_per_side: 5
+    use_stamped_vel: false
+    cmd_vel_timeout: 0.5
+
+    publish_rate: 50.0
+    odom_frame_id: odom
+    base_frame_id: base_link
+    pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+    open_loop: false
+    enable_odom_tf: false
+    velocity_rolling_window_size: 10
+
+    linear.x.has_velocity_limits: true
+    linear.x.has_acceleration_limits: true
+    linear.x.max_velocity: 1.0
+    linear.x.min_velocity: -1.0
+    linear.x.max_acceleration: 0.4
+    linear.x.min_acceleration: -0.4
+
+    angular.z.has_velocity_limits: true
+    angular.z.has_acceleration_limits: true
+    angular.z.max_velocity: 0.5
+    angular.z.min_velocity: -0.5
+    angular.z.max_acceleration: 0.3
+    angular.z.min_acceleration: -0.3
+
+# Holds joint1..joint7 at the URDF zero pose. Path tolerances are wide because
+# GazeboSystem SetPosition can briefly overshoot this tonne-scale arm.
+arm_controller:
+  ros__parameters:
+    joints: [joint1, joint2, joint3, joint4, joint5, joint6, joint7]
+    command_interfaces: [position]
+    state_interfaces: [position, velocity]
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+    allow_nonzero_velocity_at_trajectory_end: false
+    constraints:
+      stopped_velocity_tolerance: 1.0
+      goal_time: 10.0
+      joint1: {trajectory: 3.14, goal: 0.15}
+      joint2: {trajectory: 1.17, goal: 0.15}
+      joint3: {trajectory: 1.69, goal: 0.15}
+      joint4: {trajectory: 1.63, goal: 0.15}
+      joint5: {trajectory: 1.58, goal: 0.15}
+      joint6: {trajectory: 1.58, goal: 0.15}
+      joint7: {trajectory: 3.14, goal: 0.15}
+
