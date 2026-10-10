@@ -4,7 +4,7 @@
   <!-- ================================================================
        lidar_3d - 多线 3D 激光雷达 (Gazebo ray sensor 插件)
        仿真 Velodyne VLP-16 风格多线雷达
-       发布话题: /livox/lidar_PointCloud2 (sensor_msgs/PointCloud2)
+       发布话题: /points_raw (sensor_msgs/PointCloud2)
        宏参数:
          parent  - 父 link
          xyz     - 安装位置偏移
@@ -19,7 +19,7 @@
   <xacro:property name="lidar_samples"        value="1800"/>   <!-- 每圈采样数 -->
   <xacro:property name="lidar_min_angle"      value="-3.14159"/> <!-- 水平起始角 (rad) -->
   <xacro:property name="lidar_max_angle"      value="3.14159"/>  <!-- 水平终止角 (rad) -->
-  <xacro:property name="lidar_min_range"      value="0.1"/>      <!-- 最小测距 (m) -->
+  <xacro:property name="lidar_min_range"      value="0.4"/>      <!-- 最小测距 (m) -->
   <xacro:property name="lidar_max_range"      value="10.0"/>     <!-- 最大测距 (m)，与 octomap max_range 一致 -->
   <xacro:property name="lidar_range_res"      value="0.02"/>     <!-- 距离分辨率 -->
   <xacro:property name="lidar_hz"             value="100.0"/>     <!-- 扫描频率 (Hz) -->

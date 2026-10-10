@@ -1,78 +1,112 @@
-# 清障机器人 Gazebo 仿真
+# 多场景导航仿真地图
 
-模型从 `robot_description/urdf/whc_description_gazebo.xacro` 迁入本包，入口为
-`robot/clearing_robot.xacro`，所需 STL 位于 `meshes/clearing_robot/`。
-不再需要原来的 `robot_description` 功能包。适用于 ROS 2 Humble + Gazebo Classic。
+ROS 2 Humble + Gazebo Classic，当前共 **17 张**：flat 5 张、terrain 5 张、floor 7 张。
+场景版本：`compact_mixed_floors_dynamic_20261008_v3`。长度单位为米，world、STL 与 PCD 坐标一致。
 
-## 构建与启动
+| 地图 | 尺寸 / m | 下层 / 上层 | 动态障碍 |
+| --- | --- | --- | ---: |
+| flat_1 | 14.0 × 10.0 | 平地 | 0 |
+| flat_2 | 26.0 × 5.6 | 平地 | 0 |
+| flat_3 | 19.6 × 21.0 | 平地 | 8 |
+| flat_4 | 21.0 × 16.8 | 平地 | 0 |
+| flat_5 | 30.0 × 19.0 | 平地 | 0 |
+| terrain_1 | 16.0 × 12.4 | 起伏地形 | 0 |
+| terrain_2 | 27.0 × 7.4 | 起伏地形 | 0 |
+| terrain_3 | 21.6 × 23.0 | 起伏地形 | 6 |
+| terrain_4 | 28.0 × 20.7 | 起伏地形 | 0 |
+| terrain_5 | 11.2 × 19.0 | 起伏地形 | 0 |
+| floor_1 | 18.0 × 14.4 | 平地 / 平地 | 0 |
+| floor_2 | 30.0 × 7.5 | 平地 / 平地 | 0 |
+| floor_3 | 23.3 × 26.0 | 平地 / 平地 | 8 |
+| floor_4 | 28.0 × 17.8 | 平地 / 平地 | 0 |
+| floor_5 | 30.0 × 25.0 | 平地 / 平地 | 0 |
+| floor_6 | 22.0 × 18.0 | 平地 / 起伏地形 | 0 |
+| floor_7 | 24.0 × 20.0 | 起伏地形 / 起伏地形 | 0 |
+
+floor_6 下层平坦、上层起伏，28 个静态障碍；floor_7 两层起伏，32 个静态障碍。
+两张新图坡道宽 2.4 m，两端渐变并有平缓衔接区域。上下层出生点按真实地面高度配置。
+
+flat_3、terrain_3、floor_3 分别有 8、6、8 个鲜红色动态障碍。
+flat_3 与 floor_3 速度范围 0.25–0.95 m/s，terrain_3 为 0.25–0.80 m/s；不同实体速度不同。
+路径分布在不同空间区域，floor_3 同时覆盖上下层。移动实体有 Gazebo 碰撞几何，激光可观测；
+静态 PCD 不包含动态实体，导航使用传感器观测判断它们。
+
+## 构建和启动
 
 ```bash
-cd /home/yangyang/ros2_ws/MultiMapNav_Simulation
+cd /data/projects/ros2_ws/MultiMapNav_Simulation
 source /opt/ros/humble/setup.bash
 colcon build --packages-select multimap_nav_simulation --symlink-install
 source install/setup.bash
-ros2 launch multimap_nav_simulation clearing_robot.launch.py
+source /data/projects/ros2_ws/MultiMapNav/install/setup.bash
+
+ros2 launch multimap_nav_simulation gazebo_tracked_sim.launch.py world_file_name:=floor_6 navigation:=true
+# floor_7 同样启动；在上层出生可追加 spawn_level:=upper
+# 查看动态障碍：world_file_name:=flat_3、terrain_3 或 floor_3
 ```
 
-默认使用 `cabin.world`。`spawn_x/y/z/yaw` 留空时按世界选择默认出生位姿
-（启动文件中的 `WORLD_SPAWN_POSES`）：
+`config/maps.yaml` 记录目录、尺寸、默认位姿、点数、文件校验和和动态路径。
+`config/tracked_initial_poses.yaml` 记录上下层的定位初值及对应 world 校验和。
+启动程序设置 Gazebo 资源及插件路径，并根据地图加载仿真定位参数。
+旧地图别名 indoor_flat、terrain、two_floor 仍可使用。
 
-| 世界 | x, y, z, yaw |
-| --- | --- |
-| `cabin` | 0, 0, 0.05, 0 |
-| `terrain` | 10, -4, 0.3, π（原点处有土丘，会把车体嵌进地形） |
-| `terrain_with_wall` | 3, 9, 0.3, π |
-| 其他 | 0, 0, 0.05, 0 |
+## 场景资源与再生成
 
-本包安装 cabin 的 STL 和 Gazebo 模型目录，启动时自动设置模型搜索路径。
-生成机器人前等待 `/clock` 连续前进，避免保存过仿真状态的世界加载时钟跳变
-导致 Gazebo 生成服务误判超时。
+```text
+3DModel/{flat,terrain,floor}/地图名.blend  # 可编辑 Blender 场景
+3DModel/{flat,terrain,floor}/地图名.stl    # 静态场景完整网格
+3DModel/{flat,terrain,floor}/surfaces/     # world 使用的独立曲面网格
+worlds/{flat,terrain,floor}/地图名.world
+pcd/{flat,terrain,floor}/地图名.pcd
+```
+
+同名 pcd_modified 文件保持兼容，并与 pcd 完全一致。
+当前场景由 Blender 脚本生成，再调用仿真包的点云采样函数，未改变论文公式。
+旧 generate_map_suite.py 用于共享几何函数与旧版场景；重新生成当前场景使用：
 
 ```bash
-# 切换本包的世界（名称可带 .world）
-ros2 launch multimap_nav_simulation clearing_robot.launch.py world_file_name:=terrain
-
-# 自定义世界文件、出生位置，以及无界面模式
-ros2 launch multimap_nav_simulation clearing_robot.launch.py \
-  world_file:=/absolute/path/example.world spawn_x:=6.5 spawn_y:=-3.5 headless:=true
+blender --background --factory-startup --python src/multimap_nav_simulation/scripts/regenerate_diverse_suite.py -- \
+  --package-dir src/multimap_nav_simulation --maps floor_6 floor_7
 ```
 
-`gui:=false` 也可关闭界面。`world_file` 非空时优先于 `world_file_name`。
-这个机器人宽约 3.3 米、底盘长约 5 米。零位时机械臂往前伸出约 7.8 米、最高约 5.2 米。
+省略 --maps 将重新生成整个当前目录。局部生成保留其他地图及其设计记录。
+点云按约 0.09 m 地表间距、0.08 m 墙面间距确定性采样；它是已知静态环境地图。
+world_to_mesh.py 导出静态几何时会排除运动插件控制的实体。
 
-`stiff_ground:=true`（默认）时，若世界文件里定义了接触 `kp/kd`，启动文件会
-在系统临时目录生成一份把它们改为 `1e9/1e5` 的副本并加载，原世界文件不变。
-`terrain`、`terrain_with_wall`、`two_floor` 为小车设置了 `kp=1e6`，Gazebo 按
-串联合成接触刚度，约 29 吨的本机器人会下陷约 10 cm，行驶后穿过地形网格坠落。
+## 验证
 
-## 机械臂
+```bash
+python3 src/multimap_nav_simulation/scripts/validate_map_suite.py
+```
 
-`joint1` 到 `joint7` 仍是原来那 7 个转动关节，安装位姿与
-`whc_description_gazebo.xacro` 一致。启动时 `arm_controller`（轨迹控制器）把它们
-保持在 URDF 零位，否则重力会把臂拉下去。需要活动时向
-`/arm_controller/follow_joint_trajectory` 发目标即可。
+检查静态 world/网格几何覆盖、PCD 数据和校验和、初始化位姿地面支撑、动态路径及颜色。
+两张新图通过上下楼的离线碰撞连通性检查；这是几何可行性，实际导航和动态避障需实测。
+旧实验记录对应原场景版本，不自动计入新场景验收。
 
-## 仿真动力学与碰撞近似
+## 清障机器人
 
-保留原模型的视觉网格和各链接质量；STL 链接的惯量按均匀密度凸包近似重算，
-车轮惯量按实心圆柱计算。原底盘 STL 包含贴地的刚性履带外形，直接作为碰撞
-网格会拖地，因此底盘碰撞改用抬高的简化箱体，由十个驱动轮承担地面接触。
-转台和机械臂的碰撞体使用各 STL 的包围盒（视觉仍为原网格）：原 STL 作为碰撞
-体会让 gzserver 在雷达射线检测中段错误崩溃。
-这些设置用于底盘导航仿真，不精确复现液压机械臂或履带的接触动力学。
+```bash
+ros2 launch multimap_nav_simulation clearing_robot.launch.py world_file_name:=flat_4
+```
 
-## 控制与传感器接口
+机器人模型入口为 `robot/clearing_robot.xacro`，STL 位于 `meshes/clearing_robot/`。
+该机器人宽约 3.3 m、底盘长约 5 m，零位机械臂向前伸出约 7.8 m。
+原 `flat_1`、`floor_1` 及部分窄通道是小型履带/差速机器人的实验场景；
+清障机器人测试优先使用空间足够的 `flat_4` 或地形地图。
+
+`stiff_ground:=true` 默认提高临时 world 副本的接触刚度，适应约 29 吨的机器人。
+`arm_controller` 在启动时保持七个机械臂关节的 URDF 零位，
+向 `/arm_controller/follow_joint_trajectory` 发送目标可活动机械臂。
+关节布局和视觉网格保留原模型；底盘、机械臂采用简化碰撞体，适用于导航仿真。
 
 | 接口 | 用途 |
 | --- | --- |
-| `/cmd_vel` | `geometry_msgs/msg/Twist` 底盘速度 |
+| `/cmd_vel` | 底盘速度指令 |
 | `/odom` | Gazebo 三维真值里程计 |
 | `/odom_diff_drive` | 差速轮式里程计 |
-| `/joint_states` | 十个车轮和七个机械臂关节 |
-| `/points_raw` | 导航用 3D 点云，坐标系 `lidar_link` |
-| `/livox/imu_raw` | IMU，坐标系 `imu_link` |
-| `/rslidar_points_1` 至 `/rslidar_points_5` | 原模型的五个周向雷达 |
+| `/joint_states` | 车轮和机械臂关节 |
+| `/points_raw` | 导航用 3D 点云，`lidar_link` |
+| `/livox/imu_raw` | IMU，`imu_link` |
 
-默认发布 `odom -> base_link` 真值 TF；与定位系统一起使用时，若该系统也发布
-同一 TF，可设置 `publish_odom_tf:=false`。
-控制器参数在 `config/clearing_robot_controllers.yaml`。
+默认发布 `odom -> base_link` 真值 TF；定位系统也发布同一 TF 时，
+可设置 `publish_odom_tf:=false`。

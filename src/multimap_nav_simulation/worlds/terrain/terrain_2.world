@@ -1,0 +1,810 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.7">
+  <world name="terrain_2">
+    <gravity>0 0 -9.8</gravity>
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/gazebo</namespace>
+      </ros>
+    </plugin>
+    <physics name="ode_physics" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>150</iters>
+          <sor>1.3</sor>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>0.2</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+    </physics>
+    <light name="sun" type="directional">
+      <pose>0 0 42 0 0 0</pose>
+      <diffuse>0.92 0.91 0.88 1</diffuse>
+      <specular>0.18 0.18 0.16 1</specular>
+      <direction>-0.35 -0.28 -0.9</direction>
+      <cast_shadows>true</cast_shadows>
+    </light>
+    <light name="fill" type="point">
+      <pose>0 0 6 0 0 0</pose>
+      <diffuse>0.35 0.36 0.34 1</diffuse>
+      <specular>0.02 0.02 0.02 1</specular>
+      <cast_shadows>false</cast_shadows>
+      <attenuation>
+        <range>80</range>
+        <constant>0.5</constant>
+        <linear>0.02</linear>
+      </attenuation>
+    </light>
+    <scene>
+      <ambient>0.52 0.56 0.48 1</ambient>
+      <background>0.58 0.76 0.92 1</background>
+    </scene>
+    <gui fullscreen="false">
+      <camera name="user_camera">
+        <pose>18.9 -6.62727273 22.95 0 0.65 2.2</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+    <model name="terrain_2_structure">
+      <static>true</static>
+      <link name="structure">
+        <collision name="ground_surface_collision">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>3DModel/terrain/surfaces/terrain_2_ground_surface.stl</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>8</mu>
+                <mu2>8</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="ground_surface_visual">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>3DModel/terrain/surfaces/terrain_2_ground_surface.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>0.38 0.54 0.24 1</ambient>
+            <diffuse>0.38 0.54 0.24 1</diffuse>
+          </material>
+        </visual>
+        <collision name="rock_box_0_collision">
+          <pose>-7.36363636 1.84090909 0.247232489 0 0 0.252157693</pose>
+          <geometry>
+            <box>
+              <size>0.675 0.613636364 0.398863636</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="rock_box_0_visual">
+          <pose>-7.36363636 1.84090909 0.247232489 0 0 0.252157693</pose>
+          <geometry>
+            <box>
+              <size>0.675 0.613636364 0.398863636</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.50 0.34 0.20 1</ambient>
+            <diffuse>0.50 0.34 0.20 1</diffuse>
+          </material>
+        </visual>
+        <collision name="rock_round_1_collision">
+          <pose>-1.84090909 -1.84090909 0.519823254 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.23318181818181818</radius>
+            </sphere>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="rock_round_1_visual">
+          <pose>-1.84090909 -1.84090909 0.519823254 0 0 0</pose>
+          <geometry>
+            <sphere>
+              <radius>0.23318181818181818</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.42 0.36 0.30 1</ambient>
+            <diffuse>0.42 0.36 0.30 1</diffuse>
+          </material>
+        </visual>
+        <collision name="stone_column_2_collision">
+          <pose>3.68181818 1.84090909 0.83729198 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20863636363636365</radius>
+              <length>0.49090909090909096</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="stone_column_2_visual">
+          <pose>3.68181818 1.84090909 0.83729198 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.20863636363636365</radius>
+              <length>0.49090909090909096</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.66 0.50 0.28 1</ambient>
+            <diffuse>0.66 0.50 0.28 1</diffuse>
+          </material>
+        </visual>
+        <collision name="rock_box_3_collision">
+          <pose>8.59090909 -1.84090909 0.873967674 0 0 -0.715763862</pose>
+          <geometry>
+            <box>
+              <size>0.675 0.613636364 0.398863636</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="rock_box_3_visual">
+          <pose>8.59090909 -1.84090909 0.873967674 0 0 -0.715763862</pose>
+          <geometry>
+            <box>
+              <size>0.675 0.613636364 0.398863636</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.50 0.34 0.20 1</ambient>
+            <diffuse>0.50 0.34 0.20 1</diffuse>
+          </material>
+        </visual>
+        <collision name="boundary_0_collision">
+          <pose>0 -3.68181818 0.859090909 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>27 0.0981818182 1.84090909</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="boundary_0_visual">
+          <pose>0 -3.68181818 0.859090909 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>27 0.0981818182 1.84090909</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.62 0.58 0.50 1</ambient>
+            <diffuse>0.62 0.58 0.50 1</diffuse>
+          </material>
+        </visual>
+        <collision name="boundary_1_collision">
+          <pose>13.5 0 0.859090909 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>7.36363636 0.0981818182 1.84090909</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="boundary_1_visual">
+          <pose>13.5 0 0.859090909 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>7.36363636 0.0981818182 1.84090909</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.62 0.58 0.50 1</ambient>
+            <diffuse>0.62 0.58 0.50 1</diffuse>
+          </material>
+        </visual>
+        <collision name="boundary_2_collision">
+          <pose>0 3.68181818 0.859090909 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>27 0.0981818182 1.84090909</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="boundary_2_visual">
+          <pose>0 3.68181818 0.859090909 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>27 0.0981818182 1.84090909</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.62 0.58 0.50 1</ambient>
+            <diffuse>0.62 0.58 0.50 1</diffuse>
+          </material>
+        </visual>
+        <collision name="boundary_3_collision">
+          <pose>-13.5 0 0.859090909 0 0 -1.57079633</pose>
+          <geometry>
+            <box>
+              <size>7.36363636 0.0981818182 1.84090909</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="boundary_3_visual">
+          <pose>-13.5 0 0.859090909 0 0 -1.57079633</pose>
+          <geometry>
+            <box>
+              <size>7.36363636 0.0981818182 1.84090909</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.62 0.58 0.50 1</ambient>
+            <diffuse>0.62 0.58 0.50 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_0_collision">
+          <pose>3.52605402 0.14693548 1.00917888 0 0 -1.52039342</pose>
+          <geometry>
+            <box>
+              <size>0.897526773 0.796967811 0.824718119</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_0_visual">
+          <pose>3.52605402 0.14693548 1.00917888 0 0 -1.52039342</pose>
+          <geometry>
+            <box>
+              <size>0.897526773 0.796967811 0.824718119</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.50 0.34 0.20 1</ambient>
+            <diffuse>0.50 0.34 0.20 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_1_collision">
+          <pose>4.68234577 -1.98848086 0.886539426 0 0 -1.4403284</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.25570458080539726</radius>
+              <length>0.5300926638557665</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_1_visual">
+          <pose>4.68234577 -1.98848086 0.886539426 0 0 -1.4403284</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.25570458080539726</radius>
+              <length>0.5300926638557665</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.42 0.36 0.30 1</ambient>
+            <diffuse>0.42 0.36 0.30 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_2_collision">
+          <pose>-4.36321673 0.703447508 0.519935062 0 0 -3.02401162</pose>
+          <geometry>
+            <sphere>
+              <radius>0.38494449460127217</radius>
+            </sphere>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_2_visual">
+          <pose>-4.36321673 0.703447508 0.519935062 0 0 -3.02401162</pose>
+          <geometry>
+            <sphere>
+              <radius>0.38494449460127217</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.42 0.36 0.30 1</ambient>
+            <diffuse>0.42 0.36 0.30 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_3_collision">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>3DModel/terrain/surfaces/terrain_2_irregular_prop_3.stl</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>8</mu>
+                <mu2>8</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_3_visual">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>3DModel/terrain/surfaces/terrain_2_irregular_prop_3.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>0.42 0.36 0.30 1</ambient>
+            <diffuse>0.42 0.36 0.30 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_4_collision">
+          <pose>-1.18040939 1.9350998 0.669952897 0 0 -2.27437032</pose>
+          <geometry>
+            <box>
+              <size>0.571917563 0.835448006 0.681564383</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_4_visual">
+          <pose>-1.18040939 1.9350998 0.669952897 0 0 -2.27437032</pose>
+          <geometry>
+            <box>
+              <size>0.571917563 0.835448006 0.681564383</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.50 0.34 0.20 1</ambient>
+            <diffuse>0.50 0.34 0.20 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_5_collision">
+          <pose>12.6968608 -0.769827334 0.87173921 0 0 -0.4212369</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.3725413363198869</radius>
+              <length>0.4359778927498049</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_5_visual">
+          <pose>12.6968608 -0.769827334 0.87173921 0 0 -0.4212369</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.3725413363198869</radius>
+              <length>0.4359778927498049</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.42 0.36 0.30 1</ambient>
+            <diffuse>0.42 0.36 0.30 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_6_collision">
+          <pose>0.424291257 -2.84764414 0.693496889 0 0 -2.69786196</pose>
+          <geometry>
+            <sphere>
+              <radius>0.2650390949673091</radius>
+            </sphere>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_6_visual">
+          <pose>0.424291257 -2.84764414 0.693496889 0 0 -2.69786196</pose>
+          <geometry>
+            <sphere>
+              <radius>0.2650390949673091</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.42 0.36 0.30 1</ambient>
+            <diffuse>0.42 0.36 0.30 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_7_collision">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>3DModel/terrain/surfaces/terrain_2_irregular_prop_7.stl</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>8</mu>
+                <mu2>8</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_7_visual">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>3DModel/terrain/surfaces/terrain_2_irregular_prop_7.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>0.42 0.36 0.30 1</ambient>
+            <diffuse>0.42 0.36 0.30 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_8_collision">
+          <pose>11.0326809 -2.05128993 1.07359204 0 0 -1.73854028</pose>
+          <geometry>
+            <box>
+              <size>1.1443229 0.456709303 0.812046689</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_8_visual">
+          <pose>11.0326809 -2.05128993 1.07359204 0 0 -1.73854028</pose>
+          <geometry>
+            <box>
+              <size>1.1443229 0.456709303 0.812046689</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.50 0.34 0.20 1</ambient>
+            <diffuse>0.50 0.34 0.20 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_9_collision">
+          <pose>5.20397242 1.02143468 1.00965341 0 0 0.439125164</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.3291050014733087</radius>
+              <length>0.7284059210901803</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_9_visual">
+          <pose>5.20397242 1.02143468 1.00965341 0 0 0.439125164</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.3291050014733087</radius>
+              <length>0.7284059210901803</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.42 0.36 0.30 1</ambient>
+            <diffuse>0.42 0.36 0.30 1</diffuse>
+          </material>
+        </visual>
+        <collision name="irregular_prop_10_collision">
+          <pose>1.71042887 -1.11595894 0.859853305 0 0 -2.60452415</pose>
+          <geometry>
+            <sphere>
+              <radius>0.3523278495800145</radius>
+            </sphere>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="irregular_prop_10_visual">
+          <pose>1.71042887 -1.11595894 0.859853305 0 0 -2.60452415</pose>
+          <geometry>
+            <sphere>
+              <radius>0.3523278495800145</radius>
+            </sphere>
+          </geometry>
+          <material>
+            <ambient>0.42 0.36 0.30 1</ambient>
+            <diffuse>0.42 0.36 0.30 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

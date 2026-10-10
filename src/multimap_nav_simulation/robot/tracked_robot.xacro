@@ -22,6 +22,10 @@
   <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/imu.xacro"/>
   <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/depth_camera.xacro"/>
 
+  <!-- 仿真横向摩擦标定：原1.3会在坡地锁住8轮差速转向。
+       0.3为当前仿真设置，保留纵向摩擦6.0；不是实体履带摩擦测量值。 -->
+  <xacro:arg name="lateral_friction" default="0.3"/>
+
   <!-- ========================== 尺寸与质量 ========================== -->
   <!-- 底盘：长 0.40 m、宽 0.28 m、高 0.10 m，与圆柱差速车占地接近 -->
   <xacro:property name="chassis_length" value="0.40"/>
@@ -139,7 +143,7 @@
            ODE：mu1 沿 fdir1（车体横向），mu2 沿 fdir1×法向（坡面纵向）。
            8 轮差速转向时前后轮必须侧滑，横向摩擦不能和纵向一样高。 -->
       <fdir1>0 1 0</fdir1>
-      <mu1>1.3</mu1>
+      <mu1>$(arg lateral_friction)</mu1>
       <mu2>6.0</mu2>
       <slip1>0.05</slip1>
       <slip2>0.0</slip2>

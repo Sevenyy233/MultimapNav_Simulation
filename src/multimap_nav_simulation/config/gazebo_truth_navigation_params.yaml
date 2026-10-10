@@ -1,0 +1,36 @@
+# Gazebo navigation validation using P3D world pose and velocity.
+# Map and world origins coincide. NDT-ESKF performance is not evaluated.
+localization_server:
+  ros__parameters:
+    use_sim_time: true
+    publish_identity_map_to_odom: true
+    costmap2d_localization:
+      use_ndt: false
+      use_odom: true
+      odom_is_map_frame: true
+      odom_topic: /truth/odometry
+      odom_timeout: 0.5
+      use_wheel_velocity: false
+      use_ground_support_prior: false
+      use_map_visibility: false
+      icp_refinement: false
+    gridmap_localization:
+      use_ndt: false
+      use_odom: true
+      odom_is_map_frame: true
+      odom_topic: /truth/odometry
+      odom_timeout: 0.5
+      use_wheel_velocity: false
+      use_ground_support_prior: false
+      use_map_visibility: false
+      icp_refinement: false
+    octomap_localization:
+      use_ndt: false
+      use_odom: true
+      odom_is_map_frame: true
+      odom_topic: /truth/odometry
+      odom_timeout: 0.5
+      use_wheel_velocity: false
+      use_ground_support_prior: false
+      use_map_visibility: false
+      icp_refinement: false

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Launch the clearing robot in Gazebo at the original URDF zero pose."""
 
-import os
 from pathlib import Path
 import re
 import tempfile
@@ -20,15 +19,8 @@ from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
 from launch_ros.actions import Node
 import xacro
+from multimap_nav_simulation.map_catalog import gazebo_environment, resolve_world, spawn_pose
 
-# Flat ground for the 5 m x 3.3 m chassis, facing the map interior; spawning
-# at the terrain origin embeds the robot in a mound and it falls through.
-WORLD_SPAWN_POSES = {
-    'cabin': ('0.0', '0.0', '0.05', '0.0'),
-    'terrain': ('10.0', '-4.0', '0.3', '3.14159'),
-    'terrain_with_wall': ('3.0', '9.0', '0.3', '3.14159'),
-}
-DEFAULT_SPAWN_POSE = ('0.0', '0.0', '0.05', '0.0')
 GROUND_KP = '1e9'
 GROUND_KD = '1e5'
 
@@ -50,15 +42,9 @@ def _launch_setup(context):
     boolean = lambda name: value(name).lower() in ('true', '1', 'yes')
 
     world_name = value('world_file').strip() or value('world_file_name').strip()
-    world = Path(os.path.expanduser(world_name))
-    if not world.is_absolute():
-        world = pkg_share / 'worlds' / world
-    if world.suffix != '.world':
-        world = world.with_suffix('.world')
-    if not world.is_file():
-        raise RuntimeError(f'World file does not exist: {world}')
-    world_spawn = WORLD_SPAWN_POSES.get(world.stem, DEFAULT_SPAWN_POSE)
-    spawn_pose = [value(f'spawn_{axis}').strip() or default
+    world = resolve_world(pkg_share, world_name)
+    world_spawn = spawn_pose(pkg_share, world, value('spawn_level'), 'clearing')
+    robot_pose = [value(f'spawn_{axis}').strip() or str(default)
                   for axis, default in zip(('x', 'y', 'z', 'yaw'), world_spawn)]
     if boolean('stiff_ground'):
         # Gazebo combines contact kp in series, so a world's soft ground (kp 1e6,
@@ -68,8 +54,10 @@ def _launch_setup(context):
         stiff = re.sub(r'<kp>[^<]*</kp>', f'<kp>{GROUND_KP}</kp>', text)
         stiff = re.sub(r'<kd>[^<]*</kd>', f'<kd>{GROUND_KD}</kd>', stiff)
         if stiff != text:
-            world = Path(tempfile.gettempdir()) / f'clearing_robot_{world.name}'
-            world.write_text(stiff)
+            with tempfile.NamedTemporaryFile(mode='w', prefix=f'clearing_robot_{world.stem}_',
+                                             suffix='.world', delete=False) as stream:
+                stream.write(stiff)
+                world = Path(stream.name)
 
     description = xacro.process_file(str(pkg_share / 'robot' / 'clearing_robot.xacro')).toxml()
     # Gazebo Classic passes this XML through the ROS argument parser. Comments
@@ -80,10 +68,7 @@ def _launch_setup(context):
     gzserver = ExecuteProcess(
         cmd=['gzserver', '--verbose', '-s', 'libgazebo_ros_init.so',
              '-s', 'libgazebo_ros_factory.so', str(world)],
-        additional_env={
-            'GAZEBO_MODEL_PATH': os.pathsep.join(filter(None, [
-                str(pkg_share / 'models'), os.environ.get('GAZEBO_MODEL_PATH', '')])),
-        },
+        additional_env=gazebo_environment(pkg_share),
         output='screen',
     )
     state_publisher = Node(
@@ -94,8 +79,8 @@ def _launch_setup(context):
     spawn = Node(
         package='gazebo_ros', executable='spawn_entity.py',
         arguments=['-entity', 'clearing_robot', '-topic', 'robot_description',
-                   '-x', spawn_pose[0], '-y', spawn_pose[1],
-                   '-z', spawn_pose[2], '-Y', spawn_pose[3], '-timeout', '120'],
+                   '-x', robot_pose[0], '-y', robot_pose[1],
+                   '-z', robot_pose[2], '-Y', robot_pose[3], '-timeout', '120'],
         output='screen',
     )
     wait_for_world = Node(
@@ -130,7 +115,7 @@ def _launch_setup(context):
         _after_success(arm, [hold_arm]),
         _after_success(hold_arm, [drive]),
         _after_success(drive, [LogInfo(msg='Clearing robot ready; /cmd_vel enabled.')]),
-        LogInfo(msg=f'World: {world}; spawn x y z yaw: {spawn_pose}'),
+        LogInfo(msg=f'World: {world}; spawn x y z yaw: {robot_pose}'),
         state_publisher,
         gzserver,
         wait_for_world,
@@ -146,11 +131,13 @@ def _launch_setup(context):
 
 def generate_launch_description():
     arguments = [
-        DeclareLaunchArgument('world_file_name', default_value='cabin',
-                              description='World basename in this package, e.g. cabin or terrain.'),
+        DeclareLaunchArgument('world_file_name', default_value='flat_4',
+                              description='flat_1..5, terrain_1..5 or floor_1..5.'),
         DeclareLaunchArgument('world_file', default_value='',
                               description='Optional absolute .world path; overrides world_file_name.'),
         DeclareLaunchArgument('use_sim_time', default_value='true'),
+        DeclareLaunchArgument('spawn_level', default_value='lower',
+                              description='lower or upper for floor maps.'),
         DeclareLaunchArgument('gui', default_value='true'),
         DeclareLaunchArgument('headless', default_value='false',
                               description='Suppress gzclient even when gui is true.'),
@@ -160,7 +147,7 @@ def generate_launch_description():
     ]
     arguments.extend(DeclareLaunchArgument(
         f'spawn_{axis}', default_value='',
-        description=f'Spawn {axis}; empty uses the per-world default in WORLD_SPAWN_POSES.')
+        description=f'Spawn {axis}; empty uses the map catalog default.')
         for axis in ('x', 'y', 'z', 'yaw'))
     arguments += [
         DeclareLaunchArgument('publish_odom_tf', default_value='true',

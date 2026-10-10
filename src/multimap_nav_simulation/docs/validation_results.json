@@ -1,0 +1,582 @@
+{
+  "date": "2026-10-03",
+  "environment": "ROS 2 Humble / Gazebo Classic 11",
+  "asset_validation": {
+    "passed": 15,
+    "maps": [
+      {
+        "name": "flat_1",
+        "points": 108456,
+        "triangles": 1424,
+        "support_z": {
+          "lower": 0.0
+        }
+      },
+      {
+        "name": "flat_2",
+        "points": 262548,
+        "triangles": 180,
+        "support_z": {
+          "lower": 0.0
+        }
+      },
+      {
+        "name": "flat_3",
+        "points": 339950,
+        "triangles": 324,
+        "support_z": {
+          "lower": 0.0
+        }
+      },
+      {
+        "name": "flat_4",
+        "points": 428095,
+        "triangles": 1656,
+        "support_z": {
+          "lower": 0.0,
+          "clearing": 0.0
+        }
+      },
+      {
+        "name": "flat_5",
+        "points": 447992,
+        "triangles": 144,
+        "support_z": {
+          "lower": 0.0
+        }
+      },
+      {
+        "name": "terrain_1",
+        "points": 702997,
+        "triangles": 29330,
+        "support_z": {
+          "lower": -0.0844709401770029,
+          "clearing": -0.0844709401770029
+        }
+      },
+      {
+        "name": "terrain_2",
+        "points": 646237,
+        "triangles": 16478,
+        "support_z": {
+          "lower": 0.0
+        }
+      },
+      {
+        "name": "terrain_3",
+        "points": 657846,
+        "triangles": 16622,
+        "support_z": {
+          "lower": 0.0
+        }
+      },
+      {
+        "name": "terrain_4",
+        "points": 649240,
+        "triangles": 16260,
+        "support_z": {
+          "lower": 0.0
+        }
+      },
+      {
+        "name": "terrain_5",
+        "points": 697171,
+        "triangles": 17690,
+        "support_z": {
+          "lower": 0.0
+        }
+      },
+      {
+        "name": "floor_1",
+        "points": 167250,
+        "triangles": 1604,
+        "support_z": {
+          "lower": 0.0,
+          "upper": 1.0,
+          "ramp": 0.0
+        }
+      },
+      {
+        "name": "floor_2",
+        "points": 1035076,
+        "triangles": 10244,
+        "support_z": {
+          "lower": 0.0,
+          "upper": 3.0,
+          "ramp": 0.24999999813759435
+        }
+      },
+      {
+        "name": "floor_3",
+        "points": 1021412,
+        "triangles": 15924,
+        "support_z": {
+          "lower": 0.0,
+          "upper": 3.0,
+          "ramp": 0.24999999813759435
+        }
+      },
+      {
+        "name": "floor_4",
+        "points": 878297,
+        "triangles": 1044,
+        "support_z": {
+          "lower": 0.0,
+          "upper": 2.4000000953674316,
+          "ramp": 0.24000001262196285
+        }
+      },
+      {
+        "name": "floor_5",
+        "points": 1029455,
+        "triangles": 25148,
+        "support_z": {
+          "lower": 0.0,
+          "upper": 3.0,
+          "ramp": 0.24999999813759435
+        }
+      }
+    ]
+  },
+  "runtime_validation": [
+    {
+      "name": "flat_1",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.208095401014968,
+      "start_z": 0.02895365235858336,
+      "end_z": 0.028953652358698144,
+      "cloud_messages": 142,
+      "cloud_points": 28800,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-all/flat_1_lower_tracked.log"
+    },
+    {
+      "name": "flat_2",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.2080755340418128,
+      "start_z": 0.028948961654529863,
+      "end_z": 0.028948961654523944,
+      "cloud_messages": 142,
+      "cloud_points": 26843,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-all/flat_2_lower_tracked.log"
+    },
+    {
+      "name": "flat_3",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.2080755340418315,
+      "start_z": 0.028948961654529468,
+      "end_z": 0.028948961654523958,
+      "cloud_messages": 157,
+      "cloud_points": 27957,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/flat_3_lower_tracked.log"
+    },
+    {
+      "name": "flat_4",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.20807553404206988,
+      "start_z": 0.02894896165452987,
+      "end_z": 0.02894896165452395,
+      "cloud_messages": 141,
+      "cloud_points": 22516,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-all/flat_4_lower_tracked.log"
+    },
+    {
+      "name": "flat_5",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.20807553404159168,
+      "start_z": 0.02894896165452908,
+      "end_z": 0.028948961654523986,
+      "cloud_messages": 153,
+      "cloud_points": 27201,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-all/flat_5_lower_tracked.log"
+    },
+    {
+      "name": "terrain_1",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.2285531852538779,
+      "start_z": -0.05668725885147978,
+      "end_z": -0.06068389879611851,
+      "cloud_messages": 161,
+      "cloud_points": 18509,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/terrain_1_lower_tracked.log"
+    },
+    {
+      "name": "terrain_2",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.20768926040226945,
+      "start_z": 0.02896922549627634,
+      "end_z": 0.028959491975657586,
+      "cloud_messages": 154,
+      "cloud_points": 23653,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/terrain_2_lower_tracked.log"
+    },
+    {
+      "name": "terrain_3",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.22536004192197184,
+      "start_z": 0.02897331222047083,
+      "end_z": 0.02894358227017252,
+      "cloud_messages": 151,
+      "cloud_points": 24921,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-all/terrain_3_lower_tracked.log"
+    },
+    {
+      "name": "terrain_4",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.22470114727333843,
+      "start_z": 0.028911932371068587,
+      "end_z": 0.028940439491172427,
+      "cloud_messages": 149,
+      "cloud_points": 24030,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-all/terrain_4_lower_tracked.log"
+    },
+    {
+      "name": "terrain_5",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.20801189505241882,
+      "start_z": 0.02894896163511783,
+      "end_z": 0.029038457527249324,
+      "cloud_messages": 173,
+      "cloud_points": 23615,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/terrain_5_lower_tracked.log"
+    },
+    {
+      "name": "floor_1",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.20809540101494284,
+      "start_z": 0.028953652358579184,
+      "end_z": 0.028953652358698102,
+      "cloud_messages": 168,
+      "cloud_points": 28800,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_1_lower_tracked.log"
+    },
+    {
+      "name": "floor_1",
+      "level": "upper",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.2080954010149448,
+      "start_z": 1.0289536523585794,
+      "end_z": 1.028953652358698,
+      "cloud_messages": 175,
+      "cloud_points": 27677,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_1_upper_tracked.log"
+    },
+    {
+      "name": "floor_2",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.2253245792606852,
+      "start_z": 0.028948961654528996,
+      "end_z": 0.028948961627923167,
+      "cloud_messages": 161,
+      "cloud_points": 23471,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_2_lower_tracked.log"
+    },
+    {
+      "name": "floor_2",
+      "level": "upper",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.22490510336437797,
+      "start_z": 3.028920482987968,
+      "end_z": 3.0290540308801472,
+      "cloud_messages": 165,
+      "cloud_points": 19480,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_2_upper_tracked.log"
+    },
+    {
+      "name": "floor_3",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.2253025183675224,
+      "start_z": 0.028948961708574854,
+      "end_z": 0.029008383866545626,
+      "cloud_messages": 158,
+      "cloud_points": 24389,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_3_lower_tracked.log"
+    },
+    {
+      "name": "floor_3",
+      "level": "upper",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.20807553404208765,
+      "start_z": 3.0289489616545286,
+      "end_z": 3.0289489616545238,
+      "cloud_messages": 180,
+      "cloud_points": 19023,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_3_upper_tracked.log"
+    },
+    {
+      "name": "floor_4",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.20807553404198195,
+      "start_z": 0.02894896165452905,
+      "end_z": 0.028948961654523965,
+      "cloud_messages": 156,
+      "cloud_points": 24928,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_4_lower_tracked.log"
+    },
+    {
+      "name": "floor_4",
+      "level": "upper",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.22532457926081753,
+      "start_z": 2.42894896165453,
+      "end_z": 2.428948961627923,
+      "cloud_messages": 145,
+      "cloud_points": 20895,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_4_upper_tracked.log"
+    },
+    {
+      "name": "floor_5",
+      "level": "lower",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.20775499412502252,
+      "start_z": 0.02894896167021685,
+      "end_z": 0.029050676412926302,
+      "cloud_messages": 169,
+      "cloud_points": 25108,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_5_lower_tracked.log"
+    },
+    {
+      "name": "floor_5",
+      "level": "upper",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 0.20567999404295417,
+      "start_z": 3.0289221016196723,
+      "end_z": 3.028940184651051,
+      "cloud_messages": 139,
+      "cloud_points": 19274,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-recheck/floor_5_upper_tracked.log"
+    },
+    {
+      "name": "floor_2",
+      "level": "ramp",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 11.71047333305254,
+      "start_z": 0.2745288898351159,
+      "end_z": 3.029066063699451,
+      "cloud_messages": 2327,
+      "cloud_points": 18020,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-ramp-debug/floor_2_ramp_tracked.log"
+    },
+    {
+      "name": "floor_1",
+      "level": "ramp",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 3.624514792596137,
+      "start_z": 0.037381138111482706,
+      "end_z": 1.0289536522682117,
+      "cloud_messages": 3465,
+      "cloud_points": 27003,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-ramps-final-v2/floor_1_ramp_tracked.log"
+    },
+    {
+      "name": "floor_3",
+      "level": "ramp",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 11.711861750841374,
+      "start_z": 0.27447620251195226,
+      "end_z": 3.028948961654501,
+      "cloud_messages": 2346,
+      "cloud_points": 18140,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-ramps-final-v2/floor_3_ramp_tracked.log"
+    },
+    {
+      "name": "floor_4",
+      "level": "ramp",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 9.711559978515274,
+      "start_z": 0.26437826770153344,
+      "end_z": 2.428948961654512,
+      "cloud_messages": 1987,
+      "cloud_points": 18765,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-ramps-final-v2/floor_4_ramp_tracked.log"
+    },
+    {
+      "name": "floor_5",
+      "level": "ramp",
+      "robot": "tracked",
+      "passed": true,
+      "displacement": 11.713184993759732,
+      "start_z": 0.27394932928032184,
+      "end_z": 3.029066182342727,
+      "cloud_messages": 2379,
+      "cloud_points": 17630,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-ramps-final-v2/floor_5_ramp_tracked.log"
+    },
+    {
+      "name": "flat_2",
+      "level": "lower",
+      "robot": "diff_drive",
+      "passed": true,
+      "displacement": 0.18808429255528847,
+      "start_z": 0.03898328400349782,
+      "end_z": 0.03898328399957235,
+      "cloud_messages": 180,
+      "cloud_points": 26591,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-diff-drive/flat_2_lower_diff_drive.log"
+    },
+    {
+      "name": "flat_4",
+      "level": "lower",
+      "robot": "clearing",
+      "passed": true,
+      "displacement": 0.2423358374424051,
+      "start_z": 0.007355656057725701,
+      "end_z": 0.007231368550521422,
+      "cloud_messages": 100,
+      "cloud_points": 5657,
+      "controllers": {
+        "joint_state_broadcaster": "active",
+        "arm_controller": "active",
+        "diff_drive_controller": "active"
+      },
+      "log": "/tmp/multimap-gazebo-clearing-final/flat_4_lower_clearing.log"
+    }
+  ],
+  "runtime_passed": 27,
+  "original_geometry_preserved": [
+    "flat_1",
+    "terrain_1",
+    "floor_1"
+  ]
+}
