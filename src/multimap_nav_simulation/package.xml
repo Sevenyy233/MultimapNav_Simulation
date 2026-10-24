@@ -14,6 +14,7 @@
   <depend>nav_msgs</depend>
   <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>
+  <exec_depend>std_msgs</exec_depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
 
@@ -24,6 +25,7 @@
   <exec_depend>gazebo_ros2_control</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>
+  <exec_depend>velocity_controllers</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>rosgraph_msgs</exec_depend>
   <exec_depend>trajectory_msgs</exec_depend>
@@ -40,6 +42,8 @@
   <exec_depend>python3-yaml</exec_depend>
 
   <test_depend>python3-scipy</test_depend>
+  <test_depend>controller_manager_msgs</test_depend>
+  <test_depend>tf2_msgs</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
