@@ -60,7 +60,7 @@
   <xacro:macro name="gazebo_ros2_control_plugin" params="">
     <gazebo>
       <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-        <parameters>$(find multimap_nav_simulation)/config/diff_drive_controller.yaml</parameters>
+        <parameters>$(find multimap_nav_simulation)/config/robot.yaml</parameters>
         <ros>
           <remapping>/diff_drive_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
           <!-- /odom 已由 gazebo_ros_p3d 地面真值占用（见 robot.xacro），
