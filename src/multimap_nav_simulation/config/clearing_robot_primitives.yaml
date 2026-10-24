@@ -1,0 +1,98 @@
+# Full primitive robot configuration: controllers, drive, arm pose and geometry.
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+    use_sim_time: true
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    tracks_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+tracks_velocity_controller:
+  ros__parameters:
+    joints:
+    - left_wheel_back_joint
+    - left_wheel_middle2_joint
+    - left_wheel_middle_joint
+    - left_wheel_middle1_joint
+    - left_wheel_front_joint
+    - right_wheel_back_joint
+    - right_wheel_middle2_joint
+    - right_wheel_middle_joint
+    - right_wheel_middle1_joint
+    - right_wheel_front_joint
+arm_controller:
+  ros__parameters:
+    joints:
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+    - joint6
+    - joint7
+    command_interfaces:
+    - position
+    state_interfaces:
+    - position
+    - velocity
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+    allow_nonzero_velocity_at_trajectory_end: false
+    constraints:
+      stopped_velocity_tolerance: 0.1
+      goal_time: 5.0
+      joint1:
+        trajectory: 0.2
+        goal: 0.03
+      joint2:
+        trajectory: 0.2
+        goal: 0.03
+      joint3:
+        trajectory: 0.2
+        goal: 0.03
+      joint4:
+        trajectory: 0.2
+        goal: 0.03
+      joint5:
+        trajectory: 0.2
+        goal: 0.03
+      joint6:
+        trajectory: 0.2
+        goal: 0.03
+      joint7:
+        trajectory: 0.2
+        goal: 0.03
+clearing_tracks_drive:
+  ros__parameters:
+    use_sim_time: true
+    wheel_radius: 0.48
+    wheel_separation: 2.8
+    wheels_per_side: 5
+    publish_rate: 50.0
+    cmd_vel_timeout: 0.5
+    max_linear_velocity: 1.0
+    max_angular_velocity: 0.35
+    max_linear_acceleration: 0.3
+    max_angular_acceleration: 0.2
+    max_wheel_velocity: 8.0
+initialize_clearing_arm:
+  ros__parameters:
+    positions:
+    - 0.0
+    - 0.1
+    - -0.03
+    - 1.54
+    - 0.0
+    - -1.5
+    - 0.0
+    move_duration: 2.0
+    timeout: 120.0
+robot_geometry:
+  ros__parameters:
+    navigation_footprint: '[[-3.45, -1.75], [6.05, -1.75], [6.05, 1.75], [-3.45, 1.75]]'
+    minimum_arm_ground_clearance: 0.5
+    maximum_arm_height: 4.3
+    maximum_bucket_height: 1.3
