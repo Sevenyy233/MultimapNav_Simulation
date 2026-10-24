@@ -10,7 +10,6 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import numpy as np
-import yaml
 from scipy.spatial import cKDTree
 
 from stl_to_navigation_pcd import read_binary_stl
@@ -125,14 +124,18 @@ def validate_motion(world, record, triangles):
 
 
 def validate(package):
-    metadata = yaml.safe_load((package / "config/maps.yaml").read_text())
+    metadata = json.loads((package / "worlds/catalog.json").read_text())
     records = metadata["maps"]
     expected = {f"{category}_{i}" for category,count in [('flat',5),('terrain',5),('floor',7)] for i in range(1,count+1)}
     assert set(records) == expected
-    assert {p.stem for p in (package / "worlds").rglob("*.world")} == expected
+    # Standalone robot test worlds (worlds/clearing_robot) are validated by
+    # their own tests; the navigation catalog covers these three families.
+    suite_worlds = {p.stem for category in ("flat", "terrain", "floor")
+                    for p in (package / "worlds" / category).rglob("*.world")}
+    assert suite_worlds == expected
     assert {p.stem for p in (package / "pcd").rglob("*.pcd")} == expected
     mesh_hashes = set(); results = []
-    surveyed=yaml.safe_load((package/'config/tracked_initial_poses.yaml').read_text())
+    surveyed=metadata['tracked_initial_poses']
     for name, record in records.items():
         for field in ("world", "mesh", "pcd"):
             assert (package / record[field]).is_file(), (name, field)
