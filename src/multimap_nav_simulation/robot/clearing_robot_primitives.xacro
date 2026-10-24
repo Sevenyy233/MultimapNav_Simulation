@@ -1,0 +1,380 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="clearing_robot_primitives">
+  <!-- Preserve the original CAD link frames, seven arm joint origins/axes,
+       2.5 m / 4.5 m arm joint spacing and 2.5 m bucket width. Geometry only
+       uses boxes and cylinders. The original zero pose remains reproducible;
+       a separate configuration carries the full-size arm low and forward. -->
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/imu.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/lidar_3d.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/part/clearing_arm_geometry.xacro"/>
+  <xacro:arg name="config_file" default="$(find multimap_nav_simulation)/config/clearing_robot_primitives.yaml"/>
+  <xacro:arg name="lateral_friction" default="0.03"/>
+  <xacro:property name="arm_stow" value="${xacro.load_yaml('$(arg config_file)')['initialize_clearing_arm']['ros__parameters']['positions']}"/>
+  <xacro:property name="wheel_radius" value="0.48"/>
+  <xacro:property name="wheel_width" value="0.30"/>
+  <xacro:property name="wheel_mass" value="500.0"/>
+  <xacro:property name="wheel_separation" value="2.80"/>
+  <material name="body_grey">
+    <color rgba="0.50 0.50 0.50 1"/>
+  </material>
+  <material name="track_black">
+    <color rgba="0.12 0.13 0.14 1"/>
+  </material>
+  <material name="steel">
+    <color rgba="0.36 0.39 0.42 1"/>
+  </material>
+  <xacro:macro name="box_shape" params="size xyz material rpy:='0 0 0' collision:=true">
+    <!-- Unnamed geometries retain Gazebo material/contact extensions in sdf9. -->
+    <visual>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <geometry>
+        <box size="${size}"/>
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+    <xacro:if value="${collision}">
+      <collision>
+        <origin xyz="${xyz}" rpy="${rpy}"/>
+        <geometry>
+          <box size="${size}"/>
+        </geometry>
+      </collision>
+    </xacro:if>
+  </xacro:macro>
+  <xacro:macro name="cylinder_shape" params="radius length xyz material rpy:='0 0 0' collision:=true">
+    <visual>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <geometry>
+        <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+    <xacro:if value="${collision}">
+      <collision>
+        <origin xyz="${xyz}" rpy="${rpy}"/>
+        <geometry>
+          <cylinder radius="${radius}" length="${length}"/>
+        </geometry>
+      </collision>
+    </xacro:if>
+  </xacro:macro>
+  <xacro:macro name="box_inertia" params="mass x y z xyz:='0 0 0'">
+    <inertial>
+      <origin xyz="${xyz}"/>
+      <mass value="${mass}"/>
+      <inertia ixx="${mass*(y*y+z*z)/12}" iyy="${mass*(x*x+z*z)/12}" izz="${mass*(x*x+y*y)/12}" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </xacro:macro>
+  <link name="base_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0110947986 0.0314803963 0.598827115"/>
+      <mass value="12600"/>
+      <inertia ixx="11743.797433846155" ixy="-0.0916434066046154" ixz="-23.308738061538463" iyy="22675.99329692308" iyz="8.660298857538463" izz="31252.704161538462"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_0 collision="false"/>
+    <!-- Elevated contact proxies; only rotating wheels contact the floor. -->
+    <collision>
+      <origin xyz="0.004 0.0325 0.75"/>
+      <geometry>
+        <box size="4.70 2.0 0.90"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+  </joint>
+  <gazebo reference="base_link">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+    <kp>1e9</kp>
+    <kd>1e5</kd>
+  </gazebo>
+  <xacro:macro name="track_belt" params="side y">
+    <link name="${side}_track_belt">
+      <xacro:box_inertia mass="200.0" x="4.96" y="0.39" z="0.96"/>
+      <xacro:box_shape size="4.0 0.39 0.08" xyz="0 0 0.44" material="track_black" collision="false"/>
+      <xacro:box_shape size="4.0 0.39 0.08" xyz="0 0 -0.44" material="track_black" collision="false"/>
+      <xacro:cylinder_shape radius="0.48" length="0.39" xyz="-2 0 0" rpy="${pi/2} 0 0" material="track_black" collision="false"/>
+      <xacro:cylinder_shape radius="0.48" length="0.39" xyz="2 0 0" rpy="${pi/2} 0 0" material="track_black" collision="false"/>
+    </link>
+    <joint name="${side}_track_belt_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${side}_track_belt"/>
+      <origin xyz="0 ${y + 0.0325} 0.47"/>
+    </joint>
+    <gazebo reference="${side}_track_belt">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+  </xacro:macro>
+  <xacro:macro name="track_wheel" params="side label x y">
+    <link name="${side}_wheel_${label}">
+      <inertial>
+        <mass value="${wheel_mass}"/>
+        <inertia ixx="${wheel_mass*(3*wheel_radius**2+wheel_width**2)/12}" iyy="${wheel_mass*wheel_radius**2/2}" izz="${wheel_mass*(3*wheel_radius**2+wheel_width**2)/12}" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <xacro:cylinder_shape radius="${wheel_radius}" length="${wheel_width}" xyz="0 0 0" rpy="${pi/2} 0 0" material="body_grey"/>
+      <xacro:cylinder_shape radius="0.28" length="0.32" xyz="0 0 0" rpy="${pi/2} 0 0" material="steel" collision="false"/>
+    </link>
+    <joint name="${side}_wheel_${label}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${side}_wheel_${label}"/>
+      <origin xyz="${x} ${y} 0.47"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="12000" velocity="8"/>
+      <dynamics damping="5" friction="0"/>
+    </joint>
+    <gazebo reference="${side}_wheel_${label}">
+      <material>Gazebo/Grey</material>
+      <selfCollide>false</selfCollide>
+      <!-- Collision-local Z is the cylinder axle after its 90-degree roll. -->
+      <fdir1>0 0 1</fdir1>
+      <mu1>$(arg lateral_friction)</mu1>
+      <mu2>1.2</mu2>
+      <kp>1e9</kp>
+      <kd>1e5</kd>
+      <maxVel>0.1</maxVel>
+      <minDepth>0.001</minDepth>
+      <maxContacts>8</maxContacts>
+    </gazebo>
+  </xacro:macro>
+  <xacro:macro name="track_side" params="side y">
+    <xacro:track_belt side="${side}" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="back" x="-2.0" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="middle2" x="-1.0" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="middle" x="0.0" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="middle1" x="1.0" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="front" x="2.0" y="${y}"/>
+  </xacro:macro>
+  <xacro:track_side side="left" y="${wheel_separation/2}"/>
+  <xacro:track_side side="right" y="${-wheel_separation/2}"/>
+  <link name="link1">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.26630551 -2.46152979e-17 -0.555507403"/>
+      <mass value="6000"/>
+      <inertia ixx="3404.00724" ixy="0" ixz="-689.206256" iyy="11159.2513" iyz="0" izz="13988.6592"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_1/>
+  </link>
+  <joint name="joint1" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 2.313"/>
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="150000" lower="-3.14" upper="3.14" velocity="0.3"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link1">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link2">
+    <inertial>
+      <origin rpy="0 0 0" xyz="1.27370026 -0.124614766 1.35128923e-07"/>
+      <mass value="1280"/>
+      <inertia ixx="87.7149162" ixy="43.4559098" ixz="-0.000126827583" iyy="704.457612" iyz="-4.32401178e-05" izz="693.266344"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_2/>
+  </link>
+  <joint name="joint2" type="revolute">
+    <origin rpy="-1.5708 -2.760 0" xyz="1.65 0 0"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="350000" lower="0" upper="1.1687" velocity="0.25"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link2">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link3">
+    <inertial>
+      <origin rpy="0 0 0" xyz="2.13204457 -0.0592608975 0.00440016614"/>
+      <mass value="1402"/>
+      <inertia ixx="77.3925584" ixy="-5.23281886" ixz="0.223344386" iyy="1949.69327" iyz="-0.00727808857" izz="1940.91237"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_3/>
+  </link>
+  <joint name="joint3" type="revolute">
+    <origin rpy="0 0 2.7263" xyz="2.5 0 0"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200000" lower="-1.6895" upper="0" velocity="0.3"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link3">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link4">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.144338 -0.627142103 -0.0396293599"/>
+      <mass value="700"/>
+      <inertia ixx="120.375335" ixy="-87.2852653" ixz="-18.0183481" iyy="414.556747" iyz="-9.23615827" izz="485.13141"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_4/>
+  </link>
+  <joint name="joint4" type="revolute">
+    <origin rpy="0 0 0.4815" xyz="4.5 0 0"/>
+    <parent link="link3"/>
+    <child link="link4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="60000" lower="0" upper="1.6265" velocity="0.35"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link4">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link5">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.183389268 0.000891158583 0.00128422761"/>
+      <mass value="525"/>
+      <inertia ixx="23.7986984" ixy="-0.0985816319" ixz="0.0870947509" iyy="35.612472" iyz="0.00448312687" izz="32.823992"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_5/>
+  </link>
+  <joint name="joint5" type="revolute">
+    <origin rpy="1.5708 0 0" xyz="1.855 -0.239 0"/>
+    <parent link="link4"/>
+    <child link="link5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20000" lower="-1.58" upper="1.58" velocity="0.5"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link5">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link6">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0252308586 0.17131212 -0.01393312"/>
+      <mass value="580"/>
+      <inertia ixx="30.4273422" ixy="-1.5814964" ixz="0.816006364" iyy="24.4154256" iyz="0.786265784" izz="21.3190364"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_6/>
+  </link>
+  <joint name="joint6" type="revolute">
+    <origin rpy="-1.5708 -1.5708 0" xyz="0.469 0 0"/>
+    <parent link="link5"/>
+    <child link="link6"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20000" lower="-1.58" upper="1.58" velocity="0.5"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link6">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link7">
+    <inertial>
+      <origin rpy="0 0 0" xyz="3.26484326e-05 0.186943813 0.508338592"/>
+      <mass value="720"/>
+      <inertia ixx="92.026891" ixy="-2.52810726e-05" ixz="-1.05435695e-05" iyy="407.855369" iyz="-22.6800914" izz="358.651723"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_7/>
+  </link>
+  <joint name="joint7" type="revolute">
+    <origin rpy="-1.5708 -1.5708 0" xyz="0 0.438 0"/>
+    <parent link="link6"/>
+    <child link="link7"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="12000" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link7">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <!-- Retain the original fixed navigation sensor locations; no cab or
+       tall mast is added. The low half of the scan clears the folded arm. -->
+  <link name="lidar_mount">
+    <xacro:box_inertia mass="10.0" x="0.08" y="0.08" z="1.07"/>
+    <xacro:box_shape size="0.08 0.08 1.07" xyz="0 0 0" material="steel"/>
+  </link>
+  <joint name="lidar_mount_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_mount"/>
+    <origin xyz="-1.5 0 1.985"/>
+  </joint>
+  <gazebo reference="lidar_mount">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <xacro:property name="imu_mass" value="0.5"/>
+  <xacro:property name="imu_size" value="0.08"/>
+  <xacro:property name="lidar_mass" value="3.0"/>
+  <xacro:property name="lidar_radius" value="0.10"/>
+  <xacro:property name="lidar_height" value="0.16"/>
+  <xacro:property name="lidar_samples" value="720"/>
+  <xacro:property name="lidar_hz" value="10.0"/>
+  <xacro:property name="lidar_max_range" value="80.0"/>
+  <xacro:imu parent="base_link" xyz="0 0 1.65"/>
+  <xacro:lidar_3d parent="base_link" xyz="-1.5 0 2.60"/>
+  <xacro:macro name="wheel_interface" params="side label">
+    <joint name="${side}_wheel_${label}_joint">
+      <command_interface name="velocity">
+        <param name="min">-8</param>
+        <param name="max">8</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+  <xacro:macro name="side_interfaces" params="side">
+    <xacro:wheel_interface side="${side}" label="back"/>
+    <xacro:wheel_interface side="${side}" label="middle2"/>
+    <xacro:wheel_interface side="${side}" label="middle"/>
+    <xacro:wheel_interface side="${side}" label="middle1"/>
+    <xacro:wheel_interface side="${side}" label="front"/>
+  </xacro:macro>
+  <xacro:macro name="arm_interface" params="index lower upper">
+    <joint name="joint${index}">
+      <command_interface name="position">
+        <param name="min">${lower}</param>
+        <param name="max">${upper}</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">${arm_stow[index-1]}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+  <ros2_control name="clearing_primitives_system" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <xacro:side_interfaces side="left"/>
+    <xacro:side_interfaces side="right"/>
+    <xacro:arm_interface index="1" lower="-3.14" upper="3.14"/>
+    <xacro:arm_interface index="2" lower="0" upper="1.1687"/>
+    <xacro:arm_interface index="3" lower="-1.6895" upper="0"/>
+    <xacro:arm_interface index="4" lower="0" upper="1.6265"/>
+    <xacro:arm_interface index="5" lower="-1.58" upper="1.58"/>
+    <xacro:arm_interface index="6" lower="-1.58" upper="1.58"/>
+    <xacro:arm_interface index="7" lower="-3.14" upper="3.14"/>
+  </ros2_control>
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+      <hold_joints>true</hold_joints>
+      <parameters>$(arg config_file)</parameters>
+    </plugin>
+    <plugin name="gazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
+      <ros>
+        <remapping>odom:=/odom</remapping>
+      </ros>
+      <body_name>base_link</body_name>
+      <frame_name>world</frame_name>
+      <update_rate>100</update_rate>
+      <gaussian_noise>0.0</gaussian_noise>
+    </plugin>
+  </gazebo>
+</robot>
