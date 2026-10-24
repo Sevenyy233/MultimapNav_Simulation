@@ -313,7 +313,7 @@
 
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-      <parameters>$(find multimap_nav_simulation)/config/tracked_diff_drive_controller.yaml</parameters>
+      <parameters>$(find multimap_nav_simulation)/config/tracked_robot.yaml</parameters>
       <ros>
         <remapping>/diff_drive_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
         <remapping>/diff_drive_controller/odom:=/odom_diff_drive</remapping>
