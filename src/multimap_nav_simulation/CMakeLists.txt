@@ -33,6 +33,7 @@ install(TARGETS
 ament_python_install_package(${PROJECT_NAME})
 
 install(PROGRAMS scripts/initialize_clearing_arm.py scripts/wait_for_gazebo_clock.py
+  scripts/clearing_tracks_drive.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -52,6 +53,16 @@ if(BUILD_TESTING)
       --package-dir ${CMAKE_CURRENT_SOURCE_DIR}
   )
   set_tests_properties(map_suite_consistency PROPERTIES TIMEOUT 60)
+  add_test(NAME clearing_robot_primitives_consistency
+    COMMAND ${Python3_EXECUTABLE}
+      ${CMAKE_CURRENT_SOURCE_DIR}/test/test_clearing_robot_primitives.py
+  )
+  set_tests_properties(clearing_robot_primitives_consistency PROPERTIES TIMEOUT 60)
+  add_test(NAME robot_layout_consistency
+    COMMAND ${Python3_EXECUTABLE}
+      ${CMAKE_CURRENT_SOURCE_DIR}/test/test_robot_layout.py
+  )
+  set_tests_properties(robot_layout_consistency PROPERTIES TIMEOUT 60)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
   # comment the line when a copyright and license is added to all source files
