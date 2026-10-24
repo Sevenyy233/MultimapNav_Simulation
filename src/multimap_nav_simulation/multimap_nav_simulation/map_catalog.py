@@ -1,9 +1,8 @@
 """Resolve categorized map names and their documented spawn positions."""
 
 import os
+import json
 from pathlib import Path
-
-import yaml
 
 
 ALIASES = {
@@ -14,7 +13,11 @@ ALIASES = {
 
 
 def load_catalog(package_dir):
-    return yaml.safe_load((Path(package_dir) / "config/maps.yaml").read_text())["maps"]
+    return json.loads((Path(package_dir) / "worlds/catalog.json").read_text())["maps"]
+
+
+def load_initial_poses(package_dir):
+    return json.loads((Path(package_dir) / "worlds/catalog.json").read_text())["tracked_initial_poses"]
 
 
 def resolve_world(package_dir, name):
