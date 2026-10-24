@@ -16,7 +16,7 @@ from pathlib import Path
 
 import numpy as np
 import xml.etree.ElementTree as ET
-import yaml
+import json
 
 from stl_to_navigation_pcd import (interior_from_size, read_binary_stl,
                                    sample_navigation_surfaces, write_binary_pcd)
@@ -880,7 +880,7 @@ def generate(package, spacing):
                 record["clearing_spawn"] = [-6., -9., .1, 0.]
             catalog["maps"][name] = record
             print(f"{name}: {len(triangles)} triangles, {len(points)} points", flush=True)
-    (package / "config/maps.yaml").write_text(yaml.safe_dump(catalog, allow_unicode=True, sort_keys=False))
+    (package / "worlds/catalog.json").write_text(json.dumps(catalog, ensure_ascii=False, indent=2)+"\n")
 
 
 def main():
