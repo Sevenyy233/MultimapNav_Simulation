@@ -8,7 +8,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-import yaml
+import json
 
 from validate_map_suite import read_pcd
 
@@ -20,7 +20,7 @@ def main():
                         help="Image path; default docs/maps_overview.png under the package.")
     args = parser.parse_args()
     package = args.package_dir.resolve()
-    records = yaml.safe_load((package / "config/maps.yaml").read_text())["maps"]
+    records = json.loads((package / "worlds/catalog.json").read_text())["maps"]
     subtitles = {
         "flat_1": "Original indoor rooms", "flat_2": "Offset warehouse",
         "flat_3": "Asymmetric offices", "flat_4": "Plaza with props", "flat_5": "Irregular maze",
