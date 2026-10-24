@@ -1,5 +1,11 @@
 # 多场景导航仿真地图
 
+新增基础几何体大型清障机器人：
+`ros2 launch multimap_nav_simulation clearing_robot_primitives.launch.py`。
+默认加载 `worlds/clearing_robot/clearing_enclosed.world`（内部 50 × 50 × 20 m 封闭场景），
+机械臂启动时收起并保持，履带与七轴机械臂均接入 ros2_control，里程计采用 Gazebo 真值。
+模型、参数及接口详见 [基础几何体清障机器人](docs/clearing_robot_primitives.md)。
+
 ROS 2 Humble + Gazebo Classic，当前共 **17 张**：flat 5 张、terrain 5 张、floor 7 张。
 场景版本：`compact_mixed_floors_dynamic_20261008_v3`。长度单位为米，world、STL 与 PCD 坐标一致。
 
@@ -31,6 +37,22 @@ flat_3 与 floor_3 速度范围 0.25–0.95 m/s，terrain_3 为 0.25–0.80 m/s�
 路径分布在不同空间区域，floor_3 同时覆盖上下层。移动实体有 Gazebo 碰撞几何，激光可观测；
 静态 PCD 不包含动态实体，导航使用传感器观测判断它们。
 
+## 机器人入口
+
+机器人模型、启动文件和参数文件按名称一一对应，`launch/` 和 `config/` 各保留四个文件：
+
+| 机器人 | 模型 | 启动入口 | 配置 |
+| --- | --- | --- | --- |
+| 小型轮式差速 | `robot/robot.xacro` | `robot.launch.py` | `config/robot.yaml` |
+| 小型履带 | `robot/tracked_robot.xacro` | `tracked_robot.launch.py` | `config/tracked_robot.yaml` |
+| STL 清障机器人 | `robot/clearing_robot.xacro` | `clearing_robot.launch.py` | `config/clearing_robot.yaml` |
+| 基础几何体清障机器人 | `robot/clearing_robot_primitives.xacro` | `clearing_robot_primitives.launch.py` | `config/clearing_robot_primitives.yaml` |
+
+每份 YAML 包含对应机器人的控制器与节点参数。基础几何体机器人的驱动、机械臂初始位置、
+行驶包络同在其 YAML 内；履带机器人的可选辅助导航参数同在 `tracked_robot.yaml` 内。
+地图和出生位姿数据位于 `worlds/catalog.json`，场景设计记录位于 `worlds/scene_design.json`。
+共享的零件、传感器宏、运行脚本及地图生成/验证工具保留在各自目录中。
+
 ## 构建和启动
 
 ```bash
@@ -40,13 +62,12 @@ colcon build --packages-select multimap_nav_simulation --symlink-install
 source install/setup.bash
 source /data/projects/ros2_ws/MultiMapNav/install/setup.bash
 
-ros2 launch multimap_nav_simulation gazebo_tracked_sim.launch.py world_file_name:=floor_6 navigation:=true
+ros2 launch multimap_nav_simulation tracked_robot.launch.py world_file_name:=floor_6 navigation:=true
 # floor_7 同样启动；在上层出生可追加 spawn_level:=upper
 # 查看动态障碍：world_file_name:=flat_3、terrain_3 或 floor_3
 ```
 
-`config/maps.yaml` 记录目录、尺寸、默认位姿、点数、文件校验和和动态路径。
-`config/tracked_initial_poses.yaml` 记录上下层的定位初值及对应 world 校验和。
+`worlds/catalog.json` 统一记录地图目录、尺寸、点数、校验和、动态路径、默认出生位姿和上下层定位初值。
 启动程序设置 Gazebo 资源及插件路径，并根据地图加载仿真定位参数。
 旧地图别名 indoor_flat、terrain、two_floor 仍可使用。
 
@@ -77,6 +98,9 @@ world_to_mesh.py 导出静态几何时会排除运动插件控制的实体。
 
 ```bash
 python3 src/multimap_nav_simulation/scripts/validate_map_suite.py
+# 同时检查四个模型/启动入口/YAML 的对应关系及清障模型：
+ctest --test-dir build/multimap_nav_simulation \
+  -R 'map_suite_consistency|clearing_robot_primitives_consistency|robot_layout_consistency' --output-on-failure
 ```
 
 检查静态 world/网格几何覆盖、PCD 数据和校验和、初始化位姿地面支撑、动态路径及颜色。
