@@ -11,7 +11,6 @@ import sys
 from pathlib import Path
 import bpy
 import numpy as np
-import yaml
 from mathutils import Vector
 from mathutils.geometry import tessellate_polygon
 import xml.etree.ElementTree as ET
@@ -404,9 +403,9 @@ def export_mesh(objects,path):
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--package-dir',type=Path,required=True);parser.add_argument('--maps',nargs='+');args=parser.parse_args(sys.argv[sys.argv.index('--')+1:])
     package=args.package_dir.resolve();sys.path.insert(0,str(package/'scripts'));import generate_map_suite as legacy
-    existing=yaml.safe_load((package/'config/maps.yaml').read_text());catalog=existing;catalog['scene_version']='compact_mixed_floors_dynamic_20261008_v3';catalog['maps']={} if not args.maps else catalog['maps']
-    surveyed=yaml.safe_load((package/"config/tracked_initial_poses.yaml").read_text()) if args.maps and (package/"config/tracked_initial_poses.yaml").exists() else {}
-    design_path=package/'config/scene_design.json'
+    existing=json.loads((package/'worlds/catalog.json').read_text());catalog=existing;catalog['scene_version']='compact_mixed_floors_dynamic_20261008_v3';catalog['maps']={} if not args.maps else catalog['maps']
+    surveyed=catalog.pop('tracked_initial_poses', {}) if args.maps else {}
+    design_path=package/'worlds/scene_design.json'
     design=[r for r in json.loads(design_path.read_text())if r['name']not in args.maps] if args.maps and design_path.exists()else[]
     for spec in specs():
         name=spec['name'];category=spec['category'];sx,sy=spec['size']
@@ -456,8 +455,8 @@ def main():
         output=package/record['pcd'];output.parent.mkdir(parents=True,exist_ok=True);write_binary_pcd(output,points)
         mirror=package/'pcd_modified'/record['category']/(name+'.pcd');mirror.parent.mkdir(parents=True,exist_ok=True);write_binary_pcd(mirror,points)
         record.update(points=len(points),triangles=len(triangles),pcd_sha256=hashlib.sha256(output.read_bytes()).hexdigest(),bounds_min=points.min(axis=0).astype(float).tolist(),bounds_max=points.max(axis=0).astype(float).tolist())
-    (package/'config/maps.yaml').write_text(yaml.safe_dump(catalog,allow_unicode=True,sort_keys=False))
-    (package/'config/tracked_initial_poses.yaml').write_text(yaml.safe_dump(surveyed,sort_keys=True))
-    (package/'config/scene_design.json').write_text(json.dumps(design,ensure_ascii=False,indent=2)+'\n')
+    catalog['tracked_initial_poses']=surveyed
+    (package/'worlds/catalog.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n')
+    (package/'worlds/scene_design.json').write_text(json.dumps(design,ensure_ascii=False,indent=2)+'\n')
 
 if __name__=='__main__':main()
