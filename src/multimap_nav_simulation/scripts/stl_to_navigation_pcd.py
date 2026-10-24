@@ -19,7 +19,7 @@ import struct
 from pathlib import Path
 
 import numpy as np
-import yaml
+import json
 
 
 STL_DTYPE = np.dtype(
@@ -179,8 +179,8 @@ def export_modified_suite(
     terrain_spacing: float,
     wall_spacing: float,
 ) -> None:
-    """Write interior clouds for every map in config/maps.yaml."""
-    catalog = yaml.safe_load((package / "config" / "maps.yaml").read_text())
+    """Write interior clouds for every map in worlds/catalog.json."""
+    catalog = json.loads((package / "worlds" / "catalog.json").read_text())
     for name, record in catalog["maps"].items():
         mesh_path = package / record["mesh"]
         interior = interior_from_size(record["size_xy"])
@@ -224,7 +224,7 @@ def main() -> None:
     parser.add_argument("--interior", type=float, nargs=4, metavar=("XMIN", "XMAX", "YMIN", "YMAX"),
                         help="Keep surfaces inside this rectangle and drop wall tops")
     parser.add_argument("--suite", action="store_true",
-                        help="Write an interior cloud for every map in config/maps.yaml")
+                        help="Write an interior cloud for every map in worlds/catalog.json")
     parser.add_argument("--output-dir", type=Path, default=package / "pcd_modified")
     parser.add_argument("--package-dir", type=Path, default=package)
     args = parser.parse_args()
