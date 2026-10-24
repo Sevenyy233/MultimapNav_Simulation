@@ -67,7 +67,7 @@
   <!-- ========================== Gazebo P3D 地面真值里程计 ========================== -->
   <!-- gazebo_ros_p3d 插件直接读取 Gazebo 中 base_link 的真实位姿（世界系），
        发布 nav_msgs/Odometry 到 /odom（地面真值，比轮式里程计准确），
-       由 odom_tf_broadcaster 转成 odom → base_link TF（见 gazebo_sim.launch.py）。
+       由 odom_tf_broadcaster 转成 odom → base_link TF（见 robot.launch.py）。
        frame_name 缺省为 world（odom 消息 header.frame_id=world），
        仿真中 odom 原点与 world 原点重合，广播节点负责映射到 odom 系。 -->
   <gazebo>
