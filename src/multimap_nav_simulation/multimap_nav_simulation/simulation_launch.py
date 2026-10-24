@@ -6,14 +6,14 @@ from xml.etree import ElementTree as ET
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, EmitEvent, ExecuteProcess, IncludeLaunchDescription, LogInfo, OpaqueFunction, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, EmitEvent, ExecuteProcess, LogInfo, OpaqueFunction, RegisterEventHandler
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 import xacro
 
 from .map_catalog import gazebo_environment, resolve_world, spawn_pose
+from .navigation import navigation_actions
 
 
 def after_success(action, following):
@@ -30,6 +30,13 @@ def small_robot_launch(robot):
         config = context.launch_configurations
         boolean = lambda name: config[name].lower() in ("true", "1", "yes")
         world = resolve_world(package, config["world_file"].strip() or config["world_file_name"])
+        def start_navigation(_context):
+            return navigation_actions(package, world, config['spawn_level'],
+                                      config['initial_pose'], config['forced_mode'], config['use_rviz'])
+        if boolean('navigation_only'):
+            if robot != 'tracked':
+                raise ValueError('navigation_only is supported by tracked_robot.launch.py')
+            return start_navigation(context)
         defaults = spawn_pose(package, world, config["spawn_level"], robot)
         pose = [config[f"spawn_{axis}"].strip() or str(default)
                 for axis, default in zip(("x", "y", "z", "yaw"), defaults)]
@@ -72,11 +79,9 @@ def small_robot_launch(robot):
             if robot != "tracked":
                 raise ValueError("This navigation entry uses the tracked robot model.")
             if any(config[f"spawn_{axis}"].strip() for axis in ("x","y","z","yaw")):
-                raise ValueError("Automatic navigation requires the documented map spawn; use tracked_navigation.launch.py initial_pose for a custom start.")
-            ready_actions.append(IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(str(package / "launch/tracked_navigation.launch.py")),
-                launch_arguments={"world_file_name": world.stem,"spawn_level": config["spawn_level"],
-                                  "use_rviz": config["use_rviz"],"forced_mode": config["forced_mode"]}.items()))
+                raise ValueError('Automatic navigation requires the documented map spawn; '
+                                 'use navigation_only:=true initial_pose:=... for a custom start.')
+            ready_actions.append(OpaqueFunction(function=start_navigation))
         actions = [
             RegisterEventHandler(OnProcessExit(target_action=server,
                 on_exit=[EmitEvent(event=Shutdown(reason="Gazebo server exited."))])),
@@ -98,6 +103,10 @@ def small_robot_launch(robot):
         DeclareLaunchArgument("spawn_level", default_value="lower", description="lower or upper (floor maps)."),
         DeclareLaunchArgument("use_sim_time", default_value="true"),
         DeclareLaunchArgument("navigation", default_value="false", description="Start map-matched assisted navigation after the robot is ready."),
+        DeclareLaunchArgument('navigation_only', default_value='false',
+                              description='Tracked robot: attach navigation to an existing simulation.'),
+        DeclareLaunchArgument('initial_pose', default_value='',
+                              description='Optional explicit map pose [x,y,z,qx,qy,qz,qw] for navigation.'),
         DeclareLaunchArgument("use_rviz", default_value="true"),
         DeclareLaunchArgument("forced_mode", default_value="auto"),
         DeclareLaunchArgument("seed", default_value="0", description="Gazebo random seed."),
