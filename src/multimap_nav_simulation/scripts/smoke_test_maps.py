@@ -67,7 +67,7 @@ def run_case(name, record, level, robot, package, log_dir, domain):
     node.create_subscription(PointCloud2, "/points_raw", cloud_received, qos_profile_sensor_data)
     velocity = node.create_publisher(Twist, "/cmd_vel", 10)
     controllers = node.create_client(ListControllers, "/controller_manager/list_controllers")
-    launch = {"tracked": "gazebo_tracked_sim.launch.py", "diff_drive": "gazebo_sim.launch.py",
+    launch = {"tracked": "tracked_robot.launch.py", "diff_drive": "robot.launch.py",
               "clearing": "clearing_robot.launch.py"}[robot]
     args = ["ros2", "launch", "multimap_nav_simulation", launch,
             f"world_file_name:={name}", "headless:=true", "gui:=false",
