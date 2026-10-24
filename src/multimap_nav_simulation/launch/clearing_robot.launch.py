@@ -99,8 +99,8 @@ def _launch_setup(context):
     arm = spawner('arm_controller')
     hold_arm = Node(
         package='multimap_nav_simulation', executable='initialize_clearing_arm.py',
-        parameters=[{'use_sim_time': sim_time, 'positions': [0.0] * 7,
-                     'move_duration': 2.0, 'timeout': 120.0}],
+        parameters=[str(pkg_share / 'config' / 'clearing_robot.yaml'),
+                    {'use_sim_time': sim_time}],
         output='screen',
     )
     drive = spawner('diff_drive_controller')
