@@ -1,4 +1,4 @@
-"""Shared startup sequence for the small differential and tracked robots."""
+"""Simulation-only startup for the small differential and tracked robots."""
 
 from pathlib import Path
 import re
@@ -13,7 +13,6 @@ from launch_ros.actions import Node
 import xacro
 
 from .map_catalog import gazebo_environment, resolve_world, spawn_pose
-from .navigation import navigation_actions
 
 
 def after_success(action, following):
@@ -30,13 +29,6 @@ def small_robot_launch(robot):
         config = context.launch_configurations
         boolean = lambda name: config[name].lower() in ("true", "1", "yes")
         world = resolve_world(package, config["world_file"].strip() or config["world_file_name"])
-        def start_navigation(_context):
-            return navigation_actions(package, world, config['spawn_level'],
-                                      config['initial_pose'], config['forced_mode'], config['use_rviz'])
-        if boolean('navigation_only'):
-            if robot != 'tracked':
-                raise ValueError('navigation_only is supported by tracked_robot.launch.py')
-            return start_navigation(context)
         defaults = spawn_pose(package, world, config["spawn_level"], robot)
         pose = [config[f"spawn_{axis}"].strip() or str(default)
                 for axis, default in zip(("x", "y", "z", "yaw"), defaults)]
@@ -45,6 +37,17 @@ def small_robot_launch(robot):
         if not 0.0 <= lateral_friction <= 10.0:
             raise ValueError("tracked_lateral_friction must be finite and between 0 and 10")
         mappings = {"lateral_friction": str(lateral_friction)} if robot == "tracked" else {}
+        use_fast_lio = robot == "tracked" and config["odometry_source"] == "fast_lio"
+        if robot == "tracked":
+            if config["lidar_model"] not in ("mid360", "legacy"):
+                raise ValueError("lidar_model must be mid360 or legacy")
+            if config["odometry_source"] not in ("fast_lio", "wheel"):
+                raise ValueError("odometry_source must be fast_lio or wheel; truth is evaluation-only")
+            if use_fast_lio and config["lidar_model"] != "mid360":
+                raise ValueError("FAST-LIO requires the timestamped MID-360 input")
+            mappings.update(lidar_model=config["lidar_model"], lidar_noise_seed=config["seed"],
+                            publish_ground_truth=config["publish_ground_truth"])
+            mappings["cmd_vel_topic"]="/actuation/cmd_vel" if use_fast_lio else "/cmd_vel"
         robot_xml = ET.fromstring(xacro.process_file(str(xacro_path), mappings=mappings).toxml())
         if not boolean("enable_camera"):
             for parent in robot_xml.iter():
@@ -75,13 +78,24 @@ def small_robot_launch(robot):
         joints = spawner("joint_state_broadcaster")
         drive = spawner("diff_drive_controller")
         ready_actions = [LogInfo(msg=f"{robot} robot ready.")]
-        if boolean("navigation"):
-            if robot != "tracked":
-                raise ValueError("This navigation entry uses the tracked robot model.")
-            if any(config[f"spawn_{axis}"].strip() for axis in ("x","y","z","yaw")):
-                raise ValueError('Automatic navigation requires the documented map spawn; '
-                                 'use navigation_only:=true initial_pose:=... for a custom start.')
-            ready_actions.append(OpaqueFunction(function=start_navigation))
+        if use_fast_lio:
+            estimator_config = str(package / "config/tracked_robot.yaml")
+            bridge_files=[estimator_config]
+            if config['bridge_overrides']:
+                extra=Path(config['bridge_overrides']).resolve()
+                if not extra.is_file():raise FileNotFoundError(str(extra))
+                bridge_files.append(str(extra))
+            ready_actions[:0] = [
+                Node(package="multimap_nav_simulation", executable="fast_lio_sim_bridge",
+                     parameters=[*bridge_files, {"use_sim_time": sim_time}], output="screen"),
+                Node(package="multimap_nav_simulation",executable="body_velocity_controller",
+                     parameters=[estimator_config,{"use_sim_time":sim_time}],output="screen"),
+                Node(package="fast_lio", executable="fastlio_mapping", name="fastlio_mapping",
+                     parameters=[estimator_config, {"use_sim_time": sim_time}],
+                     remappings=[("/Odometry", "/fast_lio/odometry"),
+                                 ("/cloud_registered_body", "/fast_lio/deskewed_body_points"),
+                                 ("/tf", "/fast_lio/tf")], output="screen"),
+            ]
         actions = [
             RegisterEventHandler(OnProcessExit(target_action=server,
                 on_exit=[EmitEvent(event=Shutdown(reason="Gazebo server exited."))])),
@@ -91,30 +105,28 @@ def small_robot_launch(robot):
         ]
         if boolean("gui") and not boolean("headless"):
             actions.append(ExecuteProcess(cmd=["gzclient"], additional_env=gazebo_environment(package), output="screen"))
-        if boolean("publish_odom_tf"):
+        if boolean("publish_odom_tf") and not use_fast_lio:
             actions.append(Node(package="multimap_nav_simulation", executable="odom_tf_broadcaster",
                                 parameters=[{"use_sim_time": sim_time}], output="screen"))
         return actions
 
     declarations = [
         DeclareLaunchArgument("world_file_name", default_value="flat_1",
-                              description="flat_1..5, terrain_1..5, floor_1..7; category/name also works."),
+                              description="F1..F5, T1..T5, L1..L5, M1..M8; category/name also works."),
         DeclareLaunchArgument("world_file", default_value="", description="Optional absolute world path."),
         DeclareLaunchArgument("spawn_level", default_value="lower", description="lower or upper (floor maps)."),
         DeclareLaunchArgument("use_sim_time", default_value="true"),
-        DeclareLaunchArgument("navigation", default_value="false", description="Start map-matched assisted navigation after the robot is ready."),
-        DeclareLaunchArgument('navigation_only', default_value='false',
-                              description='Tracked robot: attach navigation to an existing simulation.'),
-        DeclareLaunchArgument('initial_pose', default_value='',
-                              description='Optional explicit map pose [x,y,z,qx,qy,qz,qw] for navigation.'),
-        DeclareLaunchArgument("use_rviz", default_value="true"),
-        DeclareLaunchArgument("forced_mode", default_value="auto"),
         DeclareLaunchArgument("seed", default_value="0", description="Gazebo random seed."),
         DeclareLaunchArgument("gui", default_value="true"),
         DeclareLaunchArgument("enable_camera", default_value="true", description="Enable the optional camera; LiDAR is retained."),
         DeclareLaunchArgument("tracked_lateral_friction", default_value="0.3", description="Simulated lateral track friction; longitudinal friction is unchanged."),
         DeclareLaunchArgument("headless", default_value="false", description="Suppress the GUI."),
         DeclareLaunchArgument("publish_odom_tf", default_value="true"),
+        DeclareLaunchArgument("lidar_model", default_value="mid360"),
+        DeclareLaunchArgument("bridge_overrides", default_value=""),
+        DeclareLaunchArgument("odometry_source", default_value="fast_lio"),
+        DeclareLaunchArgument("publish_ground_truth", default_value="true",
+                              description="Publish only /evaluation/ground_truth for the independent evaluator."),
     ]
     declarations.extend(DeclareLaunchArgument(f"spawn_{axis}", default_value="",
                          description="Empty selects the map's documented spawn position.")
