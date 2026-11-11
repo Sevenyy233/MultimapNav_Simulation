@@ -1,0 +1,2459 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.7">
+  <world name="flat_M1">
+    <gravity>0 0 -9.8</gravity>
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/gazebo</namespace>
+      </ros>
+    </plugin>
+    <physics name="ode_physics" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>150</iters>
+          <sor>1.3</sor>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>0.2</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+    </physics>
+    <light name="sun" type="directional">
+      <pose>0 0 28 0 0 0</pose>
+      <diffuse>0.92 0.91 0.88 1</diffuse>
+      <specular>0.18 0.18 0.16 1</specular>
+      <direction>-0.35 -0.28 -0.9</direction>
+      <cast_shadows>true</cast_shadows>
+    </light>
+    <light name="fill" type="point">
+      <pose>0 0 6 0 0 0</pose>
+      <diffuse>0.35 0.36 0.34 1</diffuse>
+      <specular>0.02 0.02 0.02 1</specular>
+      <cast_shadows>false</cast_shadows>
+      <attenuation>
+        <range>80</range>
+        <constant>0.5</constant>
+        <linear>0.02</linear>
+      </attenuation>
+    </light>
+    <scene>
+      <ambient>0.50 0.49 0.47 1</ambient>
+      <background>0.80 0.82 0.86 1</background>
+    </scene>
+    <gui fullscreen="false">
+      <camera name="user_camera">
+        <pose>19.6 -17.1 23.8 0 0.65 2.2</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+    <model name="flat_M1_structure">
+      <static>true</static>
+      <link name="structure">
+        <collision name="ground_floor_collision">
+          <pose>0 0 -0.12 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>28 19 0.24</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="ground_floor_visual">
+          <pose>0 0 -0.12 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>28 19 0.24</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.78 0.74 0.68 1</ambient>
+            <diffuse>0.78 0.74 0.68 1</diffuse>
+          </material>
+        </visual>
+        <collision name="outer_south_wall_0_collision">
+          <pose>0 -9.5 1.28 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>28 0.18 2.8</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="outer_south_wall_0_visual">
+          <pose>0 -9.5 1.28 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>28 0.18 2.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.90 0.91 0.93 1</ambient>
+            <diffuse>0.90 0.91 0.93 1</diffuse>
+          </material>
+        </visual>
+        <collision name="outer_north_wall_0_collision">
+          <pose>0 9.5 1.28 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>28 0.18 2.8</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="outer_north_wall_0_visual">
+          <pose>0 9.5 1.28 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>28 0.18 2.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.90 0.91 0.93 1</ambient>
+            <diffuse>0.90 0.91 0.93 1</diffuse>
+          </material>
+        </visual>
+        <collision name="outer_west_wall_0_collision">
+          <pose>-14 0 1.28 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>19 0.18 2.8</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="outer_west_wall_0_visual">
+          <pose>-14 0 1.28 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>19 0.18 2.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.90 0.91 0.93 1</ambient>
+            <diffuse>0.90 0.91 0.93 1</diffuse>
+          </material>
+        </visual>
+        <collision name="outer_east_wall_0_collision">
+          <pose>14 0 1.28 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>19 0.18 2.8</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="outer_east_wall_0_visual">
+          <pose>14 0 1.28 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>19 0.18 2.8</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.90 0.91 0.93 1</ambient>
+            <diffuse>0.90 0.91 0.93 1</diffuse>
+          </material>
+        </visual>
+        <collision name="courtyard_wall_0_collision">
+          <pose>0 -4.5 1.23 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>18 0.18 2.7</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="courtyard_wall_0_visual">
+          <pose>0 -4.5 1.23 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>18 0.18 2.7</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.90 0.91 0.93 1</ambient>
+            <diffuse>0.90 0.91 0.93 1</diffuse>
+          </material>
+        </visual>
+        <collision name="courtyard_wall_0_part1_collision">
+          <pose>9 0 1.23 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>9 0.18 2.7</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="courtyard_wall_0_part1_visual">
+          <pose>9 0 1.23 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>9 0.18 2.7</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.90 0.91 0.93 1</ambient>
+            <diffuse>0.90 0.91 0.93 1</diffuse>
+          </material>
+        </visual>
+        <collision name="courtyard_wall_0_part2_collision">
+          <pose>0 4.5 1.23 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>18 0.18 2.7</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="courtyard_wall_0_part2_visual">
+          <pose>0 4.5 1.23 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>18 0.18 2.7</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.90 0.91 0.93 1</ambient>
+            <diffuse>0.90 0.91 0.93 1</diffuse>
+          </material>
+        </visual>
+        <collision name="courtyard_wall_0_part3_collision">
+          <pose>-9 0 1.23 0 0 -1.57079633</pose>
+          <geometry>
+            <box>
+              <size>9 0.18 2.7</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="courtyard_wall_0_part3_visual">
+          <pose>-9 0 1.23 0 0 -1.57079633</pose>
+          <geometry>
+            <box>
+              <size>9 0.18 2.7</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.90 0.91 0.93 1</ambient>
+            <diffuse>0.90 0.91 0.93 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate0_prop_collision">
+          <pose>-10.4391132 -8.74933051 0.584138986 0 0 0.0510764548</pose>
+          <geometry>
+            <box>
+              <size>0.623898544 0.650770771 1.16827797</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate0_prop_visual">
+          <pose>-10.4391132 -8.74933051 0.584138986 0 0 0.0510764548</pose>
+          <geometry>
+            <box>
+              <size>0.623898544 0.650770771 1.16827797</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate0_strap_-1_visual">
+          <pose>-10.4391132 -8.74933051 0.233655594 0 0 0.0510764548</pose>
+          <geometry>
+            <box>
+              <size>0.635898544 0.662770771 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate0_strap_1_visual">
+          <pose>-10.4391132 -8.74933051 0.934622377 0 0 0.0510764548</pose>
+          <geometry>
+            <box>
+              <size>0.635898544 0.662770771 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate1_prop_collision">
+          <pose>-8.09571075 -5.24803806 0.485445364 0 0 -0.126055236</pose>
+          <geometry>
+            <box>
+              <size>0.729410916 0.656473399 0.970890729</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate1_prop_visual">
+          <pose>-8.09571075 -5.24803806 0.485445364 0 0 -0.126055236</pose>
+          <geometry>
+            <box>
+              <size>0.729410916 0.656473399 0.970890729</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate1_strap_-1_visual">
+          <pose>-8.09571075 -5.24803806 0.194178146 0 0 -0.126055236</pose>
+          <geometry>
+            <box>
+              <size>0.741410916 0.668473399 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate1_strap_1_visual">
+          <pose>-8.09571075 -5.24803806 0.776712583 0 0 -0.126055236</pose>
+          <geometry>
+            <box>
+              <size>0.741410916 0.668473399 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_bin_prop2_collision">
+          <pose>-7.24571075 -8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_bin_prop2_visual">
+          <pose>-7.24571075 -8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.19 0.38 0.62 1</ambient>
+            <diffuse>0.19 0.38 0.62 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate3_prop_collision">
+          <pose>-5.87313101 -8.76571012 0.40294038 0 0 0.0885721272</pose>
+          <geometry>
+            <box>
+              <size>0.788195609 0.672251853 0.805880761</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate3_prop_visual">
+          <pose>-5.87313101 -8.76571012 0.40294038 0 0 0.0885721272</pose>
+          <geometry>
+            <box>
+              <size>0.788195609 0.672251853 0.805880761</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate3_strap_-1_visual">
+          <pose>-5.87313101 -8.76571012 0.161176152 0 0 0.0885721272</pose>
+          <geometry>
+            <box>
+              <size>0.800195609 0.684251853 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate3_strap_1_visual">
+          <pose>-5.87313101 -8.76571012 0.644704609 0 0 0.0885721272</pose>
+          <geometry>
+            <box>
+              <size>0.800195609 0.684251853 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate4_prop_collision">
+          <pose>-3.53114342 -5.04508739 0.40932202 0 0 0.28860341</pose>
+          <geometry>
+            <box>
+              <size>0.806827167 0.709404613 0.818644041</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate4_prop_visual">
+          <pose>-3.53114342 -5.04508739 0.40932202 0 0 0.28860341</pose>
+          <geometry>
+            <box>
+              <size>0.806827167 0.709404613 0.818644041</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate4_strap_-1_visual">
+          <pose>-3.53114342 -5.04508739 0.163728808 0 0 0.28860341</pose>
+          <geometry>
+            <box>
+              <size>0.818827167 0.721404613 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate4_strap_1_visual">
+          <pose>-3.53114342 -5.04508739 0.654915233 0 0 0.28860341</pose>
+          <geometry>
+            <box>
+              <size>0.818827167 0.721404613 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate5_prop_collision">
+          <pose>-1.52325666 -8.69519261 0.567213205 0 0 0.193719696</pose>
+          <geometry>
+            <box>
+              <size>0.589987426 0.591617913 1.13442641</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate5_prop_visual">
+          <pose>-1.52325666 -8.69519261 0.567213205 0 0 0.193719696</pose>
+          <geometry>
+            <box>
+              <size>0.589987426 0.591617913 1.13442641</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate5_strap_-1_visual">
+          <pose>-1.52325666 -8.69519261 0.226885282 0 0 0.193719696</pose>
+          <geometry>
+            <box>
+              <size>0.601987426 0.603617913 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate5_strap_1_visual">
+          <pose>-1.52325666 -8.69519261 0.907541128 0 0 0.193719696</pose>
+          <geometry>
+            <box>
+              <size>0.601987426 0.603617913 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_bin_prop6_collision">
+          <pose>-0.673256663 -8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_bin_prop6_visual">
+          <pose>-0.673256663 -8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.19 0.38 0.62 1</ambient>
+            <diffuse>0.19 0.38 0.62 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate7_prop_collision">
+          <pose>0.795353508 -5.06970358 0.485820954 0 0 0.159231207</pose>
+          <geometry>
+            <box>
+              <size>0.569680961 0.587635797 0.971641908</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate7_prop_visual">
+          <pose>0.795353508 -5.06970358 0.485820954 0 0 0.159231207</pose>
+          <geometry>
+            <box>
+              <size>0.569680961 0.587635797 0.971641908</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate7_strap_-1_visual">
+          <pose>0.795353508 -5.06970358 0.194328382 0 0 0.159231207</pose>
+          <geometry>
+            <box>
+              <size>0.581680961 0.599635797 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate7_strap_1_visual">
+          <pose>0.795353508 -5.06970358 0.777313527 0 0 0.159231207</pose>
+          <geometry>
+            <box>
+              <size>0.581680961 0.599635797 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate8_prop_collision">
+          <pose>3.44373011 -8.74055113 0.62995219 0 0 0.0694298871</pose>
+          <geometry>
+            <box>
+              <size>0.587122318 0.53413736 1.25990438</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate8_prop_visual">
+          <pose>3.44373011 -8.74055113 0.62995219 0 0 0.0694298871</pose>
+          <geometry>
+            <box>
+              <size>0.587122318 0.53413736 1.25990438</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate8_strap_-1_visual">
+          <pose>3.44373011 -8.74055113 0.251980876 0 0 0.0694298871</pose>
+          <geometry>
+            <box>
+              <size>0.599122318 0.54613736 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate8_strap_1_visual">
+          <pose>3.44373011 -8.74055113 1.0079235 0 0 0.0694298871</pose>
+          <geometry>
+            <box>
+              <size>0.599122318 0.54613736 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate9_prop_collision">
+          <pose>5.81736115 -5.22856582 0.309149981 0 0 -0.464809586</pose>
+          <geometry>
+            <box>
+              <size>0.703893586 0.598934875 0.618299961</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate9_prop_visual">
+          <pose>5.81736115 -5.22856582 0.309149981 0 0 -0.464809586</pose>
+          <geometry>
+            <box>
+              <size>0.703893586 0.598934875 0.618299961</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate9_strap_-1_visual">
+          <pose>5.81736115 -5.22856582 0.123659992 0 0 -0.464809586</pose>
+          <geometry>
+            <box>
+              <size>0.715893586 0.610934875 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate9_strap_1_visual">
+          <pose>5.81736115 -5.22856582 0.494639969 0 0 -0.464809586</pose>
+          <geometry>
+            <box>
+              <size>0.715893586 0.610934875 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_bin_prop10_collision">
+          <pose>6.66736115 -8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_bin_prop10_visual">
+          <pose>6.66736115 -8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.19 0.38 0.62 1</ambient>
+            <diffuse>0.19 0.38 0.62 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate11_prop_collision">
+          <pose>8.14415994 -8.59057292 0.527691616 0 0 0.182611482</pose>
+          <geometry>
+            <box>
+              <size>0.849994366 0.594230668 1.05538323</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate11_prop_visual">
+          <pose>8.14415994 -8.59057292 0.527691616 0 0 0.182611482</pose>
+          <geometry>
+            <box>
+              <size>0.849994366 0.594230668 1.05538323</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate11_strap_-1_visual">
+          <pose>8.14415994 -8.59057292 0.211076647 0 0 0.182611482</pose>
+          <geometry>
+            <box>
+              <size>0.861994366 0.606230668 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate11_strap_1_visual">
+          <pose>8.14415994 -8.59057292 0.844306586 0 0 0.182611482</pose>
+          <geometry>
+            <box>
+              <size>0.861994366 0.606230668 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate12_prop_collision">
+          <pose>10.1826818 -5.08349473 0.461072056 0 0 0.542073101</pose>
+          <geometry>
+            <box>
+              <size>0.847623976 0.551113294 0.922144113</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate12_prop_visual">
+          <pose>10.1826818 -5.08349473 0.461072056 0 0 0.542073101</pose>
+          <geometry>
+            <box>
+              <size>0.847623976 0.551113294 0.922144113</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate12_strap_-1_visual">
+          <pose>10.1826818 -5.08349473 0.184428823 0 0 0.542073101</pose>
+          <geometry>
+            <box>
+              <size>0.859623976 0.563113294 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate12_strap_1_visual">
+          <pose>10.1826818 -5.08349473 0.73771529 0 0 0.542073101</pose>
+          <geometry>
+            <box>
+              <size>0.859623976 0.563113294 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate13_prop_collision">
+          <pose>-13.1340661 -3.311781 0.37254083 0 0 0.105187792</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.74508166</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate13_prop_visual">
+          <pose>-13.1340661 -3.311781 0.37254083 0 0 0.105187792</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.74508166</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate13_strap_-1_visual">
+          <pose>-13.1340661 -3.311781 0.149016332 0 0 0.105187792</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate13_strap_1_visual">
+          <pose>-13.1340661 -3.311781 0.596065328 0 0 0.105187792</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate14_prop_collision">
+          <pose>-9.67070651 -1.87581081 0.36767078 0 0 -0.354525286</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.735341561</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate14_prop_visual">
+          <pose>-9.67070651 -1.87581081 0.36767078 0 0 -0.354525286</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.735341561</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate14_strap_-1_visual">
+          <pose>-9.67070651 -1.87581081 0.147068312 0 0 -0.354525286</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate14_strap_1_visual">
+          <pose>-9.67070651 -1.87581081 0.588273249 0 0 -0.354525286</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate15_prop_collision">
+          <pose>-13.0948562 0.28872503 0.541483496 0 0 0.333859111</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 1.08296699</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate15_prop_visual">
+          <pose>-13.0948562 0.28872503 0.541483496 0 0 0.333859111</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 1.08296699</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate15_strap_-1_visual">
+          <pose>-13.0948562 0.28872503 0.216593398 0 0 0.333859111</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate15_strap_1_visual">
+          <pose>-13.0948562 0.28872503 0.866373593 0 0 0.333859111</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate16_prop_collision">
+          <pose>-9.70425913 2.0390057 0.445917651 0 0 0.214502201</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.891835302</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate16_prop_visual">
+          <pose>-9.70425913 2.0390057 0.445917651 0 0 0.214502201</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.891835302</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate16_strap_-1_visual">
+          <pose>-9.70425913 2.0390057 0.17836706 0 0 0.214502201</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate16_strap_1_visual">
+          <pose>-9.70425913 2.0390057 0.713468242 0 0 0.214502201</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate17_prop_collision">
+          <pose>-13.2669462 3.64975533 0.610773015 0 0 0.0127748784</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 1.22154603</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate17_prop_visual">
+          <pose>-13.2669462 3.64975533 0.610773015 0 0 0.0127748784</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 1.22154603</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate17_strap_-1_visual">
+          <pose>-13.2669462 3.64975533 0.244309206 0 0 0.0127748784</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate17_strap_1_visual">
+          <pose>-13.2669462 3.64975533 0.977236824 0 0 0.0127748784</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate18_prop_collision">
+          <pose>-10.3675539 8.66375475 0.577560724 0 0 -0.126530498</pose>
+          <geometry>
+            <box>
+              <size>0.798944173 0.722084242 1.15512145</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate18_prop_visual">
+          <pose>-10.3675539 8.66375475 0.577560724 0 0 -0.126530498</pose>
+          <geometry>
+            <box>
+              <size>0.798944173 0.722084242 1.15512145</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate18_strap_-1_visual">
+          <pose>-10.3675539 8.66375475 0.23102429 0 0 -0.126530498</pose>
+          <geometry>
+            <box>
+              <size>0.810944173 0.734084242 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate18_strap_1_visual">
+          <pose>-10.3675539 8.66375475 0.924097159 0 0 -0.126530498</pose>
+          <geometry>
+            <box>
+              <size>0.810944173 0.734084242 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate19_prop_collision">
+          <pose>-8.03644528 5.05697835 0.364325722 0 0 -0.489709747</pose>
+          <geometry>
+            <box>
+              <size>0.761791939 0.715558259 0.728651443</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate19_prop_visual">
+          <pose>-8.03644528 5.05697835 0.364325722 0 0 -0.489709747</pose>
+          <geometry>
+            <box>
+              <size>0.761791939 0.715558259 0.728651443</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate19_strap_-1_visual">
+          <pose>-8.03644528 5.05697835 0.145730289 0 0 -0.489709747</pose>
+          <geometry>
+            <box>
+              <size>0.773791939 0.727558259 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate19_strap_1_visual">
+          <pose>-8.03644528 5.05697835 0.582921154 0 0 -0.489709747</pose>
+          <geometry>
+            <box>
+              <size>0.773791939 0.727558259 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_bin_prop20_collision">
+          <pose>-7.18644528 8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_bin_prop20_visual">
+          <pose>-7.18644528 8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.19 0.38 0.62 1</ambient>
+            <diffuse>0.19 0.38 0.62 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate21_prop_collision">
+          <pose>-5.73455183 8.67652253 0.600214182 0 0 0.228519391</pose>
+          <geometry>
+            <box>
+              <size>0.637104433 0.588504897 1.20042836</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate21_prop_visual">
+          <pose>-5.73455183 8.67652253 0.600214182 0 0 0.228519391</pose>
+          <geometry>
+            <box>
+              <size>0.637104433 0.588504897 1.20042836</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate21_strap_-1_visual">
+          <pose>-5.73455183 8.67652253 0.240085673 0 0 0.228519391</pose>
+          <geometry>
+            <box>
+              <size>0.649104433 0.600504897 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate21_strap_1_visual">
+          <pose>-5.73455183 8.67652253 0.960342692 0 0 0.228519391</pose>
+          <geometry>
+            <box>
+              <size>0.649104433 0.600504897 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate22_prop_collision">
+          <pose>-3.36302284 5.19730484 0.282176236 0 0 -0.432097799</pose>
+          <geometry>
+            <box>
+              <size>0.594809169 0.710942964 0.564352472</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate22_prop_visual">
+          <pose>-3.36302284 5.19730484 0.282176236 0 0 -0.432097799</pose>
+          <geometry>
+            <box>
+              <size>0.594809169 0.710942964 0.564352472</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate22_strap_-1_visual">
+          <pose>-3.36302284 5.19730484 0.112870494 0 0 -0.432097799</pose>
+          <geometry>
+            <box>
+              <size>0.606809169 0.722942964 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate22_strap_1_visual">
+          <pose>-3.36302284 5.19730484 0.451481978 0 0 -0.432097799</pose>
+          <geometry>
+            <box>
+              <size>0.606809169 0.722942964 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate23_prop_collision">
+          <pose>-1.50863707 8.58204418 0.621979301 0 0 0.0433633342</pose>
+          <geometry>
+            <box>
+              <size>0.789837723 0.605452481 1.2439586</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate23_prop_visual">
+          <pose>-1.50863707 8.58204418 0.621979301 0 0 0.0433633342</pose>
+          <geometry>
+            <box>
+              <size>0.789837723 0.605452481 1.2439586</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate23_strap_-1_visual">
+          <pose>-1.50863707 8.58204418 0.24879172 0 0 0.0433633342</pose>
+          <geometry>
+            <box>
+              <size>0.801837723 0.617452481 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate23_strap_1_visual">
+          <pose>-1.50863707 8.58204418 0.995166882 0 0 0.0433633342</pose>
+          <geometry>
+            <box>
+              <size>0.801837723 0.617452481 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_bin_prop24_collision">
+          <pose>-0.658637068 8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_bin_prop24_visual">
+          <pose>-0.658637068 8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.19 0.38 0.62 1</ambient>
+            <diffuse>0.19 0.38 0.62 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate25_prop_collision">
+          <pose>0.891190891 5.15952519 0.619012721 0 0 -0.210409384</pose>
+          <geometry>
+            <box>
+              <size>0.644271897 0.687613636 1.23802544</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate25_prop_visual">
+          <pose>0.891190891 5.15952519 0.619012721 0 0 -0.210409384</pose>
+          <geometry>
+            <box>
+              <size>0.644271897 0.687613636 1.23802544</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate25_strap_-1_visual">
+          <pose>0.891190891 5.15952519 0.247605089 0 0 -0.210409384</pose>
+          <geometry>
+            <box>
+              <size>0.656271897 0.699613636 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate25_strap_1_visual">
+          <pose>0.891190891 5.15952519 0.990420354 0 0 -0.210409384</pose>
+          <geometry>
+            <box>
+              <size>0.656271897 0.699613636 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate26_prop_collision">
+          <pose>3.25799382 8.6560249 0.342962951 0 0 0.164903086</pose>
+          <geometry>
+            <box>
+              <size>0.622845223 0.70199547 0.685925902</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate26_prop_visual">
+          <pose>3.25799382 8.6560249 0.342962951 0 0 0.164903086</pose>
+          <geometry>
+            <box>
+              <size>0.622845223 0.70199547 0.685925902</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate26_strap_-1_visual">
+          <pose>3.25799382 8.6560249 0.13718518 0 0 0.164903086</pose>
+          <geometry>
+            <box>
+              <size>0.634845223 0.71399547 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate26_strap_1_visual">
+          <pose>3.25799382 8.6560249 0.548740721 0 0 0.164903086</pose>
+          <geometry>
+            <box>
+              <size>0.634845223 0.71399547 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate27_prop_collision">
+          <pose>5.39991429 5.09214188 0.578499517 0 0 -0.0457918046</pose>
+          <geometry>
+            <box>
+              <size>0.796057808 0.555284504 1.15699903</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate27_prop_visual">
+          <pose>5.39991429 5.09214188 0.578499517 0 0 -0.0457918046</pose>
+          <geometry>
+            <box>
+              <size>0.796057808 0.555284504 1.15699903</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate27_strap_-1_visual">
+          <pose>5.39991429 5.09214188 0.231399807 0 0 -0.0457918046</pose>
+          <geometry>
+            <box>
+              <size>0.808057808 0.567284504 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate27_strap_1_visual">
+          <pose>5.39991429 5.09214188 0.925599227 0 0 -0.0457918046</pose>
+          <geometry>
+            <box>
+              <size>0.808057808 0.567284504 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_bin_prop28_collision">
+          <pose>6.24991429 8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_bin_prop28_visual">
+          <pose>6.24991429 8.65 0.42 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.24</radius>
+              <length>0.84</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.19 0.38 0.62 1</ambient>
+            <diffuse>0.19 0.38 0.62 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate29_prop_collision">
+          <pose>7.79545595 8.57009002 0.347560834 0 0 -0.252366383</pose>
+          <geometry>
+            <box>
+              <size>0.699542055 0.618776022 0.695121668</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate29_prop_visual">
+          <pose>7.79545595 8.57009002 0.347560834 0 0 -0.252366383</pose>
+          <geometry>
+            <box>
+              <size>0.699542055 0.618776022 0.695121668</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate29_strap_-1_visual">
+          <pose>7.79545595 8.57009002 0.139024334 0 0 -0.252366383</pose>
+          <geometry>
+            <box>
+              <size>0.711542055 0.630776022 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate29_strap_1_visual">
+          <pose>7.79545595 8.57009002 0.556097334 0 0 -0.252366383</pose>
+          <geometry>
+            <box>
+              <size>0.711542055 0.630776022 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate30_prop_collision">
+          <pose>10.1486731 5.12618097 0.515723838 0 0 0.347487438</pose>
+          <geometry>
+            <box>
+              <size>0.769911111 0.574847905 1.03144768</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate30_prop_visual">
+          <pose>10.1486731 5.12618097 0.515723838 0 0 0.347487438</pose>
+          <geometry>
+            <box>
+              <size>0.769911111 0.574847905 1.03144768</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate30_strap_-1_visual">
+          <pose>10.1486731 5.12618097 0.206289535 0 0 0.347487438</pose>
+          <geometry>
+            <box>
+              <size>0.781911111 0.586847905 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate30_strap_1_visual">
+          <pose>10.1486731 5.12618097 0.825158141 0 0 0.347487438</pose>
+          <geometry>
+            <box>
+              <size>0.781911111 0.586847905 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate31_prop_collision">
+          <pose>13.1377664 -3.62378349 0.35131431 0 0 -0.0123385568</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.702628621</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate31_prop_visual">
+          <pose>13.1377664 -3.62378349 0.35131431 0 0 -0.0123385568</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.702628621</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate31_strap_-1_visual">
+          <pose>13.1377664 -3.62378349 0.140525724 0 0 -0.0123385568</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate31_strap_1_visual">
+          <pose>13.1377664 -3.62378349 0.562102897 0 0 -0.0123385568</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate32_prop_collision">
+          <pose>9.72924078 -1.59549339 0.417024328 0 0 0.262377986</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.834048655</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate32_prop_visual">
+          <pose>9.72924078 -1.59549339 0.417024328 0 0 0.262377986</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.834048655</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate32_strap_-1_visual">
+          <pose>9.72924078 -1.59549339 0.166809731 0 0 0.262377986</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate32_strap_1_visual">
+          <pose>9.72924078 -1.59549339 0.667238924 0 0 0.262377986</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate33_prop_collision">
+          <pose>13.1951069 0.0559249119 0.308732735 0 0 0.1722221</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.617465469</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate33_prop_visual">
+          <pose>13.1951069 0.0559249119 0.308732735 0 0 0.1722221</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 0.617465469</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate33_strap_-1_visual">
+          <pose>13.1951069 0.0559249119 0.123493094 0 0 0.1722221</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate33_strap_1_visual">
+          <pose>13.1951069 0.0559249119 0.493972376 0 0 0.1722221</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate34_prop_collision">
+          <pose>9.70545147 1.92701163 0.585610519 0 0 -0.0270553821</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 1.17122104</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate34_prop_visual">
+          <pose>9.70545147 1.92701163 0.585610519 0 0 -0.0270553821</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 1.17122104</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate34_strap_-1_visual">
+          <pose>9.70545147 1.92701163 0.234244207 0 0 -0.0270553821</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate34_strap_1_visual">
+          <pose>9.70545147 1.92701163 0.93697683 0 0 -0.0270553821</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="corridor_crate35_prop_collision">
+          <pose>13.2381591 3.8177998 0.531630831 0 0 0.225351858</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 1.06326166</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="corridor_crate35_prop_visual">
+          <pose>13.2381591 3.8177998 0.531630831 0 0 0.225351858</pose>
+          <geometry>
+            <box>
+              <size>0.65 0.7 1.06326166</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate35_strap_-1_visual">
+          <pose>13.2381591 3.8177998 0.212652332 0 0 0.225351858</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="corridor_crate35_strap_1_visual">
+          <pose>13.2381591 3.8177998 0.850609329 0 0 0.225351858</pose>
+          <geometry>
+            <box>
+              <size>0.662 0.712 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>
