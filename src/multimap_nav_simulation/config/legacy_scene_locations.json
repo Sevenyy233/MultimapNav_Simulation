@@ -1,0 +1,172 @@
+{
+  "resource_root": "/data/projects/ros2_ws/MultiMapNav/thesis/legacy_assets/simulation",
+  "maps": {
+    "floor_6": {
+      "category": "floor",
+      "description": "flat_lower_rolling_upper",
+      "world": "worlds/floor/floor_6.world",
+      "mesh": "3DModel/floor/floor_6.stl",
+      "pcd": "pcd/floor/floor_6.pcd",
+      "size_xy": [
+        22.0,
+        18.0
+      ],
+      "floor_types": [
+        "flat",
+        "terrain"
+      ],
+      "spawn": [
+        -9.0,
+        -7.0,
+        0.15,
+        0.0
+      ],
+      "goal": [
+        9.0,
+        -5.0,
+        2.2828412359369623,
+        1.5707963267948966
+      ],
+      "expected_mode": "octomap",
+      "footprint_polygon": [
+        [
+          -11.0,
+          -9.0
+        ],
+        [
+          11.0,
+          -9.0
+        ],
+        [
+          11.0,
+          9.0
+        ],
+        [
+          -11.0,
+          9.0
+        ]
+      ],
+      "upper_spawn": [
+        9.0,
+        -5.0,
+        2.4028412359369624,
+        1.5707963267948966
+      ],
+      "ramp_start": [
+        -9.0,
+        4.0,
+        0.15,
+        0.0
+      ],
+      "ramp_waypoints": [
+        [
+          -9.0,
+          4.0
+        ],
+        [
+          1.05,
+          4.0
+        ]
+      ],
+      "dynamic_obstacles": [],
+      "points": 229553,
+      "triangles": 13712,
+      "pcd_sha256": "470d3d3b7e3713611d635ca9cc2f048d2ace9b1486f25935910e6e7ce6d738be",
+      "bounds_min": [
+        -11.0,
+        -9.0,
+        -0.17732809484004974
+      ],
+      "bounds_max": [
+        11.062817573547363,
+        9.0,
+        3.2756667137145996
+      ]
+    },
+    "floor_7": {
+      "category": "floor",
+      "description": "rolling_lower_rolling_upper",
+      "world": "worlds/floor/floor_7.world",
+      "mesh": "3DModel/floor/floor_7.stl",
+      "pcd": "pcd/floor/floor_7.pcd",
+      "size_xy": [
+        24.0,
+        20.0
+      ],
+      "floor_types": [
+        "terrain",
+        "terrain"
+      ],
+      "spawn": [
+        -10.0,
+        -8.0,
+        0.23003863021775273,
+        0.0
+      ],
+      "goal": [
+        10.0,
+        -6.0,
+        2.38123334175575,
+        1.5707963267948966
+      ],
+      "expected_mode": "octomap",
+      "footprint_polygon": [
+        [
+          -12.0,
+          -10.0
+        ],
+        [
+          12.0,
+          -10.0
+        ],
+        [
+          12.0,
+          10.0
+        ],
+        [
+          -12.0,
+          10.0
+        ]
+      ],
+      "upper_spawn": [
+        10.0,
+        -6.0,
+        2.50123334175575,
+        1.5707963267948966
+      ],
+      "ramp_start": [
+        -10.0,
+        5.0,
+        0.15,
+        0.0
+      ],
+      "ramp_waypoints": [
+        [
+          -10.0,
+          5.0
+        ],
+        [
+          1.05,
+          5.0
+        ]
+      ],
+      "dynamic_obstacles": [],
+      "points": 279619,
+      "triangles": 32034,
+      "pcd_sha256": "21414df3d90237a4e6750f65d97279999d91c8c40138b469e2672a1b1160ca5d",
+      "bounds_min": [
+        -12.0,
+        -10.0,
+        -0.17735441029071808
+      ],
+      "bounds_max": [
+        12.062817573547363,
+        10.0,
+        3.3249526023864746
+      ]
+    },
+    "clearing_enclosed": {
+      "world": "worlds/clearing_robot/clearing_enclosed.world"
+    }
+  }
+}
