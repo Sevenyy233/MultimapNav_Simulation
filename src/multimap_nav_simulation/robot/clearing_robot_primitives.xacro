@@ -5,15 +5,18 @@
        uses boxes and cylinders. The original zero pose remains reproducible;
        a separate configuration carries the full-size arm low and forward. -->
   <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/imu.xacro"/>
-  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/lidar_3d.xacro"/>
+  <!-- Namespace the vendor macros: both packages define box_inertia. -->
+  <xacro:include filename="$(find ros2_livox_simulation)/urdf/avia.xacro" ns="livox"/>
   <xacro:include filename="$(find multimap_nav_simulation)/robot/part/clearing_arm_geometry.xacro"/>
   <xacro:arg name="config_file" default="$(find multimap_nav_simulation)/config/clearing_robot_primitives.yaml"/>
   <xacro:arg name="lateral_friction" default="0.03"/>
-  <xacro:property name="arm_stow" value="${xacro.load_yaml('$(arg config_file)')['initialize_clearing_arm']['ros__parameters']['positions']}"/>
-  <xacro:property name="wheel_radius" value="0.48"/>
+  <xacro:property name="robot_config" value="${xacro.load_yaml('$(arg config_file)')}"/>
+  <xacro:property name="arm_stow" value="${robot_config['initialize_clearing_arm']['ros__parameters']['positions']}"/>
+  <xacro:property name="drive_config" value="${robot_config['clearing_tracks_drive']['ros__parameters']}"/>
+  <xacro:property name="wheel_radius" value="${drive_config['wheel_radius']}"/>
   <xacro:property name="wheel_width" value="0.30"/>
   <xacro:property name="wheel_mass" value="500.0"/>
-  <xacro:property name="wheel_separation" value="2.80"/>
+  <xacro:property name="wheel_separation" value="${drive_config['wheel_separation']}"/>
   <material name="body_grey">
     <color rgba="0.50 0.50 0.50 1"/>
   </material>
@@ -289,30 +292,31 @@
     <material>Gazebo/Grey</material>
     <selfCollide>false</selfCollide>
   </gazebo>
-  <!-- Retain the original fixed navigation sensor locations; no cab or
-       tall mast is added. The low half of the scan clears the folded arm. -->
-  <link name="lidar_mount">
-    <xacro:box_inertia mass="10.0" x="0.08" y="0.08" z="1.07"/>
-    <xacro:box_shape size="0.08 0.08 1.07" xyz="0 0 0" material="steel"/>
-  </link>
-  <joint name="lidar_mount_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="lidar_mount"/>
-    <origin xyz="-1.5 0 1.985"/>
-  </joint>
-  <gazebo reference="lidar_mount">
-    <material>Gazebo/Grey</material>
-  </gazebo>
+  <!-- Keep the five original scan headings, with the four side/front mounts
+       outside link1's platform so downward rays can reach the ground.
+       Use the installed vendor Avia URDF and its non-repeating scan pattern.
+       Preserve the physical links so Gazebo gives every plugin its own parent
+       collision and publishes points in that sensor's local frame. -->
+  <xacro:macro name="directional_avia" params="index xyz yaw">
+    <xacro:livox.avia name="rslidar_${index}" parent="link1" topic="/livox/lidar_${index}">
+      <origin xyz="${xyz}" rpy="0 0 ${yaw}"/>
+    </xacro:livox.avia>
+    <gazebo reference="rslidar_${index}_joint">
+      <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+  </xacro:macro>
+  <xacro:directional_avia index="1" xyz="-3.2 0 -0.6" yaw="${pi}"/>
+  <xacro:directional_avia index="2" xyz="-0.5 1.55 -0.6" yaw="${pi/2}"/>
+  <!-- Small outward toe-out keeps front-left/right roles while overlapping
+       the long vehicle's forward centre corridor. Avia horizontal FOV is 70.4 deg. -->
+  <xacro:directional_avia index="3" xyz="2.0 1.55 -0.6" yaw="${pi/18}"/>
+  <xacro:directional_avia index="4" xyz="2.0 -1.55 -0.6" yaw="${-pi/18}"/>
+  <xacro:directional_avia index="5" xyz="-0.5 -1.55 -0.6" yaw="${-pi/2}"/>
   <xacro:property name="imu_mass" value="0.5"/>
   <xacro:property name="imu_size" value="0.08"/>
-  <xacro:property name="lidar_mass" value="3.0"/>
-  <xacro:property name="lidar_radius" value="0.10"/>
-  <xacro:property name="lidar_height" value="0.16"/>
-  <xacro:property name="lidar_samples" value="720"/>
-  <xacro:property name="lidar_hz" value="10.0"/>
-  <xacro:property name="lidar_max_range" value="80.0"/>
-  <xacro:imu parent="base_link" xyz="0 0 1.65"/>
-  <xacro:lidar_3d parent="base_link" xyz="-1.5 0 2.60"/>
+  <!-- Same neutral-pose height (2.313 - 0.663 = 1.65 m), rigid with all
+       five sensors even when the upper carriage rotates about joint1. -->
+  <xacro:imu parent="link1" xyz="0 0 -0.663"/>
   <xacro:macro name="wheel_interface" params="side label">
     <joint name="${side}_wheel_${label}_joint">
       <command_interface name="velocity">
@@ -366,15 +370,6 @@
       <robot_param_node>robot_state_publisher</robot_param_node>
       <hold_joints>true</hold_joints>
       <parameters>$(arg config_file)</parameters>
-    </plugin>
-    <plugin name="gazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
-      <ros>
-        <remapping>odom:=/odom</remapping>
-      </ros>
-      <body_name>base_link</body_name>
-      <frame_name>world</frame_name>
-      <update_rate>100</update_rate>
-      <gaussian_noise>0.0</gaussian_noise>
     </plugin>
   </gazebo>
 </robot>
