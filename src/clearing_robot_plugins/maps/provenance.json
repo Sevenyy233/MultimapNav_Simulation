@@ -1,0 +1,72 @@
+{
+  "world": "/home/yangyang/ros2_ws/MultiMapNav_Simulation/install/multimap_nav_simulation/share/multimap_nav_simulation/worlds/clearing_robot/clearing_enclosed.world",
+  "world_sha256": "256c385fa482038af7e2b659e39cebc56e67c3ce36cab291c99e903a246113fd",
+  "model_sha256": "a426cbbaaeeef30a45df1c4a8dea479b68aed04337fc68e81cb6c1a6d39fe0bf",
+  "sampling_spacing_m": 0.18,
+  "map_points": 713371,
+  "support_points": 99404,
+  "collision_boxes": 18,
+  "primitive_counts": {
+    "base_link": 80,
+    "left_track_belt": 4,
+    "right_track_belt": 4,
+    "link1": 37,
+    "link2": 21,
+    "link3": 15,
+    "link4": 50,
+    "link5": 10,
+    "link6": 8,
+    "link7": 70,
+    "rslidar_1": 1,
+    "rslidar_2": 1,
+    "rslidar_3": 1,
+    "rslidar_4": 1,
+    "rslidar_5": 1
+  },
+  "stowed_dynamics": {
+    "mass_kg": 29207.999999999993,
+    "yaw_inertia_kg_m2": 106681.17987013592,
+    "center_of_mass": [
+      0.370189675473647,
+      0.013026691648884677,
+      1.129673592198721
+    ]
+  },
+  "truth_odometry_used": false,
+  "geometry_inputs": [
+    {
+      "package": "multimap_nav_simulation",
+      "path": "robot/clearing_robot_primitives.xacro",
+      "sha256": "a426cbbaaeeef30a45df1c4a8dea479b68aed04337fc68e81cb6c1a6d39fe0bf"
+    },
+    {
+      "package": "multimap_nav_simulation",
+      "path": "robot/part/clearing_arm_geometry.xacro",
+      "sha256": "651bff0de23f36a3bad2d9a5bb49765925a21ce53eff47b8593c37469fab7862"
+    },
+    {
+      "package": "multimap_nav_simulation",
+      "path": "robot/sensors/imu.xacro",
+      "sha256": "ebc65490c6f381506326a49b0b95fa515d3a23d8e69804beeab3c183633d59a7"
+    },
+    {
+      "package": "ros2_livox_simulation",
+      "path": "urdf/avia.xacro",
+      "sha256": "5f5019e31a0afa3561904ea8f3c791a80687342e372e661d661690527592ca7d"
+    }
+  ],
+  "stowed_joints": [
+    0.0,
+    0.1,
+    -0.03,
+    1.54,
+    0.0,
+    -1.5,
+    0.0
+  ],
+  "wheel_radius": 0.48,
+  "wheel_separation": 2.8,
+  "model_asset_sha256": "a44b6da77cb8614b09c6df1c279e50949bb222ef0a3a9503453ce95ca04282ea",
+  "map_asset_sha256": "fe7c4e4b5dab8f4c6c7c2e02f4ed727ca592c9480be322c15c051c4bed25233e",
+  "support_asset_sha256": "abae194df81de898553b1f72a18c59278155639ffe50e012a0091dcb27c1ec5e"
+}
