@@ -9,6 +9,8 @@ from control_msgs.action import FollowJointTrajectory
 import rclpy
 from rclpy.action import ActionClient
 from rclpy.node import Node
+from rclpy.qos import qos_profile_sensor_data
+from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectoryPoint
 
 
@@ -22,10 +24,50 @@ def wait_for_future(node, future, timeout):
     return future.result()
 
 
+def arm_is_stowed(message, positions, now, position_tolerance=0.02, velocity_tolerance=0.03):
+    """Check fresh, complete measured feedback; an action acknowledgement is insufficient."""
+    if message is None:
+        return False
+    stamp = message.header.stamp.sec + message.header.stamp.nanosec * 1e-9
+    if not -0.1 <= now - stamp <= 0.5:
+        return False
+    for index, target in enumerate(positions, 1):
+        try:
+            offset = message.name.index(f'joint{index}')
+            position, velocity = message.position[offset], message.velocity[offset]
+        except (ValueError, IndexError):
+            return False
+        if (not math.isfinite(position) or not math.isfinite(velocity) or
+                abs(position - target) > position_tolerance or abs(velocity) > velocity_tolerance):
+            return False
+    return True
+
+
+def confirm_feedback(node, latest, positions, timeout):
+    deadline = time.monotonic() + timeout
+    stable_since = None
+    while rclpy.ok() and time.monotonic() < deadline:
+        rclpy.spin_once(node, timeout_sec=0.05)
+        message = latest[0]
+        if arm_is_stowed(message, positions, node.get_clock().now().nanoseconds * 1e-9):
+            stamp = message.header.stamp.sec + message.header.stamp.nanosec * 1e-9
+            if stable_since is None:
+                stable_since = stamp
+            if stamp - stable_since >= 0.5:
+                return
+        else:
+            stable_since = None
+    raise RuntimeError('Arm feedback did not confirm a fresh, stopped stowed pose')
+
+
 def main(args=None):
     rclpy.init(args=args)
     node = Node('initialize_clearing_arm')
     client = None
+    latest = [None]
+    subscription = node.create_subscription(
+        JointState, '/joint_states', lambda message: latest.__setitem__(0, message),
+        qos_profile_sensor_data)
     result_code = 1
     try:
         positions = list(node.declare_parameter('positions', [0.0] * 7).value)
@@ -47,13 +89,21 @@ def main(args=None):
         point.time_from_start.sec = int(duration)
         point.time_from_start.nanosec = int((duration - int(duration)) * 1e9)
         goal.trajectory.points = [point]
-        handle = wait_for_future(node, client.send_goal_async(goal), timeout)
-        if not handle.accepted:
-            raise RuntimeError('Arm controller rejected the initial pose')
-        result = wait_for_future(node, handle.get_result_async(), timeout)
-        if (result.status != GoalStatus.STATUS_SUCCEEDED or
-                result.result.error_code != FollowJointTrajectory.Result.SUCCESSFUL):
-            raise RuntimeError(f'Arm initialization failed: {result.result.error_string}')
+        try:
+            handle = wait_for_future(node, client.send_goal_async(goal), min(timeout, 10.0))
+            if not handle.accepted:
+                raise RuntimeError('Arm controller rejected the initial pose')
+            result = wait_for_future(node, handle.get_result_async(), min(timeout, duration + 15.0))
+            if (result.status != GoalStatus.STATUS_SUCCEEDED or
+                    result.result.error_code != FollowJointTrajectory.Result.SUCCESSFUL):
+                raise RuntimeError(f'Arm initialization failed: {result.result.error_string}')
+        except RuntimeError as error:
+            if str(error) != 'Timed out waiting for arm controller':
+                raise
+            node.get_logger().warning('Arm action reply timed out; checking measured joint feedback')
+        # DDS can lose an action reply after the controller has accepted and
+        # executed it. Enable the chassis only after actual joints have settled.
+        confirm_feedback(node, latest, positions, min(timeout, 20.0))
         node.get_logger().info(f'Arm initialized and held at {positions} radians')
         result_code = 0
     except (RuntimeError, ValueError) as error:
@@ -62,7 +112,7 @@ def main(args=None):
         if client is not None:
             client.destroy()
         node.destroy_node()
-        rclpy.shutdown()
+        rclpy.try_shutdown()
     return result_code
 
 
