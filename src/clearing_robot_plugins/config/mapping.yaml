@@ -1,0 +1,12 @@
+# Override the shared robot/IMU configuration only for online mapping.
+fastlio_mapping:
+  ros__parameters:
+    publish:
+      path_en: true
+      map_en: true
+      scan_publish_en: true
+      dense_publish_en: false
+      scan_bodyframe_pub_en: true
+    pcd_save:
+      pcd_save_en: true
+      interval: -1
