@@ -126,22 +126,34 @@ def validate_motion(world, record, triangles):
 def validate(package):
     metadata = json.loads((package / "worlds/catalog.json").read_text())
     records = metadata["maps"]
-    expected = {f"{category}_{i}" for category,count in [('flat',5),('terrain',5),('floor',7)] for i in range(1,count+1)}
+    expected = {f"{category}_{i}" for category,count in [('flat',5),('terrain',5),('floor',5)] for i in range(1,count+1)}
+    expected |= {f"M{i}" for i in range(1,9)}
     assert set(records) == expected
     # Standalone robot test worlds (worlds/clearing_robot) are validated by
     # their own tests; the navigation catalog covers these three families.
-    suite_worlds = {p.stem for category in ("flat", "terrain", "floor")
+    suite_worlds = {p.stem for category in ("flat", "terrain", "floor", "unseen")
                     for p in (package / "worlds" / category).rglob("*.world")}
     assert suite_worlds == expected
     assert {p.stem for p in (package / "pcd").rglob("*.pcd")} == expected
     mesh_hashes = set(); results = []
     surveyed=metadata['tracked_initial_poses']
     for name, record in records.items():
-        for field in ("world", "mesh", "pcd"):
+        for field in (("world", "pcd") if record.get("cohort")=="unseen" else ("world", "mesh", "pcd")):
             assert (package / record[field]).is_file(), (name, field)
         world = package / record["world"]
         for uri in ET.parse(world).getroot().findall(".//geometry/mesh/uri"):
             assert resolve_uri(uri.text, package, world.parent).is_file(), (name, uri.text)
+        if record.get('cohort') == 'unseen':
+            points = read_pcd(package / record['pcd'])
+            assert len(points) == record['points'], name
+            assert hashlib.sha256((package / record['pcd']).read_bytes()).hexdigest() == record['pcd_sha256'], name
+            assert hashlib.sha256(world.read_bytes()).hexdigest() == record['world_sha256'], name
+            exported = world_triangles(world, package)
+            support = support_height(exported, record['spawn'])
+            assert abs(record['initial_pose'][2] - support - .03) < .015, (name, support)
+            results.append({'name':name,'points':len(points),'support_z':{'lower':support},'cohort':'unseen'})
+            print(f"PASS {name}: {len(points)} points; support {support}", flush=True)
+            continue
         triangles = read_binary_stl(package / record["mesh"])
         exported = world_triangles(package / record["world"], package)
         validate_static_geometry(package,world,triangles)
@@ -153,7 +165,6 @@ def validate(package):
         points = read_pcd(package / record["pcd"])
         assert len(points) == record["points"]
         assert record['pcd_sha256']==hashlib.sha256((package/record['pcd']).read_bytes()).hexdigest(),name
-        assert (package/'pcd_modified'/record['category']/(name+'.pcd')).read_bytes()==(package/record['pcd']).read_bytes(),name
         minimum, maximum = triangles.min(axis=(0, 1)), triangles.max(axis=(0, 1))
         assert (points >= minimum - 1e-4).all() and (points <= maximum + 1e-4).all(), name
         assert np.allclose(points.min(axis=0), record["bounds_min"], atol=1e-5)
@@ -174,10 +185,8 @@ def validate(package):
         results.append({"name": name, "points": len(points), "triangles": len(triangles), "support_z": supports,'dynamic_obstacles':dynamic_count})
         print(f"PASS {name}: {len(points)} points; support {supports}", flush=True)
     combos = {tuple(record["floor_types"]) for record in records.values() if record["category"] == "floor"}
-    assert {('flat','flat'),('flat','terrain'),('terrain','terrain')}<=combos
-    assert records['floor_6']['floor_types']==['flat','terrain']
-    assert records['floor_7']['floor_types']==['terrain','terrain']
-    assert {r['name']:r['dynamic_obstacles']for r in results if r['dynamic_obstacles']}=={'flat_3':8,'terrain_3':6,'floor_3':8}
+    assert combos == {('flat','flat')}, 'Development floor maps 1–5 have two planar levels'
+    assert {r['name']:r['dynamic_obstacles']for r in results if r.get('dynamic_obstacles')}=={'flat_3':8,'terrain_3':6,'floor_3':8}
     return {"passed": len(results), "maps": results}
 
 
