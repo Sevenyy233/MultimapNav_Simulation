@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Launch the clearing robot in Gazebo at the original URDF zero pose."""
+"""Simulation only: clearing robot in Gazebo at the original URDF zero pose."""
 
 from pathlib import Path
 import re
