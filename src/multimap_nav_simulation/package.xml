@@ -14,9 +14,14 @@
   <depend>nav_msgs</depend>
   <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>
-  <exec_depend>std_msgs</exec_depend>
+  <depend>livox_ros_driver2</depend>
+  <exec_depend>ros2_livox_simulation</exec_depend>
+  <exec_depend>fast_lio</exec_depend>
+  <depend>std_msgs</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
+  <depend>tf2_sensor_msgs</depend>
+  <depend>tf2_geometry_msgs</depend>
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>action_msgs</exec_depend>
@@ -32,11 +37,9 @@
   <exec_depend>ament_index_python</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
-  <exec_depend>gazebo_ros</exec_depend>
+  <depend>gazebo_ros</depend>
   <exec_depend>gazebo_plugins</exec_depend>
-  <exec_depend>octomap_server</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
-  <exec_depend>rviz2</exec_depend>
   <exec_depend>xacro</exec_depend>
   <exec_depend>python3-numpy</exec_depend>
   <exec_depend>python3-yaml</exec_depend>
@@ -44,6 +47,7 @@
   <test_depend>python3-scipy</test_depend>
   <test_depend>controller_manager_msgs</test_depend>
   <test_depend>tf2_msgs</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
