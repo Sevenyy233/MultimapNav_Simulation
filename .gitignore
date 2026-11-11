@@ -6,3 +6,5 @@ log/
 __pycache__/
 *.py[cod]
 *.egg-info/
+/build_round2/
+/install_round2/
