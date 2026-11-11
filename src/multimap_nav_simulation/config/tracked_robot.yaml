@@ -1,4 +1,4 @@
-# Parameters for robot/tracked_robot.xacro and launch/tracked_robot.launch.py.
+# Development configuration: not frozen for independent evaluation.
 controller_manager:
   ros__parameters:
     update_rate: 100
@@ -58,87 +58,86 @@ diff_drive_controller:
 joint_state_broadcaster:
   ros__parameters:
     publish_rate: 100.0
-localization_server:
+fastlio_mapping:
   ros__parameters:
     use_sim_time: true
-    publish_identity_map_to_odom: false
-    costmap2d_localization:
-      use_ndt: true
-      use_odom: true
-      odom_is_map_frame: false
-      odom_topic: /truth/odometry
-      use_wheel_velocity: false
-      odom_velocity_mode: body_3d
-      odom_velocity_noise: 0.01
-      use_odom_rotation_guess: true
-      odom_timeout: 0.5
-      use_map_visibility: true
-      use_ground_support_prior: true
-      icp_refinement: true
-    gridmap_localization:
-      use_ndt: true
-      use_odom: true
-      odom_is_map_frame: false
-      odom_topic: /truth/odometry
-      use_wheel_velocity: false
-      odom_velocity_mode: body_3d
-      odom_velocity_noise: 0.01
-      use_odom_rotation_guess: true
-      odom_timeout: 0.5
-      use_map_visibility: true
-      use_ground_support_prior: true
-      icp_refinement: true
-    octomap_localization:
-      use_ndt: true
-      use_odom: true
-      odom_is_map_frame: false
-      odom_topic: /truth/odometry
-      use_wheel_velocity: false
-      odom_velocity_mode: body_3d
-      odom_velocity_noise: 0.01
-      use_odom_rotation_guess: true
-      odom_timeout: 0.5
-      use_map_visibility: true
-      use_ground_support_prior: true
-      icp_refinement: true
-trajectory_planner_server:
+    imu_queue_size: 2000
+    feature_extract_enable: false
+    point_filter_num: 3
+    max_iteration: 4
+    filter_size_surf: 0.5
+    filter_size_map: 0.5
+    cube_side_length: 200.0
+    runtime_pos_log_enable: false
+    common:
+      lid_topic: /fast_lio/lidar
+      imu_topic: /livox/imu
+      time_sync_en: false
+      time_offset_lidar_to_imu: 0.0
+    preprocess:
+      lidar_type: 1
+      scan_line: 4
+      blind: 0.15
+      timestamp_unit: 3
+      scan_rate: 10
+    mapping:
+      acc_cov: 0.1
+      gyr_cov: 0.1
+      b_acc_cov: 0.0001
+      b_gyr_cov: 0.0001
+      fov_degree: 360.0
+      det_range: 40.0
+      extrinsic_est_en: false
+      extrinsic_T:
+      - 0.0
+      - 0.0
+      - 0.08
+      extrinsic_R:
+      - 1.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    publish:
+      path_en: false
+      effect_map_en: false
+      map_en: false
+      scan_publish_en: true
+      dense_publish_en: false
+      scan_bodyframe_pub_en: true
+    pcd_save:
+      pcd_save_en: false
+      interval: -1
+fast_lio_sim_bridge:
   ros__parameters:
-    goal_position_tolerance: 0.15
-    goal_yaw_tolerance: 0.15
-    costmap2d_trajectory_planner:
-      goal_position_tolerance: 0.15
-      goal_yaw_tolerance: 0.15
-      min_in_place_angular_vel: 0.45
-    gridmap_trajectory_planner:
-      goal_position_tolerance: 0.15
-      goal_yaw_tolerance: 0.15
-      min_in_place_angular_vel: 0.45
-    octomap_trajectory_planner:
-      goal_position_tolerance: 0.15
-      goal_yaw_tolerance: 0.15
-      min_in_place_angular_vel: 0.45
-bt_navigator:
+    use_sim_time: true
+    lidar_topic: /livox/lidar
+    lidar_frame: lidar_link
+    instantaneous_scan: false
+    imu_input_topic: /livox/imu_raw
+    body_cloud_input_topic: /fast_lio/deskewed_body_points
+    use_native_twist: true
+    twist_filter_time_constant: 0.0
+    twist_max_interval: 0.5
+
+tracked_body_velocity_controller:
   ros__parameters:
-    goal_position_tolerance: 0.15
-    goal_yaw_tolerance: 0.15
-local_planner_server:
-  ros__parameters:
-    scan_local_planner:
-      sensor_min_range: 0.4
-      sensor_self_filter_radius: 0.35
-      sensor_ground_tolerance: 0.08
-      sensor_obstacle_min_height: -0.1
-      sensor_subtract_static_map: false
-      obstacle_cloud_topic: /obstacle_cloud
-lifecycle_manager:
-  ros__parameters:
-    profiles:
-      costmap2d:
-        goal_position_tolerance: 0.15
-        goal_yaw_tolerance: 0.15
-      gridmap:
-        goal_position_tolerance: 0.15
-        goal_yaw_tolerance: 0.15
-      octomap:
-        goal_position_tolerance: 0.15
-        goal_yaw_tolerance: 0.15
+    use_sim_time: true
+    control_frequency: 50.0
+    command_timeout: 0.5
+    odom_timeout: 0.5
+    imu_timeout: 0.2
+    feedback_max_linear_speed: 3.0
+    feedback_max_angular_speed: 3.0
+    linear.kp: 1.0
+    linear.ki: 2.0
+    linear.integral_limit: 0.3
+    linear.command_limit: 2.0
+    angular.kp: 1.0
+    angular.ki: 2.0
+    angular.integral_limit: 0.7
+    angular.command_limit: 1.2
