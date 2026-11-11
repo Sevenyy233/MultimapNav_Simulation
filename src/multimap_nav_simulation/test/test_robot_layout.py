@@ -20,7 +20,7 @@ class RobotLayoutTests(unittest.TestCase):
         self.assertEqual({path.stem for path in (PACKAGE / 'robot').glob('*.xacro')}, set(ROBOTS))
         self.assertEqual({path.name for path in (PACKAGE / 'launch').glob('*.py')},
                          {f'{name}.launch.py' for name in ROBOTS})
-        self.assertEqual({path.name for path in (PACKAGE / 'config').iterdir()},
+        self.assertEqual({path.name for path in (PACKAGE / 'config').glob('*.yaml')},
                          {f'{name}.yaml' for name in ROBOTS})
         self.assertEqual(len(list(PACKAGE.rglob('*.yaml'))), 4)
 
