@@ -37,7 +37,7 @@
   <xacro:property name="depth_camera_near"  value="0.05"/>   <!-- 最近有效距离 [m] -->
   <xacro:property name="depth_camera_far"   value="8.0"/>    <!-- 最远有效距离 [m] -->
 
-  <xacro:macro name="depth_camera" params="name:='depth_camera' parent:='base_link' xyz:='0.21 0 0.06' rpy:='0 0 0'">
+  <xacro:macro name="depth_camera" params="name:='depth_camera' parent:='base_link' xyz:='0.21 0 0.06' rpy:='0 0 0' width:=${depth_camera_w} height:=${depth_camera_h}">
 
     <!-- ========================== 相机本体 link ========================== -->
     <link name="${name}_link">
@@ -106,8 +106,8 @@
         <camera>
           <horizontal_fov>${depth_camera_hfov}</horizontal_fov>
           <image>
-            <width>${depth_camera_w}</width>
-            <height>${depth_camera_h}</height>
+            <width>${width}</width>
+            <height>${height}</height>
             <format>R8G8B8</format>
           </image>
           <clip>
