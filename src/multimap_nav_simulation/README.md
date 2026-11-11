@@ -3,8 +3,27 @@
 新增基础几何体大型清障机器人：
 `ros2 launch multimap_nav_simulation clearing_robot_primitives.launch.py`。
 默认加载 `worlds/clearing_robot/clearing_enclosed.world`（内部 50 × 50 × 20 m 封闭场景），
-机械臂启动时收起并保持，履带与七轴机械臂均接入 ros2_control，里程计采用 Gazebo 真值。
+机械臂启动时收起并保持，履带与七轴机械臂均接入 ros2_control；五个定向 Avia 与 IMU 默认接入 FAST-LIO2。该入口不加载 Gazebo 真值里程计插件，`/odom` 和定位 TF 由 FAST-LIO2 接入桥提供。雷达射线在 Gazebo 中隐藏，五路三维点云仍正常发布。
 模型、参数及接口详见 [基础几何体清障机器人](docs/clearing_robot_primitives.md)。
+
+大型清障机器人完整导航使用本工作区的统一入口，它同时启动仿真、FAST-LIO2和原 MultiMapNav 服务器：
+
+```bash
+ros2 launch clearing_robot_plugins navigation.launch.py forced_mode:=auto
+```
+
+仿真和FAST-LIO2在线建图使用：
+
+```bash
+ros2 launch clearing_robot_plugins mapping.launch.py map_name:=clearing_enclosed
+# 另一场景示例，出生位置按大型车体设置
+ros2 launch clearing_robot_plugins mapping.launch.py map_name:=flat_3 spawn_x:=-6.0 spawn_y:=-7.0
+```
+
+建图时用 `/map_save` (`std_srvs/srv/Trigger`) 保存PCD；输出位置与控制命令见[清障导航及建图说明](../clearing_robot_plugins/docs/README.md)。
+
+默认场景自动选择 OctoMap；`forced_mode` 可设为 `costmap2d`、`gridmap`、`octomap` 强制选择。
+清障机器人的三模式配置和插件位于 `clearing_robot_plugins`，详见[清障导航说明](../clearing_robot_plugins/docs/README.md)和[地图模式验证](../clearing_robot_plugins/docs/map_modes_validation.md)。
 
 ROS 2 Humble + Gazebo Classic，当前共 **17 张**：flat 5 张、terrain 5 张、floor 7 张。
 场景版本：`compact_mixed_floors_dynamic_20261008_v3`。长度单位为米，world、STL 与 PCD 坐标一致。
@@ -49,7 +68,7 @@ flat_3 与 floor_3 速度范围 0.25–0.95 m/s，terrain_3 为 0.25–0.80 m/s�
 | 基础几何体清障机器人 | `robot/clearing_robot_primitives.xacro` | `clearing_robot_primitives.launch.py` | `config/clearing_robot_primitives.yaml` |
 
 每份 YAML 包含对应机器人的控制器与节点参数。基础几何体机器人的驱动、机械臂初始位置、
-行驶包络同在其 YAML 内；履带机器人的可选辅助导航参数同在 `tracked_robot.yaml` 内。
+行驶包络同在其 YAML 内。仿真配置只保存控制器及仿真节点参数；履带导航适配参数位于导航工程的 `bring_up/config/tracked_robot_nav_params.yaml`。
 地图和出生位姿数据位于 `worlds/catalog.json`，场景设计记录位于 `worlds/scene_design.json`。
 共享的零件、传感器宏、运行脚本及地图生成/验证工具保留在各自目录中。
 
@@ -58,18 +77,25 @@ flat_3 与 floor_3 速度范围 0.25–0.95 m/s，terrain_3 为 0.25–0.80 m/s�
 ```bash
 cd /data/projects/ros2_ws/MultiMapNav_Simulation
 source /opt/ros/humble/setup.bash
-colcon build --packages-select multimap_nav_simulation --symlink-install
+bash src/multimap_nav_simulation/scripts/build_livox_workspace.sh
 source install/setup.bash
-source /data/projects/ros2_ws/MultiMapNav/install/setup.bash
 
-ros2 launch multimap_nav_simulation tracked_robot.launch.py world_file_name:=floor_6 navigation:=true
-# floor_7 同样启动；在上层出生可追加 spawn_level:=upper
+ros2 launch multimap_nav_simulation tracked_robot.launch.py world_file_name:=flat_1
+# 双层地图在上层出生可追加 spawn_level:=upper
 # 查看动态障碍：world_file_name:=flat_3、terrain_3 或 floor_3
 ```
 
 `worlds/catalog.json` 统一记录地图目录、尺寸、点数、校验和、动态路径、默认出生位姿和上下层定位初值。
-启动程序设置 Gazebo 资源及插件路径，并根据地图加载仿真定位参数。
+启动程序只设置 Gazebo 资源及插件路径、机器人模型、传感器、控制器、出生位置和可选里程计 TF。
 旧地图别名 indoor_flat、terrain、two_floor 仍可使用。
+
+四个 launch 入口不加载导航工程；基础几何体清障机器人额外提供默认启用的 FAST-LIO2 定位（`use_fast_lio:=false` 可关闭），其余入口只启动仿真。小型履带机器人需要另行接入导航时，在导航工作空间中执行：
+
+```bash
+ros2 launch bring_up tracked_robot_nav.launch.py map_name:=flat_1
+```
+
+导航与仿真的地图及出生层必须一致；导航环境和参数说明见导航工程 `src/bring_up/README.md`。两边分别启动和退出。
 
 ## 场景资源与再生成
 
@@ -99,8 +125,8 @@ world_to_mesh.py 导出静态几何时会排除运动插件控制的实体。
 ```bash
 python3 src/multimap_nav_simulation/scripts/validate_map_suite.py
 # 同时检查四个模型/启动入口/YAML 的对应关系及清障模型：
-ctest --test-dir build/multimap_nav_simulation \
-  -R 'map_suite_consistency|clearing_robot_primitives_consistency|robot_layout_consistency' --output-on-failure
+python3 src/multimap_nav_simulation/test/test_clearing_robot_primitives.py
+python3 src/multimap_nav_simulation/test/test_robot_layout.py
 ```
 
 检查静态 world/网格几何覆盖、PCD 数据和校验和、初始化位姿地面支撑、动态路径及颜色。
@@ -134,3 +160,18 @@ ros2 launch multimap_nav_simulation clearing_robot.launch.py world_file_name:=fl
 
 默认发布 `odom -> base_link` 真值 TF；定位系统也发布同一 TF 时，
 可设置 `publish_odom_tf:=false`。
+
+
+## thesis_version map layout
+
+The active worlds/pcd/3DModel folders contain the 15 development maps and eight
+unseen maps used in the submitted paper. worlds/catalog.json defines F1–F5,
+T1–T5, L1–L5 and M1–M8, their original spawn poses and ordered goals. Unseen
+worlds use package-relative mesh URIs; their point clouds and STL payloads are
+unchanged from the submission. Extra historical scenes were moved, not deleted,
+to ../MultiMapNav/thesis/legacy_assets. config/legacy_scene_locations.json keeps
+explicit legacy floor_6/floor_7 and clearing_enclosed lookup available locally.
+
+Build/install the current sensor configuration into build_round2/install_round2.
+The combined launcher is ../MultiMapNav/thesis/bin/run_scene.sh; see that
+workspace's README for exact commands. No original trial was rerun by the move.
