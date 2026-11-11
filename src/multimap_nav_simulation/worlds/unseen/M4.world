@@ -1,0 +1,3164 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.7">
+  <world name="terrain_M4">
+    <gravity>0 0 -9.8</gravity>
+    <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+      <ros>
+        <namespace>/gazebo</namespace>
+      </ros>
+    </plugin>
+    <physics name="ode_physics" type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>150</iters>
+          <sor>1.3</sor>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>0.2</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+    </physics>
+    <light name="sun" type="directional">
+      <pose>0 0 42 0 0 0</pose>
+      <diffuse>0.92 0.91 0.88 1</diffuse>
+      <specular>0.18 0.18 0.16 1</specular>
+      <direction>-0.35 -0.28 -0.9</direction>
+      <cast_shadows>true</cast_shadows>
+    </light>
+    <light name="fill" type="point">
+      <pose>0 0 6 0 0 0</pose>
+      <diffuse>0.35 0.36 0.34 1</diffuse>
+      <specular>0.02 0.02 0.02 1</specular>
+      <cast_shadows>false</cast_shadows>
+      <attenuation>
+        <range>80</range>
+        <constant>0.5</constant>
+        <linear>0.02</linear>
+      </attenuation>
+    </light>
+    <scene>
+      <ambient>0.52 0.56 0.48 1</ambient>
+      <background>0.58 0.76 0.92 1</background>
+    </scene>
+    <gui fullscreen="false">
+      <camera name="user_camera">
+        <pose>22.4 -19.8 27.2 0 0.65 2.2</pose>
+        <view_controller>orbit</view_controller>
+      </camera>
+    </gui>
+    <model name="terrain_M4_structure">
+      <static>true</static>
+      <link name="structure">
+        <collision name="terrain_surface_collision">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>3DModel/unseen/M4/terrain_surface.stl</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>8</mu>
+                <mu2>8</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="terrain_surface_visual">
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>3DModel/unseen/M4/terrain_surface.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <ambient>0.38 0.54 0.24 1</ambient>
+            <diffuse>0.38 0.54 0.24 1</diffuse>
+          </material>
+        </visual>
+        <collision name="outer_south_wall_0_collision">
+          <pose>0 -11 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>32 0.18 6</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="outer_south_wall_0_visual">
+          <pose>0 -11 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>32 0.18 6</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.62 0.58 0.50 1</ambient>
+            <diffuse>0.62 0.58 0.50 1</diffuse>
+          </material>
+          <transparency>0.72</transparency>
+        </visual>
+        <collision name="outer_north_wall_0_collision">
+          <pose>0 11 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>32 0.18 6</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="outer_north_wall_0_visual">
+          <pose>0 11 1.2 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>32 0.18 6</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.62 0.58 0.50 1</ambient>
+            <diffuse>0.62 0.58 0.50 1</diffuse>
+          </material>
+          <transparency>0.72</transparency>
+        </visual>
+        <collision name="outer_west_wall_0_collision">
+          <pose>-16 0 1.2 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>22 0.18 6</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="outer_west_wall_0_visual">
+          <pose>-16 0 1.2 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>22 0.18 6</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.62 0.58 0.50 1</ambient>
+            <diffuse>0.62 0.58 0.50 1</diffuse>
+          </material>
+          <transparency>0.72</transparency>
+        </visual>
+        <collision name="outer_east_wall_0_collision">
+          <pose>16 0 1.2 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>22 0.18 6</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="outer_east_wall_0_visual">
+          <pose>16 0 1.2 0 0 1.57079633</pose>
+          <geometry>
+            <box>
+              <size>22 0.18 6</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.62 0.58 0.50 1</ambient>
+            <diffuse>0.62 0.58 0.50 1</diffuse>
+          </material>
+          <transparency>0.72</transparency>
+        </visual>
+        <collision name="hazard_0_obstacle0_prop_collision">
+          <pose>-1.6 2.8 1.71335528 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.790439329</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle0_prop_visual">
+          <pose>-1.6 2.8 1.71335528 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.790439329</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle0_strap_-1_visual">
+          <pose>-1.6 2.8 1.47622348 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle0_strap_1_visual">
+          <pose>-1.6 2.8 1.95048708 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_obstacle1_prop_collision">
+          <pose>-1.98196601 4.00495977 1.87976621 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.99250467</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle1_prop_visual">
+          <pose>-1.98196601 4.00495977 1.87976621 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.99250467</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle1_strap_-1_visual">
+          <pose>-1.98196601 4.00495977 1.5820148 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle1_strap_1_visual">
+          <pose>-1.98196601 4.00495977 2.17751761 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_obstacle2_prop_collision">
+          <pose>-2.98196601 4.74966586 2.02424715 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.09747096</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle2_prop_visual">
+          <pose>-2.98196601 4.74966586 2.02424715 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.09747096</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle2_strap_-1_visual">
+          <pose>-2.98196601 4.74966586 1.69500587 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle2_strap_1_visual">
+          <pose>-2.98196601 4.74966586 2.35348844 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_obstacle3_prop_collision">
+          <pose>-4.21803399 4.74966586 1.88866638 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.823598363</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle3_prop_visual">
+          <pose>-4.21803399 4.74966586 1.88866638 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.823598363</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle3_strap_-1_visual">
+          <pose>-4.21803399 4.74966586 1.64158687 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle3_strap_1_visual">
+          <pose>-4.21803399 4.74966586 2.13574589 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_obstacle4_prop_collision">
+          <pose>-5.21803399 4.00495977 1.87899435 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.007998</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle4_prop_visual">
+          <pose>-5.21803399 4.00495977 1.87899435 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.007998</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle4_strap_-1_visual">
+          <pose>-5.21803399 4.00495977 1.57659495 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle4_strap_1_visual">
+          <pose>-5.21803399 4.00495977 2.18139375 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_obstacle5_prop_collision">
+          <pose>-5.6 2.8 1.78882455 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.00760939</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle5_prop_visual">
+          <pose>-5.6 2.8 1.78882455 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.00760939</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle5_strap_-1_visual">
+          <pose>-5.6 2.8 1.48654173 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle5_strap_1_visual">
+          <pose>-5.6 2.8 2.09110737 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_obstacle6_prop_collision">
+          <pose>-5.21803399 1.59504023 1.79648878 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.04638719</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle6_prop_visual">
+          <pose>-5.21803399 1.59504023 1.79648878 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.04638719</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle6_strap_-1_visual">
+          <pose>-5.21803399 1.59504023 1.48257262 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle6_strap_1_visual">
+          <pose>-5.21803399 1.59504023 2.11040494 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_obstacle7_prop_collision">
+          <pose>-4.21803399 0.850334142 1.79225097 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.957860722</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle7_prop_visual">
+          <pose>-4.21803399 0.850334142 1.79225097 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.957860722</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle7_strap_-1_visual">
+          <pose>-4.21803399 0.850334142 1.50489276 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle7_strap_1_visual">
+          <pose>-4.21803399 0.850334142 2.07960919 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_obstacle8_prop_collision">
+          <pose>-2.98196601 0.850334142 1.72797932 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.791592408</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle8_prop_visual">
+          <pose>-2.98196601 0.850334142 1.72797932 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.791592408</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle8_strap_-1_visual">
+          <pose>-2.98196601 0.850334142 1.4905016 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle8_strap_1_visual">
+          <pose>-2.98196601 0.850334142 1.96545704 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_obstacle9_prop_collision">
+          <pose>-1.98196601 1.59504023 1.74487153 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.859348079</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_obstacle9_prop_visual">
+          <pose>-1.98196601 1.59504023 1.74487153 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.859348079</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle9_strap_-1_visual">
+          <pose>-1.98196601 1.59504023 1.48706711 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_0_obstacle9_strap_1_visual">
+          <pose>-1.98196601 1.59504023 2.00267595 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_core_obstacle0_collision">
+          <pose>-4.15 2.8 3.41007589 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_core_obstacle0_visual">
+          <pose>-4.15 2.8 3.41007589 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.67 0.26 0.18 1</ambient>
+            <diffuse>0.67 0.26 0.18 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_core_obstacle1_collision">
+          <pose>-3.6 2.8 3.66263542 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_core_obstacle1_visual">
+          <pose>-3.6 2.8 3.66263542 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.67 0.26 0.18 1</ambient>
+            <diffuse>0.67 0.26 0.18 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_0_core_obstacle2_collision">
+          <pose>-3.05 2.8 3.42006649 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_0_core_obstacle2_visual">
+          <pose>-3.05 2.8 3.42006649 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.67 0.26 0.18 1</ambient>
+            <diffuse>0.67 0.26 0.18 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle0_prop_collision">
+          <pose>9 -3.6 1.54052383 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.675005548</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle0_prop_visual">
+          <pose>9 -3.6 1.54052383 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.675005548</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle0_strap_-1_visual">
+          <pose>9 -3.6 1.33802216 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle0_strap_1_visual">
+          <pose>9 -3.6 1.74302549 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle1_prop_collision">
+          <pose>8.65623059 -2.4244295 1.67206328 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.867110313</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle1_prop_visual">
+          <pose>8.65623059 -2.4244295 1.67206328 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.867110313</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle1_strap_-1_visual">
+          <pose>8.65623059 -2.4244295 1.41193019 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle1_strap_1_visual">
+          <pose>8.65623059 -2.4244295 1.93219637 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle2_prop_collision">
+          <pose>7.75623059 -1.69788697 1.85004875 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.04636858</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle2_prop_visual">
+          <pose>7.75623059 -1.69788697 1.85004875 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.04636858</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle2_strap_-1_visual">
+          <pose>7.75623059 -1.69788697 1.53613818 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle2_strap_1_visual">
+          <pose>7.75623059 -1.69788697 2.16395932 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle3_prop_collision">
+          <pose>6.64376941 -1.69788697 1.85119973 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.960054905</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle3_prop_visual">
+          <pose>6.64376941 -1.69788697 1.85119973 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.960054905</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle3_strap_-1_visual">
+          <pose>6.64376941 -1.69788697 1.56318326 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle3_strap_1_visual">
+          <pose>6.64376941 -1.69788697 2.1392162 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle4_prop_collision">
+          <pose>5.74376941 -2.4244295 1.8409748 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.02543443</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle4_prop_visual">
+          <pose>5.74376941 -2.4244295 1.8409748 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.02543443</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle4_strap_-1_visual">
+          <pose>5.74376941 -2.4244295 1.53334447 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle4_strap_1_visual">
+          <pose>5.74376941 -2.4244295 2.14860513 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle5_prop_collision">
+          <pose>5.4 -3.6 1.66374694 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.816971048</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle5_prop_visual">
+          <pose>5.4 -3.6 1.66374694 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.816971048</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle5_strap_-1_visual">
+          <pose>5.4 -3.6 1.41865563 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle5_strap_1_visual">
+          <pose>5.4 -3.6 1.90883826 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle6_prop_collision">
+          <pose>5.74376941 -4.7755705 1.67906326 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.913381417</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle6_prop_visual">
+          <pose>5.74376941 -4.7755705 1.67906326 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.913381417</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle6_strap_-1_visual">
+          <pose>5.74376941 -4.7755705 1.40504884 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle6_strap_1_visual">
+          <pose>5.74376941 -4.7755705 1.95307769 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle7_prop_collision">
+          <pose>6.64376941 -5.50211303 1.74900787 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.01246261</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle7_prop_visual">
+          <pose>6.64376941 -5.50211303 1.74900787 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.01246261</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle7_strap_-1_visual">
+          <pose>6.64376941 -5.50211303 1.44526908 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle7_strap_1_visual">
+          <pose>6.64376941 -5.50211303 2.05274665 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle8_prop_collision">
+          <pose>7.75623059 -5.50211303 1.80396839 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.08828394</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle8_prop_visual">
+          <pose>7.75623059 -5.50211303 1.80396839 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 1.08828394</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle8_strap_-1_visual">
+          <pose>7.75623059 -5.50211303 1.47748321 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle8_strap_1_visual">
+          <pose>7.75623059 -5.50211303 2.13045357 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_obstacle9_prop_collision">
+          <pose>8.65623059 -4.7755705 1.6702892 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.875517597</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_obstacle9_prop_visual">
+          <pose>8.65623059 -4.7755705 1.6702892 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.875517597</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle9_strap_-1_visual">
+          <pose>8.65623059 -4.7755705 1.40763392 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_1_obstacle9_strap_1_visual">
+          <pose>8.65623059 -4.7755705 1.93294448 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_core_obstacle0_collision">
+          <pose>6.65 -3.6 3.19027758 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_core_obstacle0_visual">
+          <pose>6.65 -3.6 3.19027758 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.67 0.26 0.18 1</ambient>
+            <diffuse>0.67 0.26 0.18 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_core_obstacle1_collision">
+          <pose>7.2 -3.6 3.47793777 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_core_obstacle1_visual">
+          <pose>7.2 -3.6 3.47793777 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.67 0.26 0.18 1</ambient>
+            <diffuse>0.67 0.26 0.18 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_1_core_obstacle2_collision">
+          <pose>7.75 -3.6 3.17327024 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_1_core_obstacle2_visual">
+          <pose>7.75 -3.6 3.17327024 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.67 0.26 0.18 1</ambient>
+            <diffuse>0.67 0.26 0.18 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle0_prop_collision">
+          <pose>4.8 5 0.443507558 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.745950193</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle0_prop_visual">
+          <pose>4.8 5 0.443507558 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.745950193</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle0_strap_-1_visual">
+          <pose>4.8 5 0.2197225 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle0_strap_1_visual">
+          <pose>4.8 5 0.667292616 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle1_prop_collision">
+          <pose>4.41803399 6.02862419 0.479224784 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.903775347</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle1_prop_visual">
+          <pose>4.41803399 6.02862419 0.479224784 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.903775347</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle1_strap_-1_visual">
+          <pose>4.41803399 6.02862419 0.20809218 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle1_strap_1_visual">
+          <pose>4.41803399 6.02862419 0.750357388 0 0 0.628318531</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle2_prop_collision">
+          <pose>3.41803399 6.6643489 0.406024158 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.76856271</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle2_prop_visual">
+          <pose>3.41803399 6.6643489 0.406024158 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.76856271</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle2_strap_-1_visual">
+          <pose>3.41803399 6.6643489 0.175455345 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle2_strap_1_visual">
+          <pose>3.41803399 6.6643489 0.636592971 0 0 1.25663706</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle3_prop_collision">
+          <pose>2.18196601 6.6643489 0.489780572 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.885742027</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle3_prop_visual">
+          <pose>2.18196601 6.6643489 0.489780572 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.885742027</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle3_strap_-1_visual">
+          <pose>2.18196601 6.6643489 0.224057964 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle3_strap_1_visual">
+          <pose>2.18196601 6.6643489 0.75550318 0 0 1.88495559</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle4_prop_collision">
+          <pose>1.18196601 6.02862419 0.426461772 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.706193819</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle4_prop_visual">
+          <pose>1.18196601 6.02862419 0.426461772 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.706193819</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle4_strap_-1_visual">
+          <pose>1.18196601 6.02862419 0.214603627 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle4_strap_1_visual">
+          <pose>1.18196601 6.02862419 0.638319918 0 0 2.51327412</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle5_prop_collision">
+          <pose>0.8 5 0.551790165 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.925424119</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle5_prop_visual">
+          <pose>0.8 5 0.551790165 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.925424119</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle5_strap_-1_visual">
+          <pose>0.8 5 0.274162929 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle5_strap_1_visual">
+          <pose>0.8 5 0.829417401 0 0 3.14159265</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle6_prop_collision">
+          <pose>1.18196601 3.97137581 0.544338989 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.850045762</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle6_prop_visual">
+          <pose>1.18196601 3.97137581 0.544338989 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.850045762</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle6_strap_-1_visual">
+          <pose>1.18196601 3.97137581 0.28932526 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle6_strap_1_visual">
+          <pose>1.18196601 3.97137581 0.799352717 0 0 3.76991118</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle7_prop_collision">
+          <pose>2.18196601 3.3356511 0.568587151 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.80194377</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle7_prop_visual">
+          <pose>2.18196601 3.3356511 0.568587151 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.80194377</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle7_strap_-1_visual">
+          <pose>2.18196601 3.3356511 0.328004019 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle7_strap_1_visual">
+          <pose>2.18196601 3.3356511 0.809170282 0 0 4.39822972</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle8_prop_collision">
+          <pose>3.41803399 3.3356511 0.655702551 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.945352911</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle8_prop_visual">
+          <pose>3.41803399 3.3356511 0.655702551 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.945352911</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle8_strap_-1_visual">
+          <pose>3.41803399 3.3356511 0.372096678 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle8_strap_1_visual">
+          <pose>3.41803399 3.3356511 0.939308425 0 0 5.02654825</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_obstacle9_prop_collision">
+          <pose>4.41803399 3.97137581 0.613783657 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.95323014</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_obstacle9_prop_visual">
+          <pose>4.41803399 3.97137581 0.613783657 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.7 0.65 0.95323014</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle9_strap_-1_visual">
+          <pose>4.41803399 3.97137581 0.327814615 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="hazard_2_obstacle9_strap_1_visual">
+          <pose>4.41803399 3.97137581 0.899752699 0 0 5.65486678</pose>
+          <geometry>
+            <box>
+              <size>0.712 0.662 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_core_obstacle0_collision">
+          <pose>2.25 5 -0.77477159 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_core_obstacle0_visual">
+          <pose>2.25 5 -0.77477159 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.67 0.26 0.18 1</ambient>
+            <diffuse>0.67 0.26 0.18 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_core_obstacle1_collision">
+          <pose>2.8 5 -0.970563312 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_core_obstacle1_visual">
+          <pose>2.8 5 -0.970563312 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.67 0.26 0.18 1</ambient>
+            <diffuse>0.67 0.26 0.18 1</diffuse>
+          </material>
+        </visual>
+        <collision name="hazard_2_core_obstacle2_collision">
+          <pose>3.35 5 -0.779935304 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="hazard_2_core_obstacle2_visual">
+          <pose>3.35 5 -0.779935304 0 0 0</pose>
+          <geometry>
+            <cylinder>
+              <radius>0.32</radius>
+              <length>0.9</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.67 0.26 0.18 1</ambient>
+            <diffuse>0.67 0.26 0.18 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle0_prop_collision">
+          <pose>-12.8 -6.4 1.00589269 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle0_prop_visual">
+          <pose>-12.8 -6.4 1.00589269 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle0_strap_-1_visual">
+          <pose>-12.8 -6.4 0.735892686 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle0_strap_1_visual">
+          <pose>-12.8 -6.4 1.27589269 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle1_prop_collision">
+          <pose>-11.3 5.6 1.05602757 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle1_prop_visual">
+          <pose>-11.3 5.6 1.05602757 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle1_strap_-1_visual">
+          <pose>-11.3 5.6 0.786027574 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle1_strap_1_visual">
+          <pose>-11.3 5.6 1.32602757 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle2_prop_collision">
+          <pose>-8.5 -2.8 1.09037915 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle2_prop_visual">
+          <pose>-8.5 -2.8 1.09037915 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle2_strap_-1_visual">
+          <pose>-8.5 -2.8 0.820379151 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle2_strap_1_visual">
+          <pose>-8.5 -2.8 1.36037915 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle3_prop_collision">
+          <pose>-7.1 7.8 1.18201724 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle3_prop_visual">
+          <pose>-7.1 7.8 1.18201724 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle3_strap_-1_visual">
+          <pose>-7.1 7.8 0.912017235 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle3_strap_1_visual">
+          <pose>-7.1 7.8 1.45201724 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle4_prop_collision">
+          <pose>-2.8 -6.4 1.17998187 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle4_prop_visual">
+          <pose>-2.8 -6.4 1.17998187 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle4_strap_-1_visual">
+          <pose>-2.8 -6.4 0.909981873 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle4_strap_1_visual">
+          <pose>-2.8 -6.4 1.44998187 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle5_prop_collision">
+          <pose>0 -8.5 1.1 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle5_prop_visual">
+          <pose>0 -8.5 1.1 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle5_strap_-1_visual">
+          <pose>0 -8.5 0.83 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle5_strap_1_visual">
+          <pose>0 -8.5 1.37 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle6_prop_collision">
+          <pose>5.7 9.2 0.956998796 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle6_prop_visual">
+          <pose>5.7 9.2 0.956998796 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle6_strap_-1_visual">
+          <pose>5.7 9.2 0.686998796 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle6_strap_1_visual">
+          <pose>5.7 9.2 1.2269988 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle7_prop_collision">
+          <pose>9.9 7.1 1.14725503 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle7_prop_visual">
+          <pose>9.9 7.1 1.14725503 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle7_strap_-1_visual">
+          <pose>9.9 7.1 0.877255027 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle7_strap_1_visual">
+          <pose>9.9 7.1 1.41725503 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle8_prop_collision">
+          <pose>12.8 0.7 0.946179485 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle8_prop_visual">
+          <pose>12.8 0.7 0.946179485 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle8_strap_-1_visual">
+          <pose>12.8 0.7 0.676179485 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle8_strap_1_visual">
+          <pose>12.8 0.7 1.21617948 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle9_prop_collision">
+          <pose>11.3 -8.5 1.22199094 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle9_prop_visual">
+          <pose>11.3 -8.5 1.22199094 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle9_strap_-1_visual">
+          <pose>11.3 -8.5 0.951990943 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle9_strap_1_visual">
+          <pose>11.3 -8.5 1.49199094 0 0 -0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle10_prop_collision">
+          <pose>-13.4 0.7 1.254944 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle10_prop_visual">
+          <pose>-13.4 0.7 1.254944 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle10_strap_-1_visual">
+          <pose>-13.4 0.7 0.984943998 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle10_strap_1_visual">
+          <pose>-13.4 0.7 1.524944 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <collision name="field_obstacle11_prop_collision">
+          <pose>0 9.8 1.09999439 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <max_contacts>40</max_contacts>
+          <surface>
+            <friction>
+              <ode>
+                <mu>2</mu>
+                <mu2>2</mu2>
+              </ode>
+            </friction>
+            <contact>
+              <ode>
+                <kp>1e7</kp>
+                <kd>1000</kd>
+                <max_vel>0.1</max_vel>
+                <min_depth>0.001</min_depth>
+              </ode>
+            </contact>
+          </surface>
+        </collision>
+        <visual name="field_obstacle11_prop_visual">
+          <pose>0 9.8 1.09999439 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.85 0.75 0.9</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.32 0.17 1</ambient>
+            <diffuse>0.55 0.32 0.17 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle11_strap_-1_visual">
+          <pose>0 9.8 0.829994389 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+        <visual name="field_obstacle11_strap_1_visual">
+          <pose>0 9.8 1.36999439 0 0 0.25</pose>
+          <geometry>
+            <box>
+              <size>0.862 0.762 0.035</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.18 0.21 1</ambient>
+            <diffuse>0.15 0.18 0.21 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>
