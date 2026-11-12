@@ -140,9 +140,65 @@ class ClearingRobotTests(unittest.TestCase):
         types = [value['type'] for value in self.controllers['controller_manager']['ros__parameters'].values()
                  if isinstance(value, dict) and 'type' in value]
         self.assertFalse(any('DiffDrive' in kind for kind in types))
-        truth = self.robot.find("gazebo/plugin[@filename='libgazebo_ros_p3d.so']")
-        self.assertEqual(truth.find('body_name').text, 'base_link')
-        self.assertEqual(truth.find('ros/remapping').text, 'odom:=/odom')
+        self.assertIsNone(self.robot.find("gazebo/plugin[@filename='libgazebo_ros_p3d.so']"))
+
+    def test_five_directional_vendor_avias_and_rigid_imu(self):
+        self.assertIsNone(self.robot.find("link[@name='lidar_mount']"))
+        self.assertIsNone(self.robot.find("link[@name='lidar_link']"))
+        self.assertEqual(len(self.robot.findall("gazebo/sensor[@type='ray']")), 5)
+        for index in range(1, 6):
+            joint = self.robot.find(f"joint[@name='rslidar_{index}_joint']")
+            original = self.original.find(f"joint[@name='rslidar_{index}_joint']")
+            self.assertEqual(joint.find('parent').get('link'), 'link1')
+            # Preserve headings while moving the four occluded mounts outboard.
+            expected_rotation = transform(original.find('origin'))[:3, :3]
+            if index in (3, 4):
+                yaw = np.pi/18 * (1 if index == 3 else -1)
+                expected_rotation = np.array([[np.cos(yaw), -np.sin(yaw), 0],
+                                              [np.sin(yaw), np.cos(yaw), 0], [0, 0, 1]])
+            np.testing.assert_allclose(transform(joint.find('origin'))[:3, :3], expected_rotation, atol=1e-12)
+            sensor = self.robot.find(f"gazebo[@reference='rslidar_{index}']/sensor")
+            plugin = sensor.find('plugin')
+            self.assertEqual(plugin.get('filename'), 'libros2_livox.so')
+            self.assertEqual(plugin.find('topic').text, f'/livox/lidar_{index}')
+            self.assertTrue(Path(plugin.find('csv_file_name').text).is_file())
+            preserved = self.robot.find(f"gazebo[@reference='rslidar_{index}_joint']/preserveFixedJoint")
+            self.assertEqual(preserved.text, 'true')
+        imu = self.robot.find("joint[@name='imu_joint']")
+        self.assertEqual(imu.find('parent').get('link'), 'link1')
+        imu_transform = transform(imu.find('origin'))
+        primary = transform(self.robot.find("joint[@name='rslidar_3_joint']/origin"))
+        relative = np.linalg.inv(imu_transform) @ primary
+        parameters = self.controllers['fastlio_mapping']['ros__parameters']
+        np.testing.assert_allclose(relative[:3, 3], parameters['mapping']['extrinsic_T'], atol=1e-12)
+        np.testing.assert_allclose(relative[:3, :3],
+                                   np.array(parameters['mapping']['extrinsic_R']).reshape(3, 3), atol=1e-12)
+        self.assertEqual(parameters['common']['imu_topic'], '/livox/imu_raw')
+        self.assertEqual(parameters['preprocess']['lidar_type'], 1)
+
+    def test_front_lidars_overlap_ahead_of_the_arm(self):
+        for index in (3, 4):
+            mount = transform(self.robot.find(f"joint[@name='rslidar_{index}_joint']/origin"))
+            # Target 8 m ahead of link1, beyond the arm. Both front sensors
+            # must cover it, not only outward-facing side regions.
+            target = np.linalg.inv(mount) @ np.array([8.0, 0.0, -0.6, 1.0])
+            self.assertLess(abs(np.arctan2(target[1], target[0])), np.deg2rad(35.2))
+
+    def test_downward_scan_origins_clear_the_platform(self):
+        bounds = [geometry_bounds(part, np.eye(4))
+                  for part in self.robot.findall("link[@name='link1']/collision")]
+        lower = np.min([bound[0] for bound in bounds], axis=0)
+        upper = np.max([bound[1] for bound in bounds], axis=0)
+        positions = {index: transform(self.robot.find(
+            f"joint[@name='rslidar_{index}_joint']/origin"))[:3, 3]
+            for index in range(1, 6)}
+        self.assertLessEqual(positions[1][0], lower[0] + 1e-6)
+        for index in (2, 3):
+            self.assertGreater(positions[index][1], upper[1] + 0.1)
+        for index in (4, 5):
+            self.assertLess(positions[index][1], lower[1] - 0.1)
+        for index in (3, 4):
+            self.assertGreater(positions[index][0], upper[0] + 0.1)
 
     def test_original_arm_joint_origins_axes_and_angle_limits_are_preserved(self):
         for index in range(1, 8):
@@ -243,6 +299,28 @@ class ClearingRobotTests(unittest.TestCase):
         mixed = drive.track_velocities(1, 0.35, 0.48, 2.8, 5, 1)
         self.assertAlmostEqual(max(abs(value) for value in mixed), 1.0)
         self.assertAlmostEqual(mixed[0] / mixed[-1], (1-0.35*1.4)/(1+0.35*1.4))
+
+    def test_drive_geometry_and_speed_limits_match_the_model(self):
+        parameters = self.controllers['clearing_tracks_drive']['ros__parameters']
+        left = self.robot.find("joint[@name='left_wheel_middle_joint']")
+        right = self.robot.find("joint[@name='right_wheel_middle_joint']")
+        spacing = abs(numbers(left.find('origin').get('xyz'))[1] -
+                      numbers(right.find('origin').get('xyz'))[1])
+        self.assertAlmostEqual(spacing, parameters['wheel_separation'])
+        wheel = self.robot.find("link[@name='left_wheel_middle']/collision/geometry/cylinder")
+        self.assertAlmostEqual(float(wheel.get('radius')), parameters['wheel_radius'])
+        count = len([j for j in self.robot.findall('joint') if j.get('name').startswith('left_wheel_')])
+        self.assertEqual(count, parameters['wheels_per_side'])
+        velocities = drive.track_velocities(
+            parameters['max_linear_velocity'], parameters['max_angular_velocity'],
+            parameters['wheel_radius'], spacing, count, parameters['max_wheel_velocity'],
+            parameters['steering_separation_multiplier'])
+        for value, joint in zip(velocities, self.controllers['tracks_velocity_controller']['ros__parameters']['joints']):
+            limit = self.robot.find(f"joint[@name='{joint}']/limit")
+            self.assertLessEqual(abs(value), float(limit.get('velocity')))
+        nominal = drive.track_velocities(0, .2, .48, 2.8, 5, 8)
+        corrected = drive.track_velocities(0, .2, .48, 2.8, 5, 8, 1.17)
+        np.testing.assert_allclose(corrected, np.array(nominal)*1.17)
 
     def test_gazebo_contact_direction_tracks_the_axle(self):
         for joint in self.robot.findall('joint'):
