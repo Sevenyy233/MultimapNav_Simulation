@@ -16,6 +16,9 @@ find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
 find_package(gazebo REQUIRED)
+# Load Gazebo before the driver's PCL/VTK exports to avoid duplicate JsonCpp
+# imported aliases in the Jammy CMake packages.
+find_package(livox_ros_driver2 REQUIRED)
 add_library(multimap_obstacle_motion SHARED src/path_obstacle_motion.cpp)
 target_include_directories(multimap_obstacle_motion PRIVATE ${GAZEBO_INCLUDE_DIRS})
 target_link_directories(multimap_obstacle_motion PRIVATE ${GAZEBO_LIBRARY_DIRS})
@@ -24,9 +27,14 @@ install(TARGETS multimap_obstacle_motion LIBRARY DESTINATION lib)
 
 add_executable(odom_tf_broadcaster src/odom_tf_broadcaster.cpp)
 ament_target_dependencies(odom_tf_broadcaster rclcpp nav_msgs tf2 tf2_ros geometry_msgs)
+add_executable(fast_lio_sim_bridge src/fast_lio_sim_bridge.cpp)
+target_include_directories(fast_lio_sim_bridge PRIVATE include)
+ament_target_dependencies(fast_lio_sim_bridge
+  rclcpp nav_msgs tf2 tf2_ros geometry_msgs livox_ros_driver2)
 
 install(TARGETS
   odom_tf_broadcaster
+  fast_lio_sim_bridge
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -46,6 +54,10 @@ install(DIRECTORY 3DModel config docs launch meshes models pcd pcd_modified robo
 install(FILES README.md DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(test_pose_velocity_estimator test/test_pose_velocity_estimator.cpp)
+  target_include_directories(test_pose_velocity_estimator PRIVATE include)
+  ament_target_dependencies(test_pose_velocity_estimator tf2)
   find_package(Python3 REQUIRED COMPONENTS Interpreter)
   add_test(NAME map_suite_consistency
     COMMAND ${Python3_EXECUTABLE}
