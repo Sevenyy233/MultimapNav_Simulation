@@ -4,18 +4,51 @@
 import math
 import time
 
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, TwistStamped
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float64MultiArray
 
 
-def track_velocities(linear, angular, radius, separation, count, limit):
+def track_velocities(linear, angular, radius, separation, count, limit,
+                     steering_separation_multiplier=1.0):
     """Keep curvature when saturating the two differential wheel speeds."""
-    left = (linear - angular * separation / 2.0) / radius
-    right = (linear + angular * separation / 2.0) / radius
+    effective_separation = separation * steering_separation_multiplier
+    left = (linear - angular * effective_separation / 2.0) / radius
+    right = (linear + angular * effective_separation / 2.0) / radius
     scale = max(1.0, abs(left) / limit, abs(right) / limit)
     return [left / scale] * count + [right / scale] * count
+
+
+class JerkLimitedAxis:
+    """Analytic S-curve with continuous velocity and acceleration at retargeting."""
+    def __init__(self):
+        self.velocity = 0.0
+        self.acceleration = 0.0
+
+    def advance(self, target, limit, jerk, dt):
+        if dt <= 0:
+            return self.velocity
+        error = target-self.velocity
+        stopping = self.acceleration*abs(self.acceleration)/(2*jerk)
+        if abs(error) < 1e-12 and abs(self.acceleration) < 1e-12:
+            return self.velocity
+        direction = 1 if error >= stopping else -1
+        initial = direction*self.acceleration
+        distance = direction*error
+        peak = min(limit, math.sqrt(max(0., .5*initial*initial+jerk*distance)))
+        rise = max(0., (peak-initial)/jerk)
+        coast = max(0., (distance-(2*peak*peak-initial*initial)/(2*jerk))/peak) if peak > 1e-12 else 0.
+        remaining = dt
+        for duration, slope in ((rise, direction*jerk), (coast, 0.), (peak/jerk, -direction*jerk)):
+            step = min(remaining, duration)
+            self.velocity += self.acceleration*step+.5*slope*step*step
+            self.acceleration += slope*step
+            remaining -= step
+        if remaining > 1e-12:
+            self.velocity = target
+            self.acceleration = 0.
+        return self.velocity
 
 
 class ClearingTracksDrive(Node):
@@ -27,6 +60,8 @@ class ClearingTracksDrive(Node):
             'max_linear_velocity': 1.0, 'max_angular_velocity': 0.35,
             'max_linear_acceleration': 0.3, 'max_angular_acceleration': 0.2,
             'max_wheel_velocity': 8.0,
+            'max_linear_jerk': .6, 'max_angular_jerk': .5,
+            'steering_separation_multiplier': 1.0,
         }
         self.settings = {key: self.declare_parameter(key, default).value
                          for key, default in defaults.items()}
@@ -34,13 +69,15 @@ class ClearingTracksDrive(Node):
             raise ValueError('Drive parameters must be positive finite numbers')
         self.target = [0.0, 0.0]
         self.current = [0.0, 0.0]
+        self.axes = [JerkLimitedAxis(), JerkLimitedAxis()]
         self.received_at = None
         self.previous_time = self.get_clock().now()
         self.publisher = self.create_publisher(
             Float64MultiArray, '/tracks_velocity_controller/commands', 1)
         self.subscription = self.create_subscription(Twist, '/cmd_vel', self.receive, 1)
+        self.applied = self.create_publisher(TwistStamped, '/clearing/cmd_vel_applied', 10)
         self.timer = self.create_timer(1.0 / self.settings['publish_rate'], self.update)
-        self.get_logger().info('Differential track drive ready; odometry comes from Gazebo truth')
+        self.get_logger().info('Differential track drive ready; wheel odometry is disabled')
 
     def receive(self, message):
         values = [message.linear.x, message.angular.z]
@@ -58,23 +95,35 @@ class ClearingTracksDrive(Node):
         self.previous_time = now
         expired = (self.received_at is None or
                    time.monotonic() - self.received_at > self.settings['cmd_vel_timeout'])
-        if expired or elapsed < 0.0:
-            # Timeout is an immediate stop; ordinary commands use acceleration
-            # limits in simulation time. A clock reset also requires a new command.
-            self.current = [0.0, 0.0]
+        if elapsed < 0.0:
+            # A simulation clock reset invalidates the old command state.
+            self.axes = [JerkLimitedAxis(), JerkLimitedAxis()]
             self.target = [0.0, 0.0]
             self.received_at = None
-        else:
-            elapsed = min(elapsed, 0.1)
-            for index, key in enumerate(('max_linear_acceleration', 'max_angular_acceleration')):
-                step = self.settings[key] * elapsed
-                delta = self.target[index] - self.current[index]
-                self.current[index] += max(-step, min(step, delta))
+        elif expired:
+            # Watchdog stops follow the same bounded braking profile.
+            self.target = [0.0, 0.0]
+            self.received_at = None
+        elapsed = max(0., min(elapsed, .1))
+        for index, (acceleration, jerk) in enumerate((
+                ('max_linear_acceleration', 'max_linear_jerk'),
+                ('max_angular_acceleration', 'max_angular_jerk'))):
+            self.current[index] = self.axes[index].advance(
+                self.target[index], self.settings[acceleration], self.settings[jerk], elapsed)
         command = Float64MultiArray()
         command.data = track_velocities(
             *self.current, self.settings['wheel_radius'], self.settings['wheel_separation'],
-            self.settings['wheels_per_side'], self.settings['max_wheel_velocity'])
+            self.settings['wheels_per_side'], self.settings['max_wheel_velocity'],
+            self.settings['steering_separation_multiplier'])
         self.publisher.publish(command)
+        stamped = TwistStamped()
+        stamped.header.stamp = now.to_msg()
+        stamped.header.frame_id = 'base_link'
+        left, right = command.data[0], command.data[self.settings['wheels_per_side']]
+        stamped.twist.linear.x = (left+right)*self.settings['wheel_radius']/2
+        stamped.twist.angular.z = ((right-left)*self.settings['wheel_radius']/
+            (self.settings['wheel_separation']*self.settings['steering_separation_multiplier']))
+        self.applied.publish(stamped)
 
 
 def main(args=None):
