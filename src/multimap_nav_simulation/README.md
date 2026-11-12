@@ -1,3 +1,5 @@
+> 当前tracked_robot默认使用MID-360与FAST-LIO2；/odom为传感器估计，/evaluation/ground_truth仅供独立评价。外部依赖源码未在本轮修改，时间扫描适配位于本包src/sensors。最新说明见相邻MultiMapNav/src/bring_up/docs/TRACKED_LIO_NAVIGATION.md。
+
 # 多场景导航仿真地图
 
 新增基础几何体大型清障机器人：
@@ -160,3 +162,8 @@ ros2 launch multimap_nav_simulation clearing_robot.launch.py world_file_name:=fl
 
 默认发布 `odom -> base_link` 真值 TF；定位系统也发布同一 TF 时，
 可设置 `publish_odom_tf:=false`。
+
+
+## tracked_robot：主分支传感器估计链路
+
+当前tracked_robot默认使用自有MID-360时间扫描插件、未修改的FAST-LIO2及自有里程计/速度反馈桥接。真值仅发布到/evaluation/ground_truth，可用publish_ground_truth:=false关闭。组合启动与Release编译说明见相邻MultiMapNav仓库的src/bring_up/docs/TRACKED_LIO_NAVIGATION.md。外部依赖源码不在本轮修改范围。
