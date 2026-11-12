@@ -15,6 +15,15 @@ struct PoseVelocity
   bool valid{false};
 };
 
+// Rigid-body velocity transport from IMU origin to base origin. The base/IMU
+// extrinsic is fixed; the cross product removes rotational lever-arm velocity.
+inline PoseVelocity imuTwistAtBase(const tf2::Transform & base_imu,
+    const tf2::Vector3 & linear, const tf2::Vector3 & angular)
+{
+  const auto w=base_imu.getBasis()*angular;
+  return PoseVelocity{base_imu.getBasis()*linear-w.cross(base_imu.getOrigin()),w,true};
+}
+
 // Differentiate the estimated base pose, expressing twist in the current base
 // frame as required by nav_msgs/Odometry. No commanded or physical truth input.
 class PoseVelocityEstimator
