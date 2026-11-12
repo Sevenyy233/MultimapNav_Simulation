@@ -56,3 +56,21 @@ TEST(PoseVelocity, FilterSmoothsTheMeasuredVelocity)
   EXPECT_GT(result.linear.x(), 0.4);
   EXPECT_LT(result.linear.x(), 0.8);
 }
+
+TEST(NativeTwist, LeverArmRemovesVelocityOfAnImuAboveARotatingBase)
+{
+  const tf2::Transform base_imu(tf2::Quaternion::getIdentity(),tf2::Vector3(0,0,.05));
+  const auto result=multimap_nav_simulation::imuTwistAtBase(base_imu,
+    tf2::Vector3(.05,0,0),tf2::Vector3(0,1,0));
+  EXPECT_NEAR(result.linear.length(),0.,1e-12);
+  EXPECT_NEAR(result.angular.y(),1.,1e-12);
+}
+TEST(NativeTwist, BothVectorsAreRotatedToBaseAxes)
+{
+  tf2::Quaternion rotation;rotation.setRPY(0,0,M_PI_2);
+  const tf2::Transform base_imu(rotation,tf2::Vector3(0,0,0));
+  const auto result=multimap_nav_simulation::imuTwistAtBase(base_imu,
+    tf2::Vector3(1,0,0),tf2::Vector3(0,1,0));
+  EXPECT_NEAR(result.linear.y(),1.,1e-12);
+  EXPECT_NEAR(result.angular.x(),-1.,1e-12);
+}
