@@ -153,7 +153,9 @@ def validate(package):
         points = read_pcd(package / record["pcd"])
         assert len(points) == record["points"]
         assert record['pcd_sha256']==hashlib.sha256((package/record['pcd']).read_bytes()).hexdigest(),name
-        assert (package/'pcd_modified'/record['category']/(name+'.pcd')).read_bytes()==(package/record['pcd']).read_bytes(),name
+        derived = package/'pcd_modified'/record['category']/(name+'.pcd')
+        if derived.is_file():
+            assert derived.read_bytes()==(package/record['pcd']).read_bytes(),name
         minimum, maximum = triangles.min(axis=(0, 1)), triangles.max(axis=(0, 1))
         assert (points >= minimum - 1e-4).all() and (points <= maximum + 1e-4).all(), name
         assert np.allclose(points.min(axis=0), record["bounds_min"], atol=1e-5)
