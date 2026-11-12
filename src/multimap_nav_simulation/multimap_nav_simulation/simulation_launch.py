@@ -37,6 +37,18 @@ def small_robot_launch(robot):
         if not 0.0 <= lateral_friction <= 10.0:
             raise ValueError("tracked_lateral_friction must be finite and between 0 and 10")
         mappings = {"lateral_friction": str(lateral_friction)} if robot == "tracked" else {}
+        use_fast_lio = robot == "tracked" and config["odometry_source"] == "fast_lio"
+        use_body_control = use_fast_lio and boolean("body_velocity_control")
+        if robot == "tracked":
+            if config["lidar_model"] not in ("mid360", "legacy"):
+                raise ValueError("lidar_model must be mid360 or legacy")
+            if config["odometry_source"] != "fast_lio":
+                raise ValueError("tracked_robot requires fast_lio; ground truth is evaluation-only")
+            if use_fast_lio and config["lidar_model"] != "mid360":
+                raise ValueError("FAST-LIO requires the timestamped MID-360 input")
+            mappings.update(lidar_model=config["lidar_model"], lidar_noise_seed=config["seed"],
+                            publish_ground_truth=config["publish_ground_truth"])
+            mappings["cmd_vel_topic"]="/actuation/cmd_vel" if use_body_control else "/cmd_vel"
         robot_xml = ET.fromstring(xacro.process_file(str(xacro_path), mappings=mappings).toxml())
         if not boolean("enable_camera"):
             for parent in robot_xml.iter():
@@ -67,6 +79,26 @@ def small_robot_launch(robot):
         joints = spawner("joint_state_broadcaster")
         drive = spawner("diff_drive_controller")
         ready_actions = [LogInfo(msg=f"{robot} robot ready.")]
+        if use_fast_lio:
+            estimator_config = str(package / "config/tracked_robot.yaml")
+            bridge_files=[estimator_config]
+            if config['bridge_overrides']:
+                extra=Path(config['bridge_overrides']).resolve()
+                if not extra.is_file():raise FileNotFoundError(str(extra))
+                bridge_files.append(str(extra))
+            ready_actions[:0] = [
+                Node(package="multimap_nav_simulation", executable="fast_lio_sim_bridge",
+                     parameters=[*bridge_files, {"use_sim_time": sim_time}], output="screen"),
+
+                Node(package="fast_lio", executable="fastlio_mapping", name="fastlio_mapping",
+                     parameters=[estimator_config, {"use_sim_time": sim_time}],
+                     remappings=[("/Odometry", "/fast_lio/odometry"),
+                                 ("/cloud_registered_body", "/fast_lio/deskewed_body_points"),
+                                 ("/tf", "/fast_lio/tf")], output="screen"),
+            ]
+        if use_body_control:
+            ready_actions.insert(1, Node(package="multimap_nav_simulation", executable="body_velocity_controller",
+                parameters=[str(package / "config/tracked_robot.yaml"), {"use_sim_time":sim_time}],output="screen"))
         actions = [
             RegisterEventHandler(OnProcessExit(target_action=server,
                 on_exit=[EmitEvent(event=Shutdown(reason="Gazebo server exited."))])),
@@ -76,7 +108,7 @@ def small_robot_launch(robot):
         ]
         if boolean("gui") and not boolean("headless"):
             actions.append(ExecuteProcess(cmd=["gzclient"], additional_env=gazebo_environment(package), output="screen"))
-        if boolean("publish_odom_tf"):
+        if boolean("publish_odom_tf") and not use_fast_lio:
             actions.append(Node(package="multimap_nav_simulation", executable="odom_tf_broadcaster",
                                 parameters=[{"use_sim_time": sim_time}], output="screen"))
         return actions
@@ -93,6 +125,13 @@ def small_robot_launch(robot):
         DeclareLaunchArgument("tracked_lateral_friction", default_value="0.3", description="Simulated lateral track friction; longitudinal friction is unchanged."),
         DeclareLaunchArgument("headless", default_value="false", description="Suppress the GUI."),
         DeclareLaunchArgument("publish_odom_tf", default_value="true"),
+        DeclareLaunchArgument("lidar_model", default_value="mid360"),
+        DeclareLaunchArgument("body_velocity_control", default_value="true",
+                              description="Use sensor-feedback body control; false is a controlled diagnostic bypass."),
+        DeclareLaunchArgument("bridge_overrides", default_value=""),
+        DeclareLaunchArgument("odometry_source", default_value="fast_lio"),
+        DeclareLaunchArgument("publish_ground_truth", default_value="true",
+                              description="Publish only /evaluation/ground_truth for the independent evaluator."),
     ]
     declarations.extend(DeclareLaunchArgument(f"spawn_{axis}", default_value="",
                          description="Empty selects the map's documented spawn position.")
