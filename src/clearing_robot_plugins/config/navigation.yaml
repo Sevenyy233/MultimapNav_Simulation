@@ -1,0 +1,204 @@
+# Common robot constraints and comparison conditions for classical and learned methods.
+/**:
+  ros__parameters:
+    use_sim_time: true
+    scene:
+      collision_margin: 0.2
+      collision_resolution: 0.15
+      terrain_resolution: 0.5
+      max_pitch: 0.21
+      max_roll: 0.02
+      max_step: 0.12
+      sensor_timeout: 1.0
+      dynamic_obstacle_keep_time: 10.0
+      obstacle_neighbor_radius: 0.45
+      obstacle_min_neighbors: 3
+      arm_tolerance: 0.06
+      map_mode: auto
+      map_source: topic
+      robot_height: 4.9
+      occupancy_resolution: 0.2
+      obstacle_keep_radius: 13.0
+    motion:
+      max_forward_speed: 0.35
+      max_reverse_speed: 0.2
+      max_yaw_rate: 0.12
+      max_acceleration: 0.18
+      max_yaw_acceleration: 0.08
+      linear_jerk: 0.4
+      angular_jerk: 0.15
+      min_turn_radius: 2.5
+      planning_turn_radius: 3.5
+      max_lateral_acceleration: 0.08
+clearing_velocity_governor:
+  ros__parameters:
+    command_timeout: 0.5
+map_server:
+  ros__parameters:
+    map_plugin_type: ''
+    map_plugin_namespace: ''
+    frame_id: map
+    clearing_gridmap_map:
+      frame_id: map
+      resolution: 0.5
+      auto_size_from_cloud: true
+      cloud_padding: 0.5
+      robot_height: 4.9
+      unknown_is_obstacle: true
+      max_step_height: 0.12
+      max_slope: 0.21
+      publish_rate: 0.5
+    clearing_octomap_map:
+      resolution: 0.2
+      occupancy_threshold: 0.7
+      use_ray_casting: false
+      reset_before_insert: true
+      point_dilation_radius: 0.0
+      publish_rate: 0.5
+      frame_id: map
+    clearing_costmap2d_map:
+      frame_id: map
+      resolution: 0.25
+      tire_length: 4.0
+      tire_width: 0.4
+      min_plane_points: 5
+      max_slope: 0.21
+      max_roughness: 0.08
+      max_step_height: 0.12
+      auto_size_from_cloud: true
+      cloud_padding: 0.5
+      reset_before_insert: true
+      publish_rate: 0.5
+      costmap_topic: costmap
+      terrain_costmap_topic: terrain_costmap
+localization_server:
+  ros__parameters:
+    localization_plugin_type: clearing_robot_plugins::MapCorrectedFastLio
+    localization_plugin_namespace: clearing_localization
+    map_frame: map
+    odom_frame: odom
+    base_frame: base_link
+    publish_rate: 15.0
+    publish_identity_map_to_odom: false
+    odometry_topic: /localization/odometry
+    initial_pose:
+    - 0.0
+    - 0.0
+    - 0.01
+    - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+    clearing_localization:
+      registration_interval: 0.6
+      maximum_match_age: 3.0
+      fitness_threshold: 0.25
+      max_correction_translation: 0.8
+      max_correction_angle: 0.2
+global_planner_server:
+  ros__parameters:
+    planner_plugin_type: ''
+    planner_plugin_namespace: ''
+    base_frame: base_link
+    cubic_bezier_smoothing_enabled: false
+    path_reuse_enabled: true
+    path_reuse_max_deviation: 1.0
+    path_reuse_goal_tolerance: 0.15
+    path_reuse_goal_z_tolerance: 0.15
+    paper_astar:
+      timeout: 2.0
+      body_search_timeout: 7.0
+    global_replanning:
+      minimum_interval: 1.0
+      retry_interval: 2.0
+      no_path_timeout: 120.0
+local_planner_server:
+  ros__parameters:
+    local_planner_plugin_type: ''
+    local_planner_plugin_namespace: ''
+    base_frame: base_link
+    cubic_bezier_smoothing_enabled: false
+    visualization_lookahead_distance: 12.0
+    clearing_hybrid:
+      lookahead: 12.0
+      timeout: 7.0
+      max_expansions: 5000
+      planning_clearance: 0.35
+trajectory_planner_server:
+  ros__parameters:
+    trajectory_planner_plugin_type: ''
+    trajectory_planner_plugin_namespace: ''
+    controller_frequency: 20.0
+    odom_topic: /odom
+    odom_twist_in_world_frame: false
+    base_frame: base_link
+    goal_position_tolerance: 0.5
+    goal_yaw_tolerance: 3.141592653589793
+    goal_height_tolerance: 0.15
+    progress_checker_distance: 0.15
+    progress_checker_timeout: 120.0
+    velocity_feedback_timeout: 0.75
+    feedback_max_linear_speed: 1.5
+    feedback_max_angular_speed: 0.5
+    sensor_freshness_enabled: true
+    sensor_freshness_topic: /clearing/points
+    sensor_freshness_timeout: 0.75
+    sensor_stop_linear_deceleration: 0.18
+    sensor_stop_angular_deceleration: 0.08
+    sensor_stop_linear_jerk: 0.4
+    sensor_stop_angular_jerk: 0.15
+    collision_monitor_enabled: false
+    clearing_mppi:
+      samples: 40
+      steps: 24
+      dt: 0.25
+      temperature: 0.3
+      max_linear_velocity: 0.35
+      max_angular_velocity: 0.12
+      max_linear_acceleration: 0.18
+      max_angular_acceleration: 0.08
+      linear_jerk: 0.4
+      angular_jerk: 0.15
+recovery_server:
+  ros__parameters:
+    recovery_plugins:
+    - back_up
+    - spin
+    recovery_frequency: 8.0
+    recovery_base_frame: base_link
+    recovery_obstacle_topic: /clearing/obstacles
+    recovery_obstacle_frame: map
+    recovery_obstacle_timeout: 1.0
+    recovery_spin_max_tilt: 0.1
+    back_up:
+      plugin: clearing_robot_plugins::BackUp
+      distance: 0.6
+      speed: 0.1
+    spin:
+      plugin: clearing_robot_plugins::Spin
+      angle: 0.26
+      speed: 0.06
+bt_navigator:
+  ros__parameters:
+    base_frame: base_link
+    recovery_behavior: auto
+    goal_position_tolerance: 0.5
+    goal_yaw_tolerance: 3.141592653589793
+    goal_height_tolerance: 0.15
+    goal_stable_duration: 1.0
+    goal_require_stopped: true
+    goal_odom_topic: /odom
+    goal_stop_linear_velocity: 0.02
+    goal_stop_angular_velocity: 0.01
+    default_server_timeout: 15000
+    wait_for_service_timeout: 3000
+    bt_loop_duration: 20
+    plugin_lib_names:
+    - nav2_recovery_node_bt_node
+    - nav2_rate_controller_bt_node
+    - nav2_pipeline_sequence_bt_node
+    - nav_compute_path_to_pose_bt_node
+    - nav_compute_local_plan_bt_node
+    - nav_follow_local_plan_bt_node
+    - nav_run_recovery_bt_node
+    - nav_goal_loop_control_bt_node
