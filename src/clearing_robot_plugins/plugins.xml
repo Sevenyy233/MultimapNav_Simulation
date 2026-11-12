@@ -1,0 +1,10 @@
+<library path="clearing_navigation">
+  <class type="clearing_robot_plugins::GridMapAdapter" base_class_type="multimap_nav_core::MapPluginBase"><description>Framework GridMap with underground floor geometry removed before elevation estimation.</description></class>
+  <class type="clearing_robot_plugins::Costmap2DAdapter" base_class_type="multimap_nav_core::MapPluginBase"><description>Framework Costmap2D terrain fitting with clearing-robot height filtering; full 3D collision guard remains enabled.</description></class>
+  <class type="clearing_robot_plugins::PaperGlobalPlanner" base_class_type="multimap_nav_core::GlobalPlannerBase"><description>Guo et al. 2025 bidirectional exponential A*, slope constraints, node filtering and cubic Bezier.</description></class>
+  <class type="clearing_robot_plugins::HybridLocalPlanner" base_class_type="multimap_nav_core::LocalPlannerBase"><description>SE2 motion-primitive local search with shared 3D swept body geometry.</description></class>
+  <class type="clearing_robot_plugins::MPPITrajectory" base_class_type="multimap_nav_core::TrajectoryPlannerBase"><description>MPPI trajectory prediction with acceleration/jerk bounds and hard 3D body checks.</description></class>
+  <class type="clearing_robot_plugins::MapCorrectedFastLio" base_class_type="multimap_nav_core::LocalizationBase"><description>FAST-LIO odometry propagation with gated prior-map NDT/ICP corrections.</description></class>
+  <class type="clearing_robot_plugins::BackUp" base_class_type="multimap_nav_core::RecoveryBehaviorBase"><description>Slow bounded reverse with full 3D swept collision checks.</description></class>
+  <class type="clearing_robot_plugins::Spin" base_class_type="multimap_nav_core::RecoveryBehaviorBase"><description>Small-angle rotation with full 3D swept collision checks.</description></class>
+</library>
