@@ -1,0 +1,1 @@
+MID-360 sensor adaptation derives from livox_laser_simulation_ros2 (ros2_livox_simulation), Copyright (c) 2023 Ricardo Casimiro, MIT License. The external package stays unchanged. Its license is included in each adapted source file.
