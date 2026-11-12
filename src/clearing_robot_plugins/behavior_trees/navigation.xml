@@ -1,0 +1,18 @@
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <RecoveryNode number_of_retries="2">
+      <GoalLoop goal="{goal}" base_frame="{base_frame}"
+        goal_position_tolerance="{goal_position_tolerance}" goal_yaw_tolerance="{goal_yaw_tolerance}"
+        goal_height_tolerance="{goal_height_tolerance}" goal_require_stopped="{goal_require_stopped}"
+        goal_odom_topic="{goal_odom_topic}" goal_stop_linear_velocity="{goal_stop_linear_velocity}"
+        goal_stop_angular_velocity="{goal_stop_angular_velocity}" goal_stable_duration="{goal_stable_duration}">
+        <PipelineSequence>
+          <RateController hz="1.0"><ComputePathToPose goal="{goal}" global_path="{global_path}" server_name="compute_path_to_pose"/></RateController>
+          <RateController hz="1.0"><ComputeLocalPlan global_path="{global_path}" local_path="{local_path}" path_reaches_goal="{path_reaches_goal}" server_name="compute_local_plan"/></RateController>
+          <FollowLocalPlan local_path="{local_path}" path_reaches_goal="{path_reaches_goal}" server_name="follow_local_plan"/>
+        </PipelineSequence>
+      </GoalLoop>
+      <RunRecovery behavior_name="{recovery_behavior}" server_name="run_recovery"/>
+    </RecoveryNode>
+  </BehaviorTree>
+</root>
