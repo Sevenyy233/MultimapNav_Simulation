@@ -1,4 +1,5 @@
-# Parameters for robot/tracked_robot.xacro and launch/tracked_robot.launch.py.
+# MID-360/FAST-LIO sources remain external and unchanged.
+# Pose-difference velocity has scan noise and delay: filter it and use a conservative linear loop.
 controller_manager:
   ros__parameters:
     update_rate: 100
@@ -58,3 +59,85 @@ diff_drive_controller:
 joint_state_broadcaster:
   ros__parameters:
     publish_rate: 100.0
+fastlio_mapping:
+  ros__parameters:
+    use_sim_time: true
+    imu_queue_size: 2000
+    feature_extract_enable: false
+    point_filter_num: 3
+    max_iteration: 4
+    filter_size_surf: 0.5
+    filter_size_map: 0.5
+    cube_side_length: 200.0
+    runtime_pos_log_enable: false
+    common:
+      lid_topic: /fast_lio/lidar
+      imu_topic: /livox/imu
+      time_sync_en: false
+      time_offset_lidar_to_imu: 0.0
+    preprocess:
+      lidar_type: 1
+      scan_line: 4
+      blind: 0.15
+      timestamp_unit: 3
+      scan_rate: 10
+    mapping:
+      acc_cov: 0.1
+      gyr_cov: 0.1
+      b_acc_cov: 0.0001
+      b_gyr_cov: 0.0001
+      fov_degree: 360.0
+      det_range: 40.0
+      extrinsic_est_en: false
+      extrinsic_T:
+      - 0.0
+      - 0.0
+      - 0.08
+      extrinsic_R:
+      - 1.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+      - 0.0
+      - 0.0
+      - 0.0
+      - 1.0
+    publish:
+      path_en: false
+      effect_map_en: false
+      map_en: false
+      scan_publish_en: true
+      dense_publish_en: false
+      scan_bodyframe_pub_en: true
+    pcd_save:
+      pcd_save_en: false
+      interval: -1
+fast_lio_sim_bridge:
+  ros__parameters:
+    use_sim_time: true
+    lidar_topic: /livox/lidar
+    lidar_frame: lidar_link
+    instantaneous_scan: false
+    imu_input_topic: /livox/imu_raw
+    body_cloud_input_topic: /fast_lio/deskewed_body_points
+    use_native_twist: false
+    twist_filter_time_constant: 0.1
+    twist_max_interval: 0.5
+tracked_body_velocity_controller:
+  ros__parameters:
+    use_sim_time: true
+    control_frequency: 50.0
+    command_timeout: 0.5
+    odom_timeout: 0.5
+    imu_timeout: 0.2
+    feedback_max_linear_speed: 3.0
+    feedback_max_angular_speed: 3.0
+    linear.kp: 0.3
+    linear.ki: 0.6
+    linear.integral_limit: 0.3
+    linear.command_limit: 2.0
+    angular.kp: 1.0
+    angular.ki: 2.0
+    angular.integral_limit: 0.7
+    angular.command_limit: 1.2
