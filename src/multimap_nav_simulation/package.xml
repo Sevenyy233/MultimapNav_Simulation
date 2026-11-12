@@ -15,11 +15,14 @@
   <depend>rclcpp</depend>
   <depend>sensor_msgs</depend>
   <depend>livox_ros_driver2</depend>
+  <build_depend>ros2_livox_simulation</build_depend>
   <exec_depend>ros2_livox_simulation</exec_depend>
   <exec_depend>fast_lio</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>tf2_sensor_msgs</depend>
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>action_msgs</exec_depend>
