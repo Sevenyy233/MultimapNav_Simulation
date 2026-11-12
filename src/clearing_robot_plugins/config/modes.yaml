@@ -1,0 +1,170 @@
+navigation_mode_selector_server:
+  ros__parameters:
+    use_sim_time: true
+    pcd_file_path: ''
+    forced_mode: auto
+    mode_ids:
+    - costmap2d
+    - gridmap
+    - octomap
+    feature_extraction:
+      voxel_leaf_size: 0.1
+      xy_cell_size: 0.3
+      min_points_per_cell: 3
+      normal_search_radius: 0.6
+      min_plane_points: 5
+      min_disconnected_layer_area: 9.0
+      planar_height_tolerance: 0.2
+      flat_max_slope_deg: 5.0
+      flat_max_roughness: 0.03
+      slope_max_deg: 35.0
+      slope_max_roughness: 0.08
+      height_cluster_tolerance: 0.2
+      min_layer_separation: 0.8
+      min_points_per_layer: 3
+      min_valid_cells: 20
+      statistical_outlier_filter: false
+      sor_mean_k: 24
+      sor_stddev_mul: 1.0
+    selection:
+      resource_cost_source: configured_prior
+      cpu_calibration_id: ''
+      resource_weight: 0.0
+      fallback_mode: octomap
+      tie_score_tolerance: 0.05
+      prefer_lower_computation_on_tie: true
+    modes:
+      costmap2d:
+        enabled: true
+        supports_elevation_surface: false
+        score:
+          bias: 0.3
+          flat_weight: 1.0
+          slope_weight: -0.6
+          multilayer_weight: -2.0
+          roughness_weight: -0.5
+          computational_cost: 0.0
+        constraints:
+          max_slope_ratio: 0.25
+          max_multilayer_ratio: 0.03
+          max_rough_ratio: 0.3
+      gridmap:
+        enabled: true
+        supports_elevation_surface: true
+        score:
+          bias: 0.2
+          flat_weight: 0.2
+          slope_weight: 1.2
+          multilayer_weight: -1.5
+          roughness_weight: 0.5
+          computational_cost: 0.0
+        constraints:
+          max_slope_ratio: 1.0
+          max_multilayer_ratio: 0.08
+          max_rough_ratio: 0.7
+      octomap:
+        enabled: true
+        supports_elevation_surface: true
+        score:
+          bias: 0.0
+          flat_weight: 0.0
+          slope_weight: 0.2
+          multilayer_weight: 2.0
+          roughness_weight: 0.2
+          computational_cost: 0.0
+        constraints:
+          max_slope_ratio: 1.0
+          max_multilayer_ratio: 1.0
+          max_rough_ratio: 1.0
+lifecycle_manager:
+  ros__parameters:
+    automatic_mode_selection: true
+    selector_node_name: navigation_mode_selector_server
+    selector_service_name: navigation_mode_selector_server/get_selected_navigation_mode
+    map_status_service_name: map_server/get_map_status
+    map_ready_timeout: 120.0
+    service_timeout: 120.0
+    bringup_delay: 3.0
+    profile_ids:
+    - costmap2d
+    - gridmap
+    - octomap
+    node_names:
+    - navigation_mode_selector_server
+    - map_server
+    - localization_server
+    - global_planner_server
+    - local_planner_server
+    - trajectory_planner_server
+    - recovery_server
+    - bt_navigator
+    profiles:
+      costmap2d:
+        map_plugin_type: clearing_robot_plugins::Costmap2DAdapter
+        map_plugin_namespace: clearing_costmap2d_map
+        localization_plugin_type: clearing_robot_plugins::MapCorrectedFastLio
+        localization_plugin_namespace: clearing_localization
+        global_planner_plugin_type: clearing_robot_plugins::PaperGlobalPlanner
+        global_planner_namespace: paper_astar_costmap2d
+        local_planner_plugin_type: clearing_robot_plugins::HybridLocalPlanner
+        local_planner_namespace: clearing_hybrid_costmap2d
+        trajectory_planner_plugin_type: clearing_robot_plugins::MPPITrajectory
+        trajectory_planner_namespace: clearing_mppi_costmap2d
+        recovery_plugin_namespace: clearing_recovery_costmap2d
+        base_frame: base_link
+        trajectory_odom_topic: /odom
+        trajectory_odom_twist_in_world_frame: false
+        collision_monitor_enabled: false
+        bt_xml: ''
+        recovery_behavior: auto
+        goal_position_tolerance: 0.5
+        goal_yaw_tolerance: 3.141592653589793
+        goal_stable_duration: 1.0
+        default_server_timeout: 15000
+        controller_frequency: 20.0
+      gridmap:
+        map_plugin_type: clearing_robot_plugins::GridMapAdapter
+        map_plugin_namespace: clearing_gridmap_map
+        localization_plugin_type: clearing_robot_plugins::MapCorrectedFastLio
+        localization_plugin_namespace: clearing_localization
+        global_planner_plugin_type: clearing_robot_plugins::PaperGlobalPlanner
+        global_planner_namespace: paper_astar_gridmap
+        local_planner_plugin_type: clearing_robot_plugins::HybridLocalPlanner
+        local_planner_namespace: clearing_hybrid_gridmap
+        trajectory_planner_plugin_type: clearing_robot_plugins::MPPITrajectory
+        trajectory_planner_namespace: clearing_mppi_gridmap
+        recovery_plugin_namespace: clearing_recovery_gridmap
+        base_frame: base_link
+        trajectory_odom_topic: /odom
+        trajectory_odom_twist_in_world_frame: false
+        collision_monitor_enabled: false
+        bt_xml: ''
+        recovery_behavior: auto
+        goal_position_tolerance: 0.5
+        goal_yaw_tolerance: 3.141592653589793
+        goal_stable_duration: 1.0
+        default_server_timeout: 15000
+        controller_frequency: 20.0
+      octomap:
+        map_plugin_type: multimap_nav_plugins::OctoMapPlugin
+        map_plugin_namespace: clearing_octomap_map
+        localization_plugin_type: clearing_robot_plugins::MapCorrectedFastLio
+        localization_plugin_namespace: clearing_localization
+        global_planner_plugin_type: clearing_robot_plugins::PaperGlobalPlanner
+        global_planner_namespace: paper_astar_octomap
+        local_planner_plugin_type: clearing_robot_plugins::HybridLocalPlanner
+        local_planner_namespace: clearing_hybrid_octomap
+        trajectory_planner_plugin_type: clearing_robot_plugins::MPPITrajectory
+        trajectory_planner_namespace: clearing_mppi_octomap
+        recovery_plugin_namespace: clearing_recovery_octomap
+        base_frame: base_link
+        trajectory_odom_topic: /odom
+        trajectory_odom_twist_in_world_frame: false
+        collision_monitor_enabled: false
+        bt_xml: ''
+        recovery_behavior: auto
+        goal_position_tolerance: 0.5
+        goal_yaw_tolerance: 3.141592653589793
+        goal_stable_duration: 1.0
+        default_server_timeout: 15000
+        controller_frequency: 20.0
