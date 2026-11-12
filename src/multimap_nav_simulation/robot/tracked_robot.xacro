@@ -14,17 +14,23 @@
 
        控制话题:
          /cmd_vel           → diff_drive_controller
-         /odom              → gazebo_ros_p3d 地面真值
+         /odom              → FAST-LIO相对里程计（独立桥接节点）
+         /evaluation/ground_truth → P3D评估真值
          /odom_diff_drive   → 轮式开环里程计
   ==================================================================== -->
 
   <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/lidar_3d.xacro"/>
+  <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/mid360_timed.xacro"/>
   <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/imu.xacro"/>
   <xacro:include filename="$(find multimap_nav_simulation)/robot/sensors/depth_camera.xacro"/>
 
   <!-- 仿真横向摩擦标定：原1.3会在坡地锁住8轮差速转向。
        0.3为当前仿真设置，保留纵向摩擦6.0；不是实体履带摩擦测量值。 -->
   <xacro:arg name="lateral_friction" default="0.3"/>
+  <xacro:arg name="lidar_model" default="mid360"/>
+  <xacro:arg name="lidar_noise_seed" default="0"/>
+  <xacro:arg name="publish_ground_truth" default="true"/>
+  <xacro:arg name="cmd_vel_topic" default="/cmd_vel"/>
 
   <!-- ========================== 尺寸与质量 ========================== -->
   <!-- 底盘：长 0.40 m、宽 0.28 m、高 0.10 m，与圆柱差速车占地接近 -->
@@ -219,26 +225,34 @@
 
   <!-- ========================== 传感器 ========================== -->
   <!-- 雷达坐在底盘顶面中心；话题 /points_raw，frame lidar_link -->
-  <xacro:lidar_3d parent="base_link" xyz="0 0 ${chassis_height + lidar_height / 2.0}" rpy="0 0 0"/>
+  <xacro:if value="${'$(arg lidar_model)' == 'mid360'}">
+    <xacro:mid360_timed parent="base_link" xyz="0 0 ${chassis_height + 0.030}"
+                       rpy="0 0 0" noise_seed="$(arg lidar_noise_seed)"/>
+  </xacro:if>
+  <xacro:unless value="${'$(arg lidar_model)' == 'mid360'}">
+    <xacro:lidar_3d parent="base_link" xyz="0 0 ${chassis_height + lidar_height / 2.0}" rpy="0 0 0"/>
+  </xacro:unless>
 
   <!-- 前装深度相机：底盘前端 x=0.20 + 半厚 0.01 -->
   <xacro:depth_camera name="depth_camera" parent="base_link"
                       xyz="${chassis_length / 2.0 + depth_camera_x / 2.0} 0 ${chassis_height * 0.55}"
-                      rpy="0 0 0"/>
+                      rpy="0 0 0" width="320" height="240"/>
 
   <!-- IMU 在底盘内部中心；话题 /livox/imu_raw，frame imu_link -->
   <xacro:imu parent="base_link" xyz="0 0 ${chassis_height / 2.0}" rpy="0 0 0"/>
 
   <!-- ========================== Gazebo P3D 地面真值里程计 ========================== -->
+  <xacro:if value="$(arg publish_ground_truth)">
   <gazebo>
     <plugin name="gazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
       <ros>
-        <remapping>odom:=/odom</remapping>
+        <remapping>odom:=/evaluation/ground_truth</remapping>
       </ros>
       <body_name>base_link</body_name>
       <update_rate>100</update_rate>
     </plugin>
   </gazebo>
+  </xacro:if>
 
   <!-- ========================== 传动 ========================== -->
   <xacro:macro name="wheel_transmission" params="joint_name">
@@ -315,7 +329,7 @@
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
       <parameters>$(find multimap_nav_simulation)/config/tracked_robot.yaml</parameters>
       <ros>
-        <remapping>/diff_drive_controller/cmd_vel_unstamped:=/cmd_vel</remapping>
+        <remapping>/diff_drive_controller/cmd_vel_unstamped:=$(arg cmd_vel_topic)</remapping>
         <remapping>/diff_drive_controller/odom:=/odom_diff_drive</remapping>
       </ros>
     </plugin>
