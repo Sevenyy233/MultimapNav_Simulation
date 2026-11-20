@@ -47,7 +47,6 @@ def rotation(quaternion):
 
 def main():
     output = Path(tempfile.mkdtemp(prefix='clearing_primitives_smoke_'))
-    os.environ.setdefault('ROS_DOMAIN_ID', '173')
     os.environ.setdefault('GAZEBO_MASTER_URI', 'http://127.0.0.1:11373')
     os.environ['ROS_LOG_DIR'] = str(output / 'ros_logs')
     os.environ['GAZEBO_MODEL_DATABASE_URI'] = ''
