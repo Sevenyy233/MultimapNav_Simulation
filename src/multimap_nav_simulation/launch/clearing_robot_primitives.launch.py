@@ -12,6 +12,7 @@ from launch.actions import (
 )
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 import xacro
 
@@ -29,8 +30,13 @@ def _after_success(action, next_actions):
 
 def _launch_setup(context):
     share = Path(get_package_share_directory('multimap_nav_simulation'))
-    value = lambda name: context.launch_configurations[name]
-    boolean = lambda name: value(name).lower() in ('true', '1', 'yes')
+
+    def value(name):
+        return LaunchConfiguration(name).perform(context)
+
+    def boolean(name):
+        return value(name).lower() in ('true', '1', 'yes')
+
     world_name = value('world_file').strip() or value('world_file_name')
     world = resolve_world(share, world_name)
     config_file = share / 'config' / 'clearing_robot_primitives.yaml'
@@ -71,9 +77,12 @@ def _launch_setup(context):
         package='robot_state_publisher', executable='robot_state_publisher',
         parameters=[{'robot_description': description, 'use_sim_time': sim_time}],
         output='screen')
+    gazebo_arguments = []
+    if value('gazebo_params_file'):
+        gazebo_arguments = ['--ros-args', '--params-file', value('gazebo_params_file'), '--']
     server = ExecuteProcess(
         cmd=['gzserver', '--verbose', '-s', 'libgazebo_ros_init.so',
-             '-s', 'libgazebo_ros_factory.so', str(world)],
+             '-s', 'libgazebo_ros_factory.so', str(world), *gazebo_arguments],
         additional_env=environment, output='screen')
     wait_for_world = Node(
         package='multimap_nav_simulation', executable='wait_for_gazebo_clock.py',
@@ -98,6 +107,11 @@ def _launch_setup(context):
     tracks = spawner('tracks_velocity_controller')
     drive = Node(
         package='multimap_nav_simulation', executable='clearing_tracks_drive.py',
+        remappings=[
+            ('/cmd_vel', LaunchConfiguration('cmd_vel_topic')),
+            ('/tracks_velocity_controller/commands', LaunchConfiguration('track_commands_topic')),
+            ('/clearing/cmd_vel_applied', LaunchConfiguration('cmd_vel_applied_topic')),
+        ],
         parameters=[str(config_file),
                     {'use_sim_time': sim_time}], output='screen')
     localization = []
@@ -154,6 +168,8 @@ def generate_launch_description():
                               description='World below worlds/; default is the 50 x 50 x 20 m enclosure.'),
         DeclareLaunchArgument('world_file', default_value='',
                               description='Optional absolute .world path overriding world_file_name.'),
+        DeclareLaunchArgument('gazebo_params_file', default_value='',
+                              description='Optional Gazebo ROS parameters file, including clock publication rate.'),
         DeclareLaunchArgument('use_sim_time', default_value='true'),
         DeclareLaunchArgument('gui', default_value='true'),
         DeclareLaunchArgument('headless', default_value='false'),
@@ -177,5 +193,12 @@ def generate_launch_description():
         DeclareLaunchArgument('primary_lidar_frame', default_value='rslidar_3'),
         DeclareLaunchArgument('fused_lidar_in_imu', default_value='false',
                               description='Five-lidar fusion already expressed in IMU coordinates; use identity extrinsic.'),
+        DeclareLaunchArgument('cmd_vel_topic', default_value='/cmd_vel',
+                              description='Command input for the legacy track bridge.'),
+        DeclareLaunchArgument('track_commands_topic',
+                              default_value='/tracks_velocity_controller/commands',
+                              description='Wheel command output for the legacy track bridge.'),
+        DeclareLaunchArgument('cmd_vel_applied_topic', default_value='/clearing/cmd_vel_applied',
+                              description='Applied-command feedback from the legacy track bridge.'),
         OpaqueFunction(function=_launch_setup),
     ])
