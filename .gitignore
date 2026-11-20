@@ -6,3 +6,6 @@ log/
 __pycache__/
 *.py[cod]
 *.egg-info/
+
+clearing_robot_drl
+clearing_robot_plugins
