@@ -17,6 +17,7 @@ from launch.actions import (
 )
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
+from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 import xacro
 from multimap_nav_simulation.map_catalog import gazebo_environment, resolve_world, spawn_pose
@@ -38,8 +39,13 @@ def _after_success(action, next_actions):
 
 def _launch_setup(context):
     pkg_share = Path(get_package_share_directory('multimap_nav_simulation'))
-    value = lambda name: context.launch_configurations[name]
-    boolean = lambda name: value(name).lower() in ('true', '1', 'yes')
+
+    def value(name):
+        return LaunchConfiguration(name).perform(context)
+
+    def boolean(name):
+        return value(name).lower() in ('true', '1', 'yes')
+
 
     world_name = value('world_file').strip() or value('world_file_name').strip()
     world = resolve_world(pkg_share, world_name)
