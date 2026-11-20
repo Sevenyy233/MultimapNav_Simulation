@@ -45,8 +45,7 @@ def yaw_of(orientation):
     return math.atan2(2 * (q.w * q.z + q.x * q.y), 1 - 2 * (q.y * q.y + q.z * q.z))
 
 
-def run_case(name, record, level, robot, package, log_dir, domain):
-    os.environ["ROS_DOMAIN_ID"] = str(domain)
+def run_case(name, record, level, robot, package, log_dir):
     env = os.environ.copy()
     env.update({"GAZEBO_MASTER_URI": f"http://127.0.0.1:{unused_port()}",
                 "ROS_LOG_DIR": str(log_dir / "ros"), "GAZEBO_MODEL_DATABASE_URI": ""})
@@ -199,11 +198,10 @@ def main():
     parser.add_argument("--levels", nargs="+", choices=("lower", "upper", "ramp"), default=["lower"])
     parser.add_argument("--robot", choices=("tracked", "diff_drive", "clearing"), default="tracked")
     parser.add_argument("--log-dir", type=Path, default=Path("/tmp/multimap-gazebo-smoke"))
-    parser.add_argument("--domain-base", type=int, default=90, help="Use distinct bases for concurrent test runs.")
     args = parser.parse_args()
     args.log_dir.mkdir(parents=True, exist_ok=True)
     records = load_catalog(args.package_dir)
-    results = []; domain = args.domain_base
+    results = []
     for name in args.maps or records:
         for level in args.levels:
             record = records[name]
@@ -211,10 +209,9 @@ def main():
                 continue
             if level == "ramp" and "ramp_start" not in record:
                 continue
-            domain += 1
             print(f"START {name}/{level}/{args.robot}", flush=True)
             try:
-                results.append(run_case(name, record, level, args.robot, args.package_dir, args.log_dir, domain))
+                results.append(run_case(name, record, level, args.robot, args.package_dir, args.log_dir))
             except Exception as error:
                 results.append({"name": name, "level": level, "robot": args.robot, "passed": False,
                                 "error": str(error)})
