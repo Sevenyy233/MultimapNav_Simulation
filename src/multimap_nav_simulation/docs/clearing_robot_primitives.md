@@ -241,7 +241,7 @@ python3 src/multimap_nav_simulation/test/smoke_clearing_robot_primitives.py
 
 静态检查覆盖几何体、惯量、关节安装关系、原始限位、收臂包络、机械臂间隙、质量和地图，
 并核对五个雷达的朝向、安装点相对车体碰撞包络的外侧间隙、FAST-LIO2 外参与 IMU 安装关系。
-运行测试使用独立 ROS_DOMAIN_ID=173 和 Gazebo 11373 端口，可预先通过环境变量覆盖。
+运行测试继承调用者的 ROS 通信域；Gazebo master 使用独立端口，避免与其他仿真实例冲突。
 结果与日志写入 `/tmp/clearing_primitives_smoke_*/`，只关闭测试自身创建的进程。
 测试覆盖五路 CustomMsg 与 PointCloud2、各自前向视场和真实地面回波、IMU、FAST-LIO2 位姿和 TF、
 直行定位增量与物理位姿对比、转向、指令超时停车、行驶期间收臂保持及七轴轨迹返回。
