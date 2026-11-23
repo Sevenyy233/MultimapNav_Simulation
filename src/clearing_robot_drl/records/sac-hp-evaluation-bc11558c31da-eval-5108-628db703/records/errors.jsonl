@@ -1,0 +1,1 @@
+{"episode": 0, "sim_time": 42.32, "error": "TimeoutError('复位后未取得新的有效定位与可用局部地图: 有效=True 碰撞=True 观测=42.230s 复位=16.740s 原因=')"}
