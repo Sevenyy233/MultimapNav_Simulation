@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="clearing_robot">
+  <!-- Preserve the original CAD link frames, seven arm joint origins/axes,
+       2.5 m / 4.5 m arm joint spacing and 2.5 m bucket width. Geometry only
+       uses boxes and cylinders. The original zero pose remains reproducible;
+       a separate configuration carries the full-size arm low and forward. -->
+  <xacro:include filename="$(find clearing_robot_simulation)/robot/sensors/imu.xacro"/>
+  <!-- Namespace the vendor macros: both packages define box_inertia. -->
+  <xacro:include filename="$(find ros2_livox_simulation)/urdf/avia.xacro" ns="livox"/>
+  <xacro:include filename="$(find clearing_robot_simulation)/robot/part/clearing_arm_geometry.xacro"/>
+  <xacro:arg name="config_file" default="$(find clearing_robot_simulation)/config/clearing_robot.yaml"/>
+  <xacro:arg name="lateral_friction" default="0.25"/>
+  <xacro:property name="robot_config" value="${xacro.load_yaml('$(arg config_file)')}"/>
+  <xacro:property name="arm_stow" value="${robot_config['initialize_clearing_arm']['ros__parameters']['positions']}"/>
+  <xacro:property name="drive_config" value="${robot_config['clearing_tracks_drive']['ros__parameters']}"/>
+  <xacro:property name="wheel_radius" value="${drive_config['wheel_radius']}"/>
+  <xacro:property name="wheel_width" value="0.30"/>
+  <xacro:property name="wheel_mass" value="500.0"/>
+  <xacro:property name="wheel_separation" value="${drive_config['wheel_separation']}"/>
+  <material name="body_grey">
+    <color rgba="0.50 0.50 0.50 1"/>
+  </material>
+  <material name="track_black">
+    <color rgba="0.12 0.13 0.14 1"/>
+  </material>
+  <material name="steel">
+    <color rgba="0.36 0.39 0.42 1"/>
+  </material>
+  <xacro:include filename="$(find clearing_robot_simulation)/robot/part/chassis.xacro"/>
+  <xacro:include filename="$(find clearing_robot_simulation)/robot/part/tracks.xacro"/>
+  <xacro:include filename="$(find clearing_robot_simulation)/robot/part/arm.xacro"/>
+  <xacro:include filename="$(find clearing_robot_simulation)/robot/part/sensors.xacro"/>
+  <xacro:include filename="$(find clearing_robot_simulation)/robot/part/control.xacro"/>
+</robot>
