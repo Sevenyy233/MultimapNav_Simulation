@@ -1,0 +1,5 @@
+<library path="clearing_astar_planners">
+  <class type="clearing_robot::CostmapAStar" base_class_type="multimap_nav_core::GlobalPlannerBase"/>
+  <class type="clearing_robot::GridMapAStar" base_class_type="multimap_nav_core::GlobalPlannerBase"/>
+  <class type="clearing_robot::OctomapAStar" base_class_type="multimap_nav_core::GlobalPlannerBase"/>
+</library>
