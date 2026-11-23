@@ -1,0 +1,1 @@
+episode,step,episode_step,sim_time,dt,reward,distance,lateral_error,heading_error,roll,pitch,action_v,action_w,prior_v,prior_w,collision,entropy_sample,reward_progress,reward_time,reward_tracking,reward_event,yaw_oscillation,yaw_oscillation_amplitude,speed_change
