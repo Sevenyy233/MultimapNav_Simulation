@@ -1,0 +1,54 @@
+{
+  "history": [
+    {
+      "episodes": 1,
+      "valid": 0,
+      "errors": 1,
+      "complete": false,
+      "success_rate": null,
+      "collision_rate": null,
+      "timeout_rate": null,
+      "planning_timeout_rate": null,
+      "policy_valid": 0,
+      "reward_mean": null,
+      "entropy_mean": null,
+      "yaw_oscillation_rate": null,
+      "yaw_oscillation_amplitude": null,
+      "speed_change_mean": null,
+      "mean_lateral_error": null,
+      "reward_components": {
+        "progress": null,
+        "time": null,
+        "tracking": null,
+        "event": null
+      },
+      "training_step": 5108,
+      "training_episode": 27,
+      "weights": "/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_drl/records/sac-hp-training_rough_v2-bc11558c31da/weights/sac-hp-training_rough_v2-bc11558c31da-step-000000005108-episode-000027-eval-c2280520-weights.pt",
+      "evaluation_run": "bc11558c31da-eval-5108-628db703",
+      "scene": "evaluation",
+      "seed": 100000,
+      "checkpoint": "/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_drl/records/sac-hp-training_rough_v2-bc11558c31da/checkpoints/sac-hp-training_rough_v2-bc11558c31da-step-000000005108-episode-000027-evaluation-d9dab88c-checkpoint.pt",
+      "gates": {
+        "ready": false,
+        "valid_evaluations": 0,
+        "window": 3,
+        "reward": false,
+        "success": false,
+        "entropy": false,
+        "safety_smoothness": false,
+        "converged": false
+      }
+    }
+  ],
+  "gates": {
+    "ready": false,
+    "valid_evaluations": 0,
+    "window": 3,
+    "reward": false,
+    "success": false,
+    "entropy": false,
+    "safety_smoothness": false,
+    "converged": false
+  }
+}
