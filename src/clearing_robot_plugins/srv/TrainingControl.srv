@@ -1,0 +1,18 @@
+uint8 OBSERVE=0
+uint8 APPLY=1
+uint8 STOP=2
+uint8 operation
+nav_msgs/Path path
+float32[2] action
+builtin_interfaces/Time observation_stamp
+---
+bool success
+string reason
+std_msgs/Header header
+geometry_msgs/Pose pose
+geometry_msgs/Twist velocity
+geometry_msgs/Twist command
+float32[28] observation
+float32[2] prior
+bool collision
+bool path_valid
