@@ -1,0 +1,28 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Keep the five original scan headings, with the four side/front mounts
+       outside link1's platform so downward rays can reach the ground.
+       Use the installed vendor Avia URDF and its non-repeating scan pattern.
+       Preserve the physical links so Gazebo gives every plugin its own parent
+       collision and publishes points in that sensor's local frame. -->
+  <xacro:macro name="directional_avia" params="index xyz yaw">
+    <xacro:livox.avia name="rslidar_${index}" parent="link1" topic="/livox/lidar_${index}">
+      <origin xyz="${xyz}" rpy="0 0 ${yaw}"/>
+    </xacro:livox.avia>
+    <gazebo reference="rslidar_${index}_joint">
+      <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+  </xacro:macro>
+  <xacro:directional_avia index="1" xyz="-3.2 0 -0.6" yaw="${pi}"/>
+  <xacro:directional_avia index="2" xyz="-0.5 1.55 -0.6" yaw="${pi/2}"/>
+  <!-- Small outward toe-out keeps front-left/right roles while overlapping
+       the long vehicle's forward centre corridor. Avia horizontal FOV is 70.4 deg. -->
+  <xacro:directional_avia index="3" xyz="2.0 1.55 -0.6" yaw="${pi/18}"/>
+  <xacro:directional_avia index="4" xyz="2.0 -1.55 -0.6" yaw="${-pi/18}"/>
+  <xacro:directional_avia index="5" xyz="-0.5 -1.55 -0.6" yaw="${-pi/2}"/>
+  <xacro:property name="imu_mass" value="0.5"/>
+  <xacro:property name="imu_size" value="0.08"/>
+  <!-- Same neutral-pose height (2.313 - 0.663 = 1.65 m), rigid with all
+       five sensors even when the upper carriage rotates about joint1. -->
+  <xacro:imu parent="link1" xyz="0 0 -0.663"/>
+
+</robot>
