@@ -1,0 +1,5 @@
+<library path="clearing_compound_rviz">
+  <class name="clearing_robot/CompoundLocalMap" type="clearing_robot::CompoundDisplay" base_class_type="rviz_common::Display">
+    <description>复合局部地图：绿色为地形，橙色为占据体素。</description>
+  </class>
+</library>
