@@ -1,0 +1,23 @@
+{
+  "episodes": 2,
+  "valid": 1,
+  "errors": 1,
+  "complete": false,
+  "success_rate": 0.0,
+  "collision_rate": 1.0,
+  "timeout_rate": 0.0,
+  "planning_timeout_rate": 0.0,
+  "policy_valid": 1,
+  "reward_mean": -19.667535800296246,
+  "entropy_mean": 0.125662362575531,
+  "yaw_oscillation_rate": 0.0,
+  "yaw_oscillation_amplitude": 0.0,
+  "speed_change_mean": 0.06207504307908809,
+  "mean_lateral_error": 0.011540383041162894,
+  "reward_components": {
+    "progress": 0.3530722894213483,
+    "time": -0.020600000000000025,
+    "tracking": -8.089717594428184e-06,
+    "event": -20.0
+  }
+}
