@@ -1,0 +1,61 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="track_belt" params="side y">
+    <link name="${side}_track_belt">
+      <xacro:box_inertia mass="200.0" x="4.96" y="0.39" z="0.96"/>
+      <xacro:box_shape size="4.0 0.39 0.08" xyz="0 0 0.44" material="track_black" collision="false"/>
+      <xacro:box_shape size="4.0 0.39 0.08" xyz="0 0 -0.44" material="track_black" collision="false"/>
+      <xacro:cylinder_shape radius="0.48" length="0.39" xyz="-2 0 0" rpy="${pi/2} 0 0" material="track_black" collision="false"/>
+      <xacro:cylinder_shape radius="0.48" length="0.39" xyz="2 0 0" rpy="${pi/2} 0 0" material="track_black" collision="false"/>
+    </link>
+    <joint name="${side}_track_belt_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${side}_track_belt"/>
+      <origin xyz="0 ${y + 0.0325} 0.47"/>
+    </joint>
+    <gazebo reference="${side}_track_belt">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+  </xacro:macro>
+  <xacro:macro name="track_wheel" params="side label x y">
+    <link name="${side}_wheel_${label}">
+      <inertial>
+        <mass value="${wheel_mass}"/>
+        <inertia ixx="${wheel_mass*(3*wheel_radius**2+wheel_width**2)/12}" iyy="${wheel_mass*wheel_radius**2/2}" izz="${wheel_mass*(3*wheel_radius**2+wheel_width**2)/12}" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+      <xacro:cylinder_shape radius="${wheel_radius}" length="${wheel_width}" xyz="0 0 0" rpy="${pi/2} 0 0" material="body_grey"/>
+      <xacro:cylinder_shape radius="0.28" length="0.32" xyz="0 0 0" rpy="${pi/2} 0 0" material="steel" collision="false"/>
+    </link>
+    <joint name="${side}_wheel_${label}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${side}_wheel_${label}"/>
+      <origin xyz="${x} ${y} 0.47"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="12000" velocity="8"/>
+      <dynamics damping="5" friction="0"/>
+    </joint>
+    <gazebo reference="${side}_wheel_${label}">
+      <material>Gazebo/Grey</material>
+      <selfCollide>false</selfCollide>
+      <!-- Collision-local Z is the cylinder axle after its 90-degree roll. -->
+      <fdir1>0 0 1</fdir1>
+      <mu1>$(arg lateral_friction)</mu1>
+      <mu2>1.2</mu2>
+      <kp>1e9</kp>
+      <kd>1e5</kd>
+      <maxVel>0.1</maxVel>
+      <minDepth>0.001</minDepth>
+      <maxContacts>8</maxContacts>
+    </gazebo>
+  </xacro:macro>
+  <xacro:macro name="track_side" params="side y">
+    <xacro:track_belt side="${side}" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="back" x="-2.0" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="middle2" x="-1.0" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="middle" x="0.0" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="middle1" x="1.0" y="${y}"/>
+    <xacro:track_wheel side="${side}" label="front" x="2.0" y="${y}"/>
+  </xacro:macro>
+  <xacro:track_side side="left" y="${wheel_separation/2}"/>
+  <xacro:track_side side="right" y="${-wheel_separation/2}"/>
+
+</robot>
