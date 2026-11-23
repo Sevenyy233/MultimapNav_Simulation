@@ -1,0 +1,19 @@
+fastlio_mapping:
+  ros__parameters:
+    use_sim_time: true
+    point_filter_num: 5
+    common:
+      lid_topic: /fast_lio/lidar
+      imu_topic: /livox/imu_raw
+      time_sync_en: false
+      time_offset_lidar_to_imu: 0.0
+    mapping:
+      fov_degree: 360.0
+      extrinsic_est_en: false
+      extrinsic_T: [0.0, 0.0, 0.0]
+      extrinsic_R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]
+    publish:
+      path_en: false
+      scan_publish_en: true
+      dense_publish_en: true
+      scan_bodyframe_pub_en: true
