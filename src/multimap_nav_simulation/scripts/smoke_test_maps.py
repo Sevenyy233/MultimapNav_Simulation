@@ -66,8 +66,7 @@ def run_case(name, record, level, robot, package, log_dir):
     node.create_subscription(PointCloud2, "/points_raw", cloud_received, qos_profile_sensor_data)
     velocity = node.create_publisher(Twist, "/cmd_vel", 10)
     controllers = node.create_client(ListControllers, "/controller_manager/list_controllers")
-    launch = {"tracked": "tracked_robot.launch.py", "diff_drive": "robot.launch.py",
-              "clearing": "clearing_robot.launch.py"}[robot]
+    launch = {"tracked": "tracked_robot.launch.py", "diff_drive": "robot.launch.py"}[robot]
     args = ["ros2", "launch", "multimap_nav_simulation", launch,
             f"world_file_name:={name}", "headless:=true", "gui:=false",
             f"spawn_level:={'lower' if level == 'ramp' else level}"]
@@ -76,7 +75,7 @@ def run_case(name, record, level, robot, package, log_dir):
         args.extend(f"spawn_{axis}:={v}" for axis, v in zip(("x", "y", "z", "yaw"), pose))
     else:
         pose = (record["upper_spawn"] if level == "upper" else
-                record.get("clearing_spawn", record["spawn"]) if robot == "clearing" else record["spawn"])
+                record["spawn"])
     logfile = log_dir / f"{name}_{level}_{robot}.log"
     process = None
     last_command = 0.0
@@ -126,8 +125,6 @@ def run_case(name, record, level, robot, package, log_dir):
             statuses = {item.name: item.state for item in future.result().controller}
             assert statuses.get("diff_drive_controller") == "active", statuses
             assert statuses.get("joint_state_broadcaster") == "active", statuses
-            if robot == "clearing":
-                assert statuses.get("arm_controller") == "active", statuses
             advance(.6)
             start = state["odom"].pose.pose.position
             first = np.array([start.x, start.y, start.z])
@@ -196,7 +193,7 @@ def main():
     parser.add_argument("--package-dir", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--maps", nargs="+", help="Map names; omit for all 15.")
     parser.add_argument("--levels", nargs="+", choices=("lower", "upper", "ramp"), default=["lower"])
-    parser.add_argument("--robot", choices=("tracked", "diff_drive", "clearing"), default="tracked")
+    parser.add_argument("--robot", choices=("tracked", "diff_drive"), default="tracked")
     parser.add_argument("--log-dir", type=Path, default=Path("/tmp/multimap-gazebo-smoke"))
     args = parser.parse_args()
     args.log_dir.mkdir(parents=True, exist_ok=True)
