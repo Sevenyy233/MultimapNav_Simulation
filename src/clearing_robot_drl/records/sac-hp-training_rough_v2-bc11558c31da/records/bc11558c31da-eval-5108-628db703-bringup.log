@@ -1,0 +1,459 @@
+[INFO] [launch]: All log files can be found below /home/yangyang/.ros/log/2026-11-23-11-50-22-536314-MyLinux-678340
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [launch.user]: Clearing robot world: /data/projects/ros2_ws/MultiMapNav_Simulation/install/clearing_robot_simulation/share/clearing_robot_simulation/worlds/evaluation.world
+[INFO] [robot_state_publisher-1]: process started with pid [678342]
+[INFO] [gzserver-2]: process started with pid [678344]
+[INFO] [wait_for_gazebo_clock.py-3]: process started with pid [678346]
+[INFO] [clearing_local_map-4]: process started with pid [678348]
+[INFO] [clearing_avia_fusion-5]: process started with pid [678350]
+[INFO] [fast_lio_sim_bridge-6]: process started with pid [678352]
+[INFO] [estimator_supervisor.py-7]: process started with pid [678354]
+[INFO] [navigation_modes.py-8]: process started with pid [678356]
+[INFO] [clearing_training_control-9]: process started with pid [678358]
+[robot_state_publisher-1] [WARN] [1795405822.980163410] [kdl_parser]: The root link base_link has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+[robot_state_publisher-1] [INFO] [1795405822.980345626] [robot_state_publisher]: got segment base_footprint
+[robot_state_publisher-1] [INFO] [1795405822.980400391] [robot_state_publisher]: got segment base_link
+[robot_state_publisher-1] [INFO] [1795405822.980405835] [robot_state_publisher]: got segment imu_link
+[robot_state_publisher-1] [INFO] [1795405822.980409940] [robot_state_publisher]: got segment left_track_belt
+[robot_state_publisher-1] [INFO] [1795405822.980414099] [robot_state_publisher]: got segment left_wheel_back
+[robot_state_publisher-1] [INFO] [1795405822.980418099] [robot_state_publisher]: got segment left_wheel_front
+[robot_state_publisher-1] [INFO] [1795405822.980422045] [robot_state_publisher]: got segment left_wheel_middle
+[robot_state_publisher-1] [INFO] [1795405822.980426070] [robot_state_publisher]: got segment left_wheel_middle1
+[robot_state_publisher-1] [INFO] [1795405822.980430028] [robot_state_publisher]: got segment left_wheel_middle2
+[robot_state_publisher-1] [INFO] [1795405822.980434022] [robot_state_publisher]: got segment link1
+[robot_state_publisher-1] [INFO] [1795405822.980438027] [robot_state_publisher]: got segment link2
+[robot_state_publisher-1] [INFO] [1795405822.980441939] [robot_state_publisher]: got segment link3
+[robot_state_publisher-1] [INFO] [1795405822.980445939] [robot_state_publisher]: got segment link4
+[robot_state_publisher-1] [INFO] [1795405822.980449838] [robot_state_publisher]: got segment link5
+[robot_state_publisher-1] [INFO] [1795405822.980453689] [robot_state_publisher]: got segment link6
+[robot_state_publisher-1] [INFO] [1795405822.980457712] [robot_state_publisher]: got segment link7
+[robot_state_publisher-1] [INFO] [1795405822.980461695] [robot_state_publisher]: got segment right_track_belt
+[robot_state_publisher-1] [INFO] [1795405822.980465756] [robot_state_publisher]: got segment right_wheel_back
+[robot_state_publisher-1] [INFO] [1795405822.980469854] [robot_state_publisher]: got segment right_wheel_front
+[robot_state_publisher-1] [INFO] [1795405822.980473886] [robot_state_publisher]: got segment right_wheel_middle
+[robot_state_publisher-1] [INFO] [1795405822.980477988] [robot_state_publisher]: got segment right_wheel_middle1
+[robot_state_publisher-1] [INFO] [1795405822.980482017] [robot_state_publisher]: got segment right_wheel_middle2
+[robot_state_publisher-1] [INFO] [1795405822.980485924] [robot_state_publisher]: got segment rslidar_1
+[robot_state_publisher-1] [INFO] [1795405822.980489949] [robot_state_publisher]: got segment rslidar_2
+[robot_state_publisher-1] [INFO] [1795405822.980493826] [robot_state_publisher]: got segment rslidar_3
+[robot_state_publisher-1] [INFO] [1795405822.980497778] [robot_state_publisher]: got segment rslidar_4
+[robot_state_publisher-1] [INFO] [1795405822.980501779] [robot_state_publisher]: got segment rslidar_5
+[gzserver-2] Gazebo multi-robot simulator, version 11.10.2
+[gzserver-2] Copyright (C) 2012 Open Source Robotics Foundation.
+[gzserver-2] Released under the Apache 2 License.
+[gzserver-2] http://gazebosim.org
+[gzserver-2] 
+[estimator_supervisor.py-7] [INFO] [1795405823.214913147] [clearing_estimator_supervisor]: 启动 FAST-LIO，PID=678508
+[estimator_supervisor.py-7] [INFO] [1795405823.272753054] [fastlio_mapping]: p_pre->lidar_type 1
+[estimator_supervisor.py-7] Multi thread started 
+[estimator_supervisor.py-7] ~~~~/data/projects/ros2_ws/MultiMapNav_Simulation/build/fast_lio/runtime/ file opened
+[estimator_supervisor.py-7] [INFO] [1795405823.276904755] [fastlio_mapping]: Node init finished.
+[gzserver-2] [1;33m[Wrn] [gazebo_ros_init.cpp:178] [0m[1;33m
+[gzserver-2] #     # ####### ####### ###  #####  #######
+[gzserver-2] ##    # #     #    #     #  #     # #
+[gzserver-2] # #   # #     #    #     #  #       #
+[gzserver-2] #  #  # #     #    #     #  #       #####
+[gzserver-2] #   # # #     #    #     #  #       #
+[gzserver-2] #    ## #     #    #     #  #     # #
+[gzserver-2] #     # #######    #    ###  #####  #######
+[gzserver-2] 
+[gzserver-2] This version of Gazebo, now called Gazebo classic, reaches end-of-life
+[gzserver-2] in January 2025. Users are highly encouraged to migrate to the new Gazebo
+[gzserver-2] using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration?utm_source=gazebo_ros_pkgs&utm_medium=cli)
+[gzserver-2] 
+[gzserver-2] [0m[1;33m
+[navigation_modes.py-8] [INFO] [launch]: All log files can be found below /home/yangyang/.ros/log/2026-11-23-11-50-23-418028-MyLinux-678510
+[navigation_modes.py-8] [INFO] [launch]: Default logging verbosity is set to INFO
+[navigation_modes.py-8] [INFO] [navigation_mode_selector_server-1]: process started with pid [678565]
+[navigation_modes.py-8] [INFO] [map_server-2]: process started with pid [678567]
+[navigation_modes.py-8] [INFO] [localization_server-3]: process started with pid [678569]
+[navigation_modes.py-8] [INFO] [global_planner_server-4]: process started with pid [678571]
+[navigation_modes.py-8] [INFO] [local_controller_server-5]: process started with pid [678573]
+[navigation_modes.py-8] [INFO] [recovery_server-6]: process started with pid [678575]
+[navigation_modes.py-8] [INFO] [bt_navigator-7]: process started with pid [678577]
+[navigation_modes.py-8] [INFO] [lifecycle_manager-8]: process started with pid [678579]
+[navigation_modes.py-8] [lifecycle_manager-8] [INFO] [1795405823.505932445] [lifecycle_manager]: LifecycleManager 启动.
+[gzserver-2] [0m[1;33m[0m[1;33m[0m[INFO] [1795405823.979989636] [gazebo.gazebo_ros_state]: Publishing states of gazebo models at [/gazebo/model_states]
+[gzserver-2] [INFO] [1795405823.980880345] [gazebo.gazebo_ros_state]: Publishing states of gazebo links at [/gazebo/link_states]
+[wait_for_gazebo_clock.py-3] [INFO] [1795405824.019327085] [wait_for_gazebo_clock]: Gazebo clock is progressing; world is ready for spawning
+[INFO] [wait_for_gazebo_clock.py-3]: process has finished cleanly [pid 678346]
+[INFO] [spawn_entity.py-10]: process started with pid [678765]
+[spawn_entity.py-10] [INFO] [1795405824.448225090] [spawn_entity]: Spawn Entity started
+[spawn_entity.py-10] [INFO] [1795405824.448440865] [spawn_entity]: Loading entity published on topic robot_description
+[spawn_entity.py-10] [INFO] [1795405824.449778657] [spawn_entity]: Waiting for entity xml on robot_description
+[spawn_entity.py-10] [INFO] [1795405824.994616284] [spawn_entity]: Waiting for service /spawn_entity, timeout = 120
+[spawn_entity.py-10] [INFO] [1795405824.994826726] [spawn_entity]: Waiting for service /spawn_entity
+[spawn_entity.py-10] [INFO] [1795405825.247580698] [spawn_entity]: Calling service /spawn_entity
+[gzserver-2] [INFO] [1795405825.889648477] [imu_controller]: <initial_orientation_as_reference> is unset, using default value of false to comply with REP 145 (world as orientation reference)
+[gzserver-2] [INFO] [1795405825.927756893] [LivoxPointsPlugin]: load csv file name: /data/projects/ros2_ws/MultiMapNav_Simulation/install/ros2_livox_simulation/share/ros2_livox_simulation/scan_mode/avia.csv
+[gzserver-2] [1;32m[Msg] [0m[1;32mWaiting for master.[0m[1;32m
+[gzserver-2] [0m[1;32m[0m[1;32m[0m[1;32m[Msg] [0m[1;32mConnected to gazebo master @ [0m[1;32mhttp://127.0.0.1:32997[0m[1;32m
+[gzserver-2] [0m[1;32m[0m[1;32m[0m[1;32m[Msg] [0m[1;32mPublicized address: [0m[1;32m10.178.103.137[0m[1;32m
+[gzserver-2] [0m[1;32m[0m[1;32m[0m[1;32m[Msg] [0m[1;32mLoading world file [[0m[1;32m/data/projects/ros2_ws/MultiMapNav_Simulation/install/clearing_robot_simulation/share/clearing_robot_simulation/worlds/evaluation.world[0m[1;32m][0m[1;32m
+[gzserver-2] cannot convert str:
+[gzserver-2] data size:960000
+[gzserver-2] [INFO] [1795405826.409408658] [LivoxPointsPlugin]: ros topic name: /livox/lidar_1
+[gzserver-2] [INFO] [1795405826.420779708] [LivoxPointsPlugin]: scan info size: 960000
+[gzserver-2] [INFO] [1795405826.421489595] [LivoxPointsPlugin]: sample: 24000
+[gzserver-2] [INFO] [1795405826.421498718] [LivoxPointsPlugin]: downsample: 8
+[navigation_modes.py-8] [lifecycle_manager-8] [INFO] [1795405826.511179574] [lifecycle_manager]: 选择结果: gridmap | flat=0.000 slope=0.000 multi=0.000 rough=0.000 | 0.0 ms
+[gzserver-2] [INFO] [1795405826.866138315] [LivoxPointsPlugin]: load csv file name: /data/projects/ros2_ws/MultiMapNav_Simulation/install/ros2_livox_simulation/share/ros2_livox_simulation/scan_mode/avia.csv
+[navigation_modes.py-8] [map_server-2] [INFO] [1795405826.896947654] [map_server]: 成功加载地图插件: multimap_nav_plugins::GridMapPlugin | 参数前缀: gridmap_map
+[navigation_modes.py-8] [map_server-2] [INFO] [1795405826.897444053] [map_server]: 地图插件激活成功!
+[gzserver-2] cannot convert str:
+[gzserver-2] data size:960000
+[gzserver-2] [INFO] [1795405827.341831740] [LivoxPointsPlugin]: ros topic name: /livox/lidar_2
+[gzserver-2] [INFO] [1795405827.351265816] [LivoxPointsPlugin]: scan info size: 960000
+[gzserver-2] [INFO] [1795405827.351683096] [LivoxPointsPlugin]: sample: 24000
+[gzserver-2] [INFO] [1795405827.351690840] [LivoxPointsPlugin]: downsample: 8
+[gzserver-2] [INFO] [1795405827.755077793] [LivoxPointsPlugin]: load csv file name: /data/projects/ros2_ws/MultiMapNav_Simulation/install/ros2_livox_simulation/share/ros2_livox_simulation/scan_mode/avia.csv
+[gzserver-2] cannot convert str:
+[gzserver-2] data size:960000
+[gzserver-2] [INFO] [1795405828.260354801] [LivoxPointsPlugin]: ros topic name: /livox/lidar_3
+[gzserver-2] [INFO] [1795405828.266689522] [LivoxPointsPlugin]: scan info size: 960000
+[gzserver-2] [INFO] [1795405828.267076304] [LivoxPointsPlugin]: sample: 24000
+[gzserver-2] [INFO] [1795405828.267082663] [LivoxPointsPlugin]: downsample: 8
+[gzserver-2] [INFO] [1795405828.699655765] [LivoxPointsPlugin]: load csv file name: /data/projects/ros2_ws/MultiMapNav_Simulation/install/ros2_livox_simulation/share/ros2_livox_simulation/scan_mode/avia.csv
+[gzserver-2] cannot convert str:
+[gzserver-2] data size:960000
+[gzserver-2] [INFO] [1795405829.180288042] [LivoxPointsPlugin]: ros topic name: /livox/lidar_4
+[gzserver-2] [INFO] [1795405829.186641451] [LivoxPointsPlugin]: scan info size: 960000
+[gzserver-2] [INFO] [1795405829.187070062] [LivoxPointsPlugin]: sample: 24000
+[gzserver-2] [INFO] [1795405829.187077554] [LivoxPointsPlugin]: downsample: 8
+[gzserver-2] [INFO] [1795405829.609688882] [LivoxPointsPlugin]: load csv file name: /data/projects/ros2_ws/MultiMapNav_Simulation/install/ros2_livox_simulation/share/ros2_livox_simulation/scan_mode/avia.csv
+[spawn_entity.py-10] [INFO] [1795405829.621574445] [spawn_entity]: Spawn status: SpawnEntity: Successfully spawned entity [clearing_robot]
+[INFO] [spawn_entity.py-10]: process has finished cleanly [pid 678765]
+[INFO] [spawner-11]: process started with pid [678869]
+[spawner-11] [INFO] [1795405830.077793328] [spawner_joint_state_broadcaster]: waiting for service /controller_manager/list_controllers to become available...
+[gzserver-2] cannot convert str:
+[gzserver-2] data size:960000
+[gzserver-2] [INFO] [1795405830.143956566] [LivoxPointsPlugin]: ros topic name: /livox/lidar_5
+[gzserver-2] [INFO] [1795405830.151872568] [LivoxPointsPlugin]: scan info size: 960000
+[gzserver-2] [INFO] [1795405830.152332736] [LivoxPointsPlugin]: sample: 24000
+[gzserver-2] [INFO] [1795405830.152339792] [LivoxPointsPlugin]: downsample: 8
+[gzserver-2] [INFO] [1795405830.635799721] [gazebo_ros2_control]: Loading gazebo_ros2_control plugin
+[gzserver-2] [INFO] [1795405830.642281585] [gazebo_ros2_control]: Starting gazebo_ros2_control plugin in namespace: /
+[gzserver-2] [INFO] [1795405830.642318232] [gazebo_ros2_control]: Starting gazebo_ros2_control plugin in ros 2 node: gazebo_ros2_control
+[gzserver-2] [INFO] [1795405830.745701119] [gazebo_ros2_control]: connected to service!! robot_state_publisher
+[gzserver-2] [INFO] [1795405830.746953833] [gazebo_ros2_control]: Received urdf from param server, parsing...
+[gzserver-2] [INFO] [1795405830.746981841] [gazebo_ros2_control]: Loading parameter files /data/projects/ros2_ws/MultiMapNav_Simulation/install/clearing_robot_simulation/share/clearing_robot_simulation/config/clearing_robot.yaml
+[gzserver-2] [INFO] [1795405830.755727378] [gazebo_ros2_control]: Loading joint: left_wheel_back_joint
+[gzserver-2] [INFO] [1795405830.755788012] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.755800589] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.755813010] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.755828278] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.755835991] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.755843571] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.755875263] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.756236098] [gazebo_ros2_control]: Loading joint: left_wheel_middle2_joint
+[gzserver-2] [INFO] [1795405830.756254372] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.756263092] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.756269998] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.756280679] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.756286178] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.756289796] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.756299795] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.756513543] [gazebo_ros2_control]: Loading joint: left_wheel_middle_joint
+[gzserver-2] [INFO] [1795405830.756524454] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.756540511] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.756550188] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.756560666] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.756568985] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.756578352] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.756586366] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.756772563] [gazebo_ros2_control]: Loading joint: left_wheel_middle1_joint
+[gzserver-2] [INFO] [1795405830.756783707] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.756789894] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.756795729] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.756803832] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.756809753] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.756814767] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.756859153] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.757084088] [gazebo_ros2_control]: Loading joint: left_wheel_front_joint
+[gzserver-2] [INFO] [1795405830.757097046] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.757104045] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.757111171] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.757118475] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.757124150] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.757129363] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.757139309] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.757343615] [gazebo_ros2_control]: Loading joint: right_wheel_back_joint
+[gzserver-2] [INFO] [1795405830.757354618] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.757362729] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.757369328] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.757376750] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.757400992] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.757406048] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.757415321] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.757595417] [gazebo_ros2_control]: Loading joint: right_wheel_middle2_joint
+[gzserver-2] [INFO] [1795405830.757606595] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.757611585] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.757617583] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.757623978] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.757629403] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.757634082] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.757642787] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.757806702] [gazebo_ros2_control]: Loading joint: right_wheel_middle_joint
+[gzserver-2] [INFO] [1795405830.757815466] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.757820354] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.757825024] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.757829675] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.757832718] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.757835584] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.757842043] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.758018589] [gazebo_ros2_control]: Loading joint: right_wheel_middle1_joint
+[gzserver-2] [INFO] [1795405830.758026523] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.758030622] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.758034577] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.758040087] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.758044449] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.758048679] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.758057138] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.758209209] [gazebo_ros2_control]: Loading joint: right_wheel_front_joint
+[gzserver-2] [INFO] [1795405830.758217980] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.758222984] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.758227994] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.758231616] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.758234333] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.758237037] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.758242261] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.758369127] [gazebo_ros2_control]: Loading joint: joint1
+[gzserver-2] [INFO] [1795405830.758376545] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.758381158] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.758412967] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.758435451] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.758445931] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.758457204] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.758466351] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.758885468] [gazebo_ros2_control]: Loading joint: joint2
+[gzserver-2] [INFO] [1795405830.758942535] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.758954521] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.758966124] [gazebo_ros2_control]: 			 found initial value: 0.100000
+[gzserver-2] [INFO] [1795405830.758980086] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.758989861] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.758999509] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.759008421] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.759336181] [gazebo_ros2_control]: Loading joint: joint3
+[gzserver-2] [INFO] [1795405830.759367623] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.759377365] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.759387768] [gazebo_ros2_control]: 			 found initial value: -0.030000
+[gzserver-2] [INFO] [1795405830.759400480] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.759409985] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.759419111] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.759428044] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.759882409] [gazebo_ros2_control]: Loading joint: joint4
+[gzserver-2] [INFO] [1795405830.759905982] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.759915651] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.759925957] [gazebo_ros2_control]: 			 found initial value: 1.540000
+[gzserver-2] [INFO] [1795405830.759937566] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.759946686] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.759955487] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.759964090] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.760264706] [gazebo_ros2_control]: Loading joint: joint5
+[gzserver-2] [INFO] [1795405830.760285565] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.760295137] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.760303816] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.760315099] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.760324292] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.760357855] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.760367795] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.760728533] [gazebo_ros2_control]: Loading joint: joint6
+[gzserver-2] [INFO] [1795405830.760757347] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.760769661] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.760781210] [gazebo_ros2_control]: 			 found initial value: -1.500000
+[gzserver-2] [INFO] [1795405830.760794298] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.760804114] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.760812446] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.760821689] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.761147235] [gazebo_ros2_control]: Loading joint: joint7
+[gzserver-2] [INFO] [1795405830.761170368] [gazebo_ros2_control]: 	State:
+[gzserver-2] [INFO] [1795405830.761180708] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.761190659] [gazebo_ros2_control]: 			 found initial value: 0.000000
+[gzserver-2] [INFO] [1795405830.761203088] [gazebo_ros2_control]: 		 velocity
+[gzserver-2] [INFO] [1795405830.761213192] [gazebo_ros2_control]: 		 effort
+[gzserver-2] [INFO] [1795405830.761221997] [gazebo_ros2_control]: 	Command:
+[gzserver-2] [INFO] [1795405830.761231933] [gazebo_ros2_control]: 		 position
+[gzserver-2] [INFO] [1795405830.761711829] [resource_manager]: Initialize hardware 'clearing_robot_system' 
+[gzserver-2] [INFO] [1795405830.761942715] [resource_manager]: Successful initialization of hardware 'clearing_robot_system'
+[gzserver-2] [INFO] [1795405830.762094488] [resource_manager]: 'configure' hardware 'clearing_robot_system' 
+[gzserver-2] [INFO] [1795405830.762110122] [resource_manager]: Successful 'configure' of hardware 'clearing_robot_system'
+[gzserver-2] [INFO] [1795405830.762139365] [resource_manager]: 'activate' hardware 'clearing_robot_system' 
+[gzserver-2] [INFO] [1795405830.762148437] [resource_manager]: Successful 'activate' of hardware 'clearing_robot_system'
+[gzserver-2] [INFO] [1795405830.762256904] [gazebo_ros2_control]: Loading controller_manager
+[gzserver-2] [WARN] [1795405830.782012265] [gazebo_ros2_control]:  Desired controller update period (0.01 s) is slower than the gazebo simulation period (0.001 s).
+[gzserver-2] [INFO] [1795405830.782270557] [gazebo_ros2_control]: Loaded gazebo_ros2_control.
+[spawner-11] [INFO] [1795405831.581851576] [spawner_joint_state_broadcaster]: waiting for service /controller_manager/load_controller to become available...
+[gzserver-2] [INFO] [1795405831.582597724] [controller_manager]: Loading controller 'joint_state_broadcaster'
+[spawner-11] [INFO] [1795405831.606826286] [spawner_joint_state_broadcaster]: [94mLoaded [1mjoint_state_broadcaster[0m
+[gzserver-2] [INFO] [1795405831.607879734] [controller_manager]: Configuring controller 'joint_state_broadcaster'
+[gzserver-2] [INFO] [1795405831.608200575] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published
+[spawner-11] [INFO] [1795405831.714167342] [spawner_joint_state_broadcaster]: [92mConfigured and activated [1mjoint_state_broadcaster[0m
+[INFO] [spawner-11]: process has finished cleanly [pid 678869]
+[INFO] [spawner-12]: process started with pid [678916]
+[estimator_supervisor.py-7] IMU Initial Done
+[estimator_supervisor.py-7] [WARN] [1795405832.032353627] [fastlio_mapping]: No point, skip this scan!
+[estimator_supervisor.py-7] 
+[spawner-12] [INFO] [1795405832.114622594] [spawner_arm_controller]: waiting for service /controller_manager/list_controllers to become available...
+[estimator_supervisor.py-7] [INFO] [1795405832.201845922] [fastlio_mapping]: Initialize the map kdtree
+[spawner-12] [INFO] [1795405833.368451965] [spawner_arm_controller]: waiting for service /controller_manager/load_controller to become available...
+[gzserver-2] [INFO] [1795405833.368693776] [controller_manager]: Loading controller 'arm_controller'
+[spawner-12] [INFO] [1795405833.393946383] [spawner_arm_controller]: [94mLoaded [1marm_controller[0m
+[spawner-12] [INFO] [1795405833.395512295] [spawner_arm_controller]: waiting for service /controller_manager/configure_controller to become available...
+[gzserver-2] [INFO] [1795405833.395707996] [controller_manager]: Configuring controller 'arm_controller'
+[gzserver-2] [INFO] [1795405833.395884502] [arm_controller]: No specific joint names are used for command interfaces. Using 'joints' parameter.
+[gzserver-2] [INFO] [1795405833.395908908] [arm_controller]: Command interfaces are [position] and state interfaces are [position velocity].
+[gzserver-2] [INFO] [1795405833.395937952] [arm_controller]: Using 'splines' interpolation method.
+[gzserver-2] [INFO] [1795405833.396978644] [arm_controller]: Controller state will be published at 50.00 Hz.
+[gzserver-2] [INFO] [1795405833.398508288] [arm_controller]: Action status changes will be monitored at 20.00 Hz.
+[spawner-12] [INFO] [1795405833.451685438] [spawner_arm_controller]: waiting for service /controller_manager/switch_controller to become available...
+[spawner-12] [INFO] [1795405833.484753519] [spawner_arm_controller]: [92mConfigured and activated [1marm_controller[0m
+[INFO] [spawner-12]: process has finished cleanly [pid 678916]
+[INFO] [initialize_clearing_arm.py-13]: process started with pid [679025]
+[gzserver-2] [INFO] [1795405834.998600891] [arm_controller]: Received new action goal
+[gzserver-2] [INFO] [1795405834.998749342] [arm_controller]: Accepted new action goal
+[navigation_modes.py-8] [map_server-2] [INFO] [1795405835.654343093] [map_server]: 异步地图加载完成.
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405835.729431307] [localization_server]: 成功加载定位插件: multimap_nav_plugins::PointCloudLocalization | 参数前缀: gridmap_localization
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405835.744865669] [localization_server]: 定位插件激活成功!
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405835.744908651] [localization_server]: 已启用启动自动初始化: pos=(0.00, 0.00, 0.03), 将在 3s 后生效
+[navigation_modes.py-8] [global_planner_server-4] [INFO] [1795405835.804973900] [global_planner_server]: 成功加载全局规划插件: clearing_robot::GridMapAStar | 参数前缀: gridmap_global_planner
+[navigation_modes.py-8] [global_planner_server-4] [INFO] [1795405835.814194148] [global_planner_server]: 全局规划插件已激活!
+[navigation_modes.py-8] [lifecycle_manager-8] [INFO] [1795405835.814375700] [lifecycle_manager]: ========== Bringup 完成! 所有节点已激活 ==========
+[gzserver-2] [INFO] [1795405838.136855325] [arm_controller]: Goal reached, success!
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405838.745160230] [localization_server]: 设置初始位姿 | frame: map | pos=(0.00, 0.00, 0.03)
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405838.745894245] [localization_server]: PointCloudLocalization [gridmap_localization]: 初始位姿已设置 (0.00, 0.00, 0.03).
+[initialize_clearing_arm.py-13] [INFO] [1795405838.913785946] [initialize_clearing_arm]: Arm initialized and held at [0.0, 0.1, -0.03, 1.54, 0.0, -1.5, 0.0] radians
+[INFO] [initialize_clearing_arm.py-13]: process has finished cleanly [pid 679025]
+[INFO] [spawner-14]: process started with pid [679113]
+[spawner-14] [INFO] [1795405839.306166708] [spawner_tracks_velocity_controller]: waiting for service /controller_manager/list_controllers to become available...
+[spawner-14] [INFO] [1795405840.309043302] [spawner_tracks_velocity_controller]: waiting for service /controller_manager/load_controller to become available...
+[gzserver-2] [INFO] [1795405840.559623603] [controller_manager]: Loading controller 'tracks_velocity_controller'
+[spawner-14] [INFO] [1795405840.583248570] [spawner_tracks_velocity_controller]: [94mLoaded [1mtracks_velocity_controller[0m
+[spawner-14] [INFO] [1795405840.584197327] [spawner_tracks_velocity_controller]: waiting for service /controller_manager/configure_controller to become available...
+[gzserver-2] [INFO] [1795405840.834729259] [controller_manager]: Configuring controller 'tracks_velocity_controller'
+[gzserver-2] [INFO] [1795405840.835749841] [tracks_velocity_controller]: configure successful
+[spawner-14] [INFO] [1795405840.849378954] [spawner_tracks_velocity_controller]: waiting for service /controller_manager/switch_controller to become available...
+[gzserver-2] [INFO] [1795405840.966454564] [tracks_velocity_controller]: activate successful
+[spawner-14] [INFO] [1795405840.981094212] [spawner_tracks_velocity_controller]: [92mConfigured and activated [1mtracks_velocity_controller[0m
+[INFO] [spawner-14]: process has finished cleanly [pid 679113]
+[INFO] [launch.user]: Clearing robot ready: arm held in low carry pose; /cmd_vel enabled.
+[INFO] [clearing_tracks_drive.py-15]: process started with pid [679189]
+[clearing_tracks_drive.py-15] [INFO] [1795405841.377666372] [clearing_tracks_drive]: Differential track drive ready; wheel odometry is disabled
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405848.181413330] [localization_server]: PointCloudLocalization [gridmap_localization]: 全图候选待复核 | candidates=16 搜索=9.343 s | map=(-0.077, 0.043, 0.030) cost=0.0118
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405848.398006530] [localization_server]: PointCloudLocalization [gridmap_localization]: 重定位成功 | scan_t=12.730 候选代价=0.0123 单帧搜索=0.174 s | map=(-0.029, 0.083, 0.030)
+[navigation_modes.py-8] [INFO] [1795405848.496592208] [clearing_navigation_modes]: 导航模式已就绪: gridmap → gridmap
+[estimator_supervisor.py-7] catch sig %d2
+[estimator_supervisor.py-7] Rebuild thread terminated normally
+[estimator_supervisor.py-7] [INFO] [1795405852.748656281] [clearing_estimator_supervisor]: 启动 FAST-LIO，PID=679402
+[estimator_supervisor.py-7] [INFO] [1795405852.823241433] [fastlio_mapping]: p_pre->lidar_type 1
+[estimator_supervisor.py-7] Multi thread started 
+[estimator_supervisor.py-7] ~~~~/data/projects/ros2_ws/MultiMapNav_Simulation/build/fast_lio/runtime/ file opened
+[estimator_supervisor.py-7] [INFO] [1795405852.830112989] [fastlio_mapping]: Node init finished.
+[estimator_supervisor.py-7] IMU Initial Done
+[estimator_supervisor.py-7] [WARN] [1795405853.942693644] [fastlio_mapping]: No point, skip this scan!
+[estimator_supervisor.py-7] 
+[estimator_supervisor.py-7] [INFO] [1795405854.090378335] [fastlio_mapping]: Initialize the map kdtree
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405854.245880283] [localization_server]: 收到初始位姿请求 | frame: map
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405854.245942033] [localization_server]: 设置初始位姿 | frame: map | pos=(0.00, 0.00, 0.03)
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405854.246138404] [localization_server]: PointCloudLocalization [gridmap_localization]: 初始位姿已设置 (0.00, 0.00, 0.03).
+[clearing_local_map-4] [WARN] [1795405854.398823797] [compound_local_map]: cloud TF unavailable: Lookup would require extrapolation into the future.  Requested time 16.730000 but the latest data is at time 15.530000, when looking up transform from frame [imu_link] to frame [map]
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405854.692137927] [localization_server]: PointCloudLocalization [gridmap_localization]: 地图配准确认初值 | scan_t=16.830
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405854.692210874] [localization_server]: LIO 初始支撑高度已对齐 | predicted_z=0.0300 matched_z=0.0300 delta=0.0000
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[ERROR] [clearing_tracks_drive.py-15]: process[clearing_tracks_drive.py-15] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[ERROR] [clearing_training_control-9]: process[clearing_training_control-9] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[ERROR] [navigation_modes.py-8]: process[navigation_modes.py-8] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[ERROR] [estimator_supervisor.py-7]: process[estimator_supervisor.py-7] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[ERROR] [fast_lio_sim_bridge-6]: process[fast_lio_sim_bridge-6] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[ERROR] [clearing_avia_fusion-5]: process[clearing_avia_fusion-5] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[ERROR] [clearing_local_map-4]: process[clearing_local_map-4] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[ERROR] [gzserver-2]: process[gzserver-2] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[ERROR] [robot_state_publisher-1]: process[robot_state_publisher-1] failed to terminate '5' seconds after receiving 'SIGINT', escalating to 'SIGTERM'
+[INFO] [clearing_tracks_drive.py-15]: sending signal 'SIGTERM' to process[clearing_tracks_drive.py-15]
+[INFO] [clearing_training_control-9]: sending signal 'SIGTERM' to process[clearing_training_control-9]
+[INFO] [navigation_modes.py-8]: sending signal 'SIGTERM' to process[navigation_modes.py-8]
+[INFO] [estimator_supervisor.py-7]: sending signal 'SIGTERM' to process[estimator_supervisor.py-7]
+[INFO] [fast_lio_sim_bridge-6]: sending signal 'SIGTERM' to process[fast_lio_sim_bridge-6]
+[INFO] [clearing_avia_fusion-5]: sending signal 'SIGTERM' to process[clearing_avia_fusion-5]
+[INFO] [clearing_local_map-4]: sending signal 'SIGTERM' to process[clearing_local_map-4]
+[INFO] [gzserver-2]: sending signal 'SIGTERM' to process[gzserver-2]
+[INFO] [robot_state_publisher-1]: sending signal 'SIGTERM' to process[robot_state_publisher-1]
+[clearing_training_control-9] [INFO] [1795405900.453471321] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[estimator_supervisor.py-7] catch sig %d2
+[fast_lio_sim_bridge-6] [INFO] [1795405900.458199703] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [INFO] [lifecycle_manager-8]: sending signal 'SIGINT' to process[lifecycle_manager-8]
+[navigation_modes.py-8] [INFO] [bt_navigator-7]: sending signal 'SIGINT' to process[bt_navigator-7]
+[clearing_avia_fusion-5] [INFO] [1795405900.459768600] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [INFO] [recovery_server-6]: sending signal 'SIGINT' to process[recovery_server-6]
+[navigation_modes.py-8] [INFO] [local_controller_server-5]: sending signal 'SIGINT' to process[local_controller_server-5]
+[navigation_modes.py-8] [INFO] [global_planner_server-4]: sending signal 'SIGINT' to process[global_planner_server-4]
+[navigation_modes.py-8] [INFO] [localization_server-3]: sending signal 'SIGINT' to process[localization_server-3]
+[navigation_modes.py-8] [INFO] [map_server-2]: sending signal 'SIGINT' to process[map_server-2]
+[navigation_modes.py-8] [INFO] [navigation_mode_selector_server-1]: sending signal 'SIGINT' to process[navigation_mode_selector_server-1]
+[navigation_modes.py-8] [bt_navigator-7] [INFO] [1795405900.459759951] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [recovery_server-6] [INFO] [1795405900.460725441] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [lifecycle_manager-8] [INFO] [1795405900.461548871] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [lifecycle_manager-8] [INFO] [1795405900.461693124] [lifecycle_manager]: 接收到退出信号, 正在关闭所有受管节点...
+[navigation_modes.py-8] [lifecycle_manager-8] Failed to publish log message to rosout: publisher's context is invalid, at ./src/rcl/publisher.c:389
+[navigation_modes.py-8] [local_controller_server-5] [INFO] [1795405900.461618675] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [localization_server-3] [INFO] [1795405900.462876624] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [map_server-2] [INFO] [1795405900.463637962] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [navigation_mode_selector_server-1] [INFO] [1795405900.464964422] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[navigation_modes.py-8] [global_planner_server-4] [INFO] [1795405900.465554335] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[clearing_local_map-4] [INFO] [1795405900.465923734] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[gzserver-2] [INFO] [1795405900.465988167] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[gzserver-2] [INFO] [1795405900.466168455] [controller_manager]: Shutdown request received....
+[gzserver-2] [INFO] [1795405900.466325582] [controller_manager]: Shutting down all controllers in the controller manager.
+[gzserver-2] [INFO] [1795405900.466383077] [controller_manager]: Deactivating controller 'joint_state_broadcaster'
+[gzserver-2] [INFO] [1795405900.466484382] [controller_manager]: Shutting down controller 'joint_state_broadcaster'
+[robot_state_publisher-1] [INFO] [1795405900.466309134] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[gzserver-2] [INFO] [1795405900.466577754] [controller_manager]: Deactivating controller 'arm_controller'
+[gzserver-2] [INFO] [1795405900.466638204] [controller_manager]: Shutting down controller 'arm_controller'
+[gzserver-2] [INFO] [1795405900.466660804] [controller_manager]: Deactivating controller 'tracks_velocity_controller'
+[gzserver-2] [INFO] [1795405900.466720349] [controller_manager]: Shutting down controller 'tracks_velocity_controller'
+[gzserver-2] [INFO] [1795405900.466773993] [resource_manager]: 'deactivate' hardware 'clearing_robot_system' 
+[gzserver-2] [INFO] [1795405900.466793545] [resource_manager]: Successful 'deactivate' of hardware 'clearing_robot_system'
+[gzserver-2] [INFO] [1795405900.466799465] [resource_manager]: 'shutdown' hardware 'clearing_robot_system' 
+[gzserver-2] [INFO] [1795405900.466805353] [resource_manager]: Successful 'shutdown' of hardware 'clearing_robot_system'
+[gzserver-2] [INFO] [1795405900.466809636] [controller_manager]: Shutting down the controller manager.
+[clearing_tracks_drive.py-15] Traceback (most recent call last):
+[clearing_tracks_drive.py-15]   File "/data/projects/ros2_ws/MultiMapNav_Simulation/install/clearing_robot_simulation/lib/clearing_robot_simulation/clearing_tracks_drive.py", line 143, in <module>
+[clearing_tracks_drive.py-15]     main()
+[clearing_tracks_drive.py-15]   File "/data/projects/ros2_ws/MultiMapNav_Simulation/install/clearing_robot_simulation/lib/clearing_robot_simulation/clearing_tracks_drive.py", line 133, in main
+[clearing_tracks_drive.py-15]     rclpy.spin(node)
+[clearing_tracks_drive.py-15]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/__init__.py", line 229, in spin
+[clearing_tracks_drive.py-15]     executor.spin_once()
+[clearing_tracks_drive.py-15]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 808, in spin_once
+[clearing_tracks_drive.py-15]     self._spin_once_impl(timeout_sec)
+[clearing_tracks_drive.py-15]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 805, in _spin_once_impl
+[clearing_tracks_drive.py-15]     raise handler.exception()
+[clearing_tracks_drive.py-15]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/task.py", line 272, in _execute_coroutine_step
+[clearing_tracks_drive.py-15]     result = coro.send(None)
+[clearing_tracks_drive.py-15]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 488, in handler
+[clearing_tracks_drive.py-15]     await call_coroutine(entity, arg)
+[clearing_tracks_drive.py-15]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 396, in _execute_timer
+[clearing_tracks_drive.py-15]     await await_or_execute(tmr.callback)
+[clearing_tracks_drive.py-15]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/executors.py", line 110, in await_or_execute
+[clearing_tracks_drive.py-15]     return callback(*args)
+[clearing_tracks_drive.py-15]   File "/data/projects/ros2_ws/MultiMapNav_Simulation/install/clearing_robot_simulation/lib/clearing_robot_simulation/clearing_tracks_drive.py", line 118, in update
+[clearing_tracks_drive.py-15]     self.publisher.publish(command)
+[clearing_tracks_drive.py-15]   File "/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy/publisher.py", line 70, in publish
+[clearing_tracks_drive.py-15]     self.__publisher.publish(msg)
+[clearing_tracks_drive.py-15] rclpy._rclpy_pybind11.RCLError: Failed to publish: publisher's context is invalid, at ./src/rcl/publisher.c:389
+[navigation_modes.py-8] [INFO] [bt_navigator-7]: process has finished cleanly [pid 678577]
+[estimator_supervisor.py-7] Rebuild thread terminated normally
+[navigation_modes.py-8] [INFO] [recovery_server-6]: process has finished cleanly [pid 678575]
+[navigation_modes.py-8] [INFO] [lifecycle_manager-8]: process has finished cleanly [pid 678579]
+[navigation_modes.py-8] [INFO] [local_controller_server-5]: process has finished cleanly [pid 678573]
+[INFO] [fast_lio_sim_bridge-6]: process has finished cleanly [pid 678352]
+[INFO] [robot_state_publisher-1]: process has finished cleanly [pid 678342]
+[INFO] [clearing_training_control-9]: process has finished cleanly [pid 678358]
+[navigation_modes.py-8] [INFO] [navigation_mode_selector_server-1]: process has finished cleanly [pid 678565]
+[INFO] [clearing_avia_fusion-5]: process has finished cleanly [pid 678350]
+[navigation_modes.py-8] [INFO] [map_server-2]: process has finished cleanly [pid 678567]
+[navigation_modes.py-8] [INFO] [global_planner_server-4]: process has finished cleanly [pid 678571]
+[INFO] [clearing_local_map-4]: process has finished cleanly [pid 678348]
+[ERROR] [clearing_tracks_drive.py-15]: process has died [pid 679189, exit code 1, cmd '/data/projects/ros2_ws/MultiMapNav_Simulation/install/clearing_robot_simulation/lib/clearing_robot_simulation/clearing_tracks_drive.py --ros-args --params-file /data/projects/ros2_ws/MultiMapNav_Simulation/install/clearing_robot_simulation/share/clearing_robot_simulation/config/clearing_robot.yaml --params-file /tmp/launch_params_4djcw6dj -r /cmd_vel:=/cmd_vel -r /tracks_velocity_controller/commands:=/tracks_velocity_controller/commands -r /clearing/cmd_vel_applied:=/clearing/cmd_vel_applied'].
+[INFO] [estimator_supervisor.py-7]: process has finished cleanly [pid 678354]
+[navigation_modes.py-8] [INFO] [localization_server-3]: process has finished cleanly [pid 678569]
+[INFO] [navigation_modes.py-8]: process has finished cleanly [pid 678356]
