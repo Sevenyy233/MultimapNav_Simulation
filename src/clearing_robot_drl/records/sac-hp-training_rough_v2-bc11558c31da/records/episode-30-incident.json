@@ -1,0 +1,22 @@
+{
+  "run_id": "bc11558c31da",
+  "episode": 30,
+  "episode_interactions": 679,
+  "first_step": 5114,
+  "last_step": 5792,
+  "last_sim_seconds": 284.66,
+  "tail": {
+    "samples": 100,
+    "first_step": 5693,
+    "goal_distance_min_m": 32.4470810410534,
+    "goal_distance_max_m": 32.55134148439593,
+    "drive_feedback_linear_abs_max_mps": 3.672734859294646e-18,
+    "normalized_mppi_prior_min": -1.0,
+    "normalized_mppi_prior_max": -1.0
+  },
+  "artifact_removals": {
+    "parameters": 15,
+    "weights": 15,
+    "checkpoints": 14
+  }
+}
