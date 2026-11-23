@@ -1,0 +1,231 @@
+{
+  "id": "test_dynamic",
+  "split": "test",
+  "scenario": "S3",
+  "world": "worlds/test_dynamic.world",
+  "map": "pcd/test_dynamic.pcd",
+  "support": "pcd/test_dynamic_support.pcd",
+  "sha256": {
+    "world": "00dcf4e2658dbce91b2f707dbd8ef714f3d069e106eb0ec3428a9fd23a3701ad",
+    "map": "44d47f339d42ad368514cfb4b5cc945c21c3f31e2194d9d7825ff2d564c458fc",
+    "support": "06f2637579eba805e58312b6dcd29da8a734ce0fb228efc892f8f7d17419f65d"
+  },
+  "start": [
+    -15,
+    0,
+    0.01,
+    0
+  ],
+  "goal": [
+    15,
+    0,
+    0.01,
+    0
+  ],
+  "dimensions": [
+    60,
+    50
+  ],
+  "dynamic_obstacles": [
+    {
+      "name": "moving_box",
+      "size": [
+        2,
+        2,
+        1.5
+      ],
+      "waypoints": [
+        [
+          -1.0,
+          -9.0,
+          0.75
+        ],
+        [
+          -1.0,
+          9.0,
+          0.75
+        ]
+      ],
+      "speed": 0.18,
+      "mode": "ping_pong"
+    }
+  ],
+  "localization_bias_m": 0,
+  "geometry": [
+    {
+      "name": "floor",
+      "pose": [
+        0,
+        0,
+        -0.25,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        60,
+        50,
+        0.5
+      ],
+      "contact": false
+    },
+    {
+      "name": "west",
+      "pose": [
+        -30.25,
+        0,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        0.5,
+        51,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "east",
+      "pose": [
+        30.25,
+        0,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        0.5,
+        51,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "north",
+      "pose": [
+        0,
+        25.25,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        60,
+        0.5,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "south",
+      "pose": [
+        0,
+        -25.25,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        60,
+        0.5,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "cargo_a",
+      "pose": [
+        -5,
+        -13,
+        1.2,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        3,
+        3,
+        2.4
+      ],
+      "contact": true
+    },
+    {
+      "name": "cargo_b",
+      "pose": [
+        10,
+        15,
+        1.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        4,
+        3,
+        3
+      ],
+      "contact": true
+    },
+    {
+      "name": "moving_box",
+      "pose": [
+        -1.0,
+        -9.0,
+        0.75,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "size": [
+        2,
+        2,
+        1.5
+      ],
+      "contact": true,
+      "dynamic": true
+    }
+  ],
+  "sampling_spacing_m": 0.18,
+  "notes": "真实运动碰撞箱按脚本横穿主通道；动态箱不进入静态先验。",
+  "simulation_overrides": {},
+  "scene_marker": "drl_scene_test_dynamic_fff9a1d3f34eef64",
+  "purpose": "移动货物横穿通道，用于检查在线避障和先验回退。",
+  "switching": "仿真与导航使用同一scene参数；切换前停止两者，并重启对应world及配对PCD。",
+  "independence": "独立测试几何或障碍布局；不得参与训练更新。",
+  "reset_sampling": {
+    "start_region": {
+      "x": [
+        -18.0,
+        -12.0
+      ],
+      "y": [
+        -5.0,
+        5.0
+      ]
+    },
+    "goal_region": {
+      "x": [
+        12.0,
+        18.0
+      ],
+      "y": [
+        -5.0,
+        5.0
+      ]
+    },
+    "min_distance_m": 12.0,
+    "max_distance_m": 40.0,
+    "heading_jitter_rad": 0.2617993877991494,
+    "max_attempts": 16,
+    "notes": "候选任务分布：端点位于缓坡及动态货物走廊两侧的平地区域；每次仍须完整包络、支撑和可达性验证。"
+  },
+  "task_markers": {
+    "start": "drl_episode_start",
+    "goal": "drl_episode_goal"
+  }
+}
