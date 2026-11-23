@@ -1,0 +1,143 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link name="link1">
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.26630551 -2.46152979e-17 -0.555507403"/>
+      <mass value="6000"/>
+      <inertia ixx="3404.00724" ixy="0" ixz="-689.206256" iyy="11159.2513" iyz="0" izz="13988.6592"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_1/>
+  </link>
+  <joint name="joint1" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 2.313"/>
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="150000" lower="-3.14" upper="3.14" velocity="0.3"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link1">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link2">
+    <inertial>
+      <origin rpy="0 0 0" xyz="1.27370026 -0.124614766 1.35128923e-07"/>
+      <mass value="1280"/>
+      <inertia ixx="87.7149162" ixy="43.4559098" ixz="-0.000126827583" iyy="704.457612" iyz="-4.32401178e-05" izz="693.266344"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_2/>
+  </link>
+  <joint name="joint2" type="revolute">
+    <origin rpy="-1.5708 -2.760 0" xyz="1.65 0 0"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="350000" lower="0" upper="1.1687" velocity="0.25"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link2">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link3">
+    <inertial>
+      <origin rpy="0 0 0" xyz="2.13204457 -0.0592608975 0.00440016614"/>
+      <mass value="1402"/>
+      <inertia ixx="77.3925584" ixy="-5.23281886" ixz="0.223344386" iyy="1949.69327" iyz="-0.00727808857" izz="1940.91237"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_3/>
+  </link>
+  <joint name="joint3" type="revolute">
+    <origin rpy="0 0 2.7263" xyz="2.5 0 0"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="200000" lower="-1.6895" upper="0" velocity="0.3"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link3">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link4">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.144338 -0.627142103 -0.0396293599"/>
+      <mass value="700"/>
+      <inertia ixx="120.375335" ixy="-87.2852653" ixz="-18.0183481" iyy="414.556747" iyz="-9.23615827" izz="485.13141"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_4/>
+  </link>
+  <joint name="joint4" type="revolute">
+    <origin rpy="0 0 0.4815" xyz="4.5 0 0"/>
+    <parent link="link3"/>
+    <child link="link4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="60000" lower="0" upper="1.6265" velocity="0.35"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link4">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link5">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.183389268 0.000891158583 0.00128422761"/>
+      <mass value="525"/>
+      <inertia ixx="23.7986984" ixy="-0.0985816319" ixz="0.0870947509" iyy="35.612472" iyz="0.00448312687" izz="32.823992"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_5/>
+  </link>
+  <joint name="joint5" type="revolute">
+    <origin rpy="1.5708 0 0" xyz="1.855 -0.239 0"/>
+    <parent link="link4"/>
+    <child link="link5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20000" lower="-1.58" upper="1.58" velocity="0.5"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link5">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link6">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0252308586 0.17131212 -0.01393312"/>
+      <mass value="580"/>
+      <inertia ixx="30.4273422" ixy="-1.5814964" ixz="0.816006364" iyy="24.4154256" iyz="0.786265784" izz="21.3190364"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_6/>
+  </link>
+  <joint name="joint6" type="revolute">
+    <origin rpy="-1.5708 -1.5708 0" xyz="0.469 0 0"/>
+    <parent link="link5"/>
+    <child link="link6"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="20000" lower="-1.58" upper="1.58" velocity="0.5"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link6">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+  <link name="link7">
+    <inertial>
+      <origin rpy="0 0 0" xyz="3.26484326e-05 0.186943813 0.508338592"/>
+      <mass value="720"/>
+      <inertia ixx="92.026891" ixy="-2.52810726e-05" ixz="-1.05435695e-05" iyy="407.855369" iyz="-22.6800914" izz="358.651723"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_7/>
+  </link>
+  <joint name="joint7" type="revolute">
+    <origin rpy="-1.5708 -1.5708 0" xyz="0 0.438 0"/>
+    <parent link="link6"/>
+    <child link="link7"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="12000" lower="-3.14" upper="3.14" velocity="0.5"/>
+    <dynamics damping="100" friction="20"/>
+  </joint>
+  <gazebo reference="link7">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+  </gazebo>
+
+</robot>
