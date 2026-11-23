@@ -1,0 +1,5 @@
+<library path="clearing_navigation_mode_panel">
+  <class name="clearing_robot/NavigationMode" type="clearing_robot::NavigationModePanel" base_class_type="rviz_common::Panel">
+    <description>选择导航地图模式并同步全局地图图层。</description>
+  </class>
+</library>
