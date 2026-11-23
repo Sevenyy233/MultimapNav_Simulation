@@ -1,0 +1,71 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="box_shape" params="size xyz material rpy:='0 0 0' collision:=true">
+    <!-- Unnamed geometries retain Gazebo material/contact extensions in sdf9. -->
+    <visual>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <geometry>
+        <box size="${size}"/>
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+    <xacro:if value="${collision}">
+      <collision>
+        <origin xyz="${xyz}" rpy="${rpy}"/>
+        <geometry>
+          <box size="${size}"/>
+        </geometry>
+      </collision>
+    </xacro:if>
+  </xacro:macro>
+  <xacro:macro name="cylinder_shape" params="radius length xyz material rpy:='0 0 0' collision:=true">
+    <visual>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <geometry>
+        <cylinder radius="${radius}" length="${length}"/>
+      </geometry>
+      <material name="${material}"/>
+    </visual>
+    <xacro:if value="${collision}">
+      <collision>
+        <origin xyz="${xyz}" rpy="${rpy}"/>
+        <geometry>
+          <cylinder radius="${radius}" length="${length}"/>
+        </geometry>
+      </collision>
+    </xacro:if>
+  </xacro:macro>
+  <xacro:macro name="box_inertia" params="mass x y z xyz:='0 0 0'">
+    <inertial>
+      <origin xyz="${xyz}"/>
+      <mass value="${mass}"/>
+      <inertia ixx="${mass*(y*y+z*z)/12}" iyy="${mass*(x*x+z*z)/12}" izz="${mass*(x*x+y*y)/12}" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+  </xacro:macro>
+  <link name="base_link">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.0110947986 0.0314803963 0.598827115"/>
+      <mass value="12600"/>
+      <inertia ixx="11743.797433846155" ixy="-0.0916434066046154" ixz="-23.308738061538463" iyy="22675.99329692308" iyz="8.660298857538463" izz="31252.704161538462"/>
+    </inertial>
+    <xacro:clearing_arm_geometry_0 collision="false"/>
+    <!-- Elevated contact proxies; only rotating wheels contact the floor. -->
+    <collision>
+      <origin xyz="0.004 0.0325 0.75"/>
+      <geometry>
+        <box size="4.70 2.0 0.90"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="base_footprint"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+  </joint>
+  <gazebo reference="base_link">
+    <material>Gazebo/Grey</material>
+    <selfCollide>false</selfCollide>
+    <kp>1e9</kp>
+    <kd>1e5</kd>
+  </gazebo>
+
+</robot>
