@@ -1,0 +1,58 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="wheel_interface" params="side label">
+    <joint name="${side}_wheel_${label}_joint">
+      <command_interface name="velocity">
+        <param name="min">-8</param>
+        <param name="max">8</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+  <xacro:macro name="side_interfaces" params="side">
+    <xacro:wheel_interface side="${side}" label="back"/>
+    <xacro:wheel_interface side="${side}" label="middle2"/>
+    <xacro:wheel_interface side="${side}" label="middle"/>
+    <xacro:wheel_interface side="${side}" label="middle1"/>
+    <xacro:wheel_interface side="${side}" label="front"/>
+  </xacro:macro>
+  <xacro:macro name="arm_interface" params="index lower upper">
+    <joint name="joint${index}">
+      <command_interface name="position">
+        <param name="min">${lower}</param>
+        <param name="max">${upper}</param>
+      </command_interface>
+      <state_interface name="position">
+        <param name="initial_value">${arm_stow[index-1]}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+  <ros2_control name="clearing_robot_system" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <xacro:side_interfaces side="left"/>
+    <xacro:side_interfaces side="right"/>
+    <xacro:arm_interface index="1" lower="-3.14" upper="3.14"/>
+    <xacro:arm_interface index="2" lower="0" upper="1.1687"/>
+    <xacro:arm_interface index="3" lower="-1.6895" upper="0"/>
+    <xacro:arm_interface index="4" lower="0" upper="1.6265"/>
+    <xacro:arm_interface index="5" lower="-1.58" upper="1.58"/>
+    <xacro:arm_interface index="6" lower="-1.58" upper="1.58"/>
+    <xacro:arm_interface index="7" lower="-3.14" upper="3.14"/>
+  </ros2_control>
+  <gazebo>
+    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>robot_state_publisher</robot_param_node>
+      <hold_joints>true</hold_joints>
+      <parameters>$(arg config_file)</parameters>
+    </plugin>
+  </gazebo>
+
+</robot>
