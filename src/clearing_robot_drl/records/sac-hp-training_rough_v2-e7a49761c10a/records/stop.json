@@ -1,0 +1,8 @@
+{
+  "reason": "manual_interrupt",
+  "episode": 0,
+  "partial_episode": true,
+  "training_step": 0,
+  "weights": "/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_drl/records/sac-hp-training_rough_v2-e7a49761c10a/weights/sac-hp-training_rough_v2-e7a49761c10a-step-000000000000-episode-000000-manual_interrupt-56c67889-weights.pt",
+  "checkpoint": "/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_drl/records/sac-hp-training_rough_v2-e7a49761c10a/checkpoints/sac-hp-training_rough_v2-e7a49761c10a-step-000000000000-episode-000000-manual_interrupt-56c67889-checkpoint.pt"
+}
