@@ -1,0 +1,8 @@
+{
+  "reason": "runtime_error",
+  "episode": 18,
+  "partial_episode": true,
+  "training_step": 4660,
+  "weights": "/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_drl/models/56ba433162ac-step-000000004660-episode-000018-runtime_error-346b4f83-weights.pt",
+  "checkpoint": "/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_drl/models/56ba433162ac-step-000000004660-episode-000018-runtime_error-346b4f83-checkpoint.pt"
+}
