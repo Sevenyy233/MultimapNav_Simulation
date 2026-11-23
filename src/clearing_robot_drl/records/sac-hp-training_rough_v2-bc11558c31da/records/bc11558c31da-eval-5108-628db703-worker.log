@@ -1,0 +1,6 @@
+[DRL bc11558c31da-eval-5108-628db703] 启动 mode=eval scene=evaluation policy=hybrid seed=100000 goal_source=/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_simulation/worlds/evaluation_goals.json
+[DRL bc11558c31da-eval-5108-628db703] 运行目录=/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_drl/records/sac-hp-evaluation-bc11558c31da-eval-5108-628db703
+[DRL bc11558c31da-eval-5108-628db703] 回合 0 开始复位
+[DRL bc11558c31da-eval-5108-628db703] 回合 0 异常: TimeoutError('复位后未取得新的有效定位与可用局部地图: 有效=True 碰撞=True 观测=42.230s 复位=16.740s 原因=')
+[DRL bc11558c31da-eval-5108-628db703] 回合 0 结束 outcome=error steps=0 return=0.000
+[DRL bc11558c31da-eval-5108-628db703] 运行结束，正在停车并关闭记录
