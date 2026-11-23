@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the four public robot entries and their ROS parameter files."""
+"""Verify the two public robot entries and their ROS parameter files."""
 
 import importlib.util
 from pathlib import Path
@@ -12,7 +12,7 @@ from rclpy.parameter import Parameter
 
 
 PACKAGE = Path(__file__).resolve().parents[1]
-ROBOTS = ('robot', 'tracked_robot', 'clearing_robot', 'clearing_robot_primitives')
+ROBOTS = ('robot', 'tracked_robot')
 
 
 class RobotLayoutTests(unittest.TestCase):
@@ -22,7 +22,7 @@ class RobotLayoutTests(unittest.TestCase):
                          {f'{name}.launch.py' for name in ROBOTS})
         self.assertEqual({path.name for path in (PACKAGE / 'config').iterdir()},
                          {f'{name}.yaml' for name in ROBOTS})
-        self.assertEqual(len(list(PACKAGE.rglob('*.yaml'))), 4)
+        self.assertEqual(len(list(PACKAGE.rglob('*.yaml'))), 2)
 
     def test_each_model_loads_its_matching_controller_config(self):
         for name in ROBOTS:
@@ -47,7 +47,7 @@ class RobotLayoutTests(unittest.TestCase):
                     self.assertIn('ros__parameters', section)
                     check_values(node + '.', section['ros__parameters'])
 
-    def test_all_four_launch_descriptions_load(self):
+    def test_launch_descriptions_load(self):
         for name in ROBOTS:
             with self.subTest(robot=name):
                 spec = importlib.util.spec_from_file_location(
