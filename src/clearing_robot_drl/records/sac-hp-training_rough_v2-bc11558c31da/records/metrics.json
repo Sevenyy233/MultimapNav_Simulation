@@ -1,0 +1,23 @@
+{
+  "episodes": 1,
+  "valid": 1,
+  "errors": 0,
+  "complete": false,
+  "success_rate": 0.0,
+  "collision_rate": 1.0,
+  "timeout_rate": 0.0,
+  "planning_timeout_rate": 0.0,
+  "policy_valid": 0,
+  "reward_mean": null,
+  "entropy_mean": null,
+  "yaw_oscillation_rate": null,
+  "yaw_oscillation_amplitude": null,
+  "speed_change_mean": null,
+  "mean_lateral_error": null,
+  "reward_components": {
+    "progress": null,
+    "time": null,
+    "tracking": null,
+    "event": null
+  }
+}
