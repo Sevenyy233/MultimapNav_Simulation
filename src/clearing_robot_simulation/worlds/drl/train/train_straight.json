@@ -1,0 +1,190 @@
+{
+  "id": "train_straight",
+  "split": "train",
+  "scenario": "S1",
+  "world": "worlds/train_straight.world",
+  "map": "pcd/train_straight.pcd",
+  "support": "pcd/train_straight_support.pcd",
+  "sha256": {
+    "world": "35eca46aa7a91acf4c75baf54073cd1f03aebd366ccc866f150897907585f961",
+    "map": "8cca0ad6e7a33292204a8de627ff78470f325af5da73475c54e5a2577c39eaa3",
+    "support": "2339b5a5c88d287a275969b14f7dd00b8e84bd39c1e3602fe5defbabe535cdca"
+  },
+  "start": [
+    -15,
+    0,
+    0.01,
+    0
+  ],
+  "goal": [
+    15,
+    0,
+    0.01,
+    0
+  ],
+  "dimensions": [
+    60,
+    50
+  ],
+  "dynamic_obstacles": [],
+  "localization_bias_m": 0,
+  "geometry": [
+    {
+      "name": "floor",
+      "pose": [
+        0,
+        0,
+        -0.25,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        60,
+        50,
+        0.5
+      ],
+      "contact": false
+    },
+    {
+      "name": "west",
+      "pose": [
+        -30.25,
+        0,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        0.5,
+        51,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "east",
+      "pose": [
+        30.25,
+        0,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        0.5,
+        51,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "north",
+      "pose": [
+        0,
+        25.25,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        60,
+        0.5,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "south",
+      "pose": [
+        0,
+        -25.25,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        60,
+        0.5,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "cargo_a",
+      "pose": [
+        -5,
+        13,
+        1.2,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        3,
+        3,
+        2.4
+      ],
+      "contact": true
+    },
+    {
+      "name": "cargo_b",
+      "pose": [
+        10,
+        -15,
+        1.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        4,
+        3,
+        3
+      ],
+      "contact": true
+    }
+  ],
+  "sampling_spacing_m": 0.18,
+  "notes": "",
+  "simulation_overrides": {},
+  "scene_marker": "drl_scene_train_straight_3104bcb5eb678610",
+  "purpose": "基础直行与静态障碍绕行，用于初始化训练和模块对照。",
+  "switching": "仿真与导航使用同一scene参数；切换前停止两者，并重启对应world及配对PCD。",
+  "independence": "训练场景；独立评价使用test分组。",
+  "reset_sampling": {
+    "start_region": {
+      "x": [
+        -18.0,
+        -12.0
+      ],
+      "y": [
+        -5.0,
+        5.0
+      ]
+    },
+    "goal_region": {
+      "x": [
+        12.0,
+        18.0
+      ],
+      "y": [
+        -5.0,
+        5.0
+      ]
+    },
+    "min_distance_m": 12.0,
+    "max_distance_m": 40.0,
+    "heading_jitter_rad": 0.2617993877991494,
+    "max_attempts": 16,
+    "notes": "候选任务分布：端点位于缓坡及动态货物走廊两侧的平地区域；每次仍须完整包络、支撑和可达性验证。"
+  },
+  "task_markers": {
+    "start": "drl_episode_start",
+    "goal": "drl_episode_goal"
+  }
+}
