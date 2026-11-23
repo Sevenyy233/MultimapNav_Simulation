@@ -1,0 +1,318 @@
+{
+  "id": "train_routes_a",
+  "split": "train",
+  "scenario": "S1",
+  "world": "worlds/train_routes_a.world",
+  "map": "pcd/train_routes_a.pcd",
+  "support": "pcd/train_routes_a_support.pcd",
+  "sha256": {
+    "world": "58cacad61d796f3ac615697b5b40819b23d46009de0d7315e572e74db04d2fc9",
+    "map": "48105e0797d984338dcc4f92e88debc5f90558986727f754136ba915867c18da",
+    "support": "478513124ea7fab46820915b1852a27b671486e7cf0182c2cfa819a1179b7353"
+  },
+  "start": [
+    -21,
+    0,
+    0.01,
+    0
+  ],
+  "goal": [
+    21,
+    0,
+    0.01,
+    0
+  ],
+  "dimensions": [
+    60,
+    50
+  ],
+  "dynamic_obstacles": [],
+  "localization_bias_m": 0,
+  "geometry": [
+    {
+      "name": "floor",
+      "pose": [
+        0,
+        0,
+        -0.25,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        60,
+        50,
+        0.5
+      ],
+      "contact": false
+    },
+    {
+      "name": "west",
+      "pose": [
+        -30.25,
+        0,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        0.5,
+        51,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "east",
+      "pose": [
+        30.25,
+        0,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        0.5,
+        51,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "north",
+      "pose": [
+        0,
+        25.25,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        60,
+        0.5,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "south",
+      "pose": [
+        0,
+        -25.25,
+        2.5,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        60,
+        0.5,
+        5
+      ],
+      "contact": true
+    },
+    {
+      "name": "cargo_00",
+      "pose": [
+        0,
+        0,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        5,
+        9,
+        2.0
+      ],
+      "contact": true
+    },
+    {
+      "name": "cargo_01",
+      "pose": [
+        -10,
+        13,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        6,
+        4,
+        2.0
+      ],
+      "contact": true
+    },
+    {
+      "name": "cargo_02",
+      "pose": [
+        10,
+        -13,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        6,
+        4,
+        2.0
+      ],
+      "contact": true
+    },
+    {
+      "name": "cargo_03",
+      "pose": [
+        -4,
+        -19,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        5,
+        3,
+        2.0
+      ],
+      "contact": true
+    },
+    {
+      "name": "cargo_04",
+      "pose": [
+        5,
+        19,
+        1.0,
+        0,
+        0,
+        0
+      ],
+      "size": [
+        5,
+        3,
+        2.0
+      ],
+      "contact": true
+    }
+  ],
+  "sampling_spacing_m": 0.1,
+  "notes": "候选任务须由整车碰撞和运动规划器验证。",
+  "simulation_overrides": {},
+  "scene_marker": "drl_scene_train_routes_a_a62ba1c736657bdd",
+  "purpose": "平坦地形、多障碍及多条绕行路线训练。",
+  "switching": "仿真与导航使用同一scene参数；切换前停止两者，并重启对应world及配对PCD。",
+  "independence": "训练场景；独立评价使用test分组。",
+  "reset_sampling": {
+    "start_region": {
+      "x": [
+        -23,
+        -19
+      ],
+      "y": [
+        -4,
+        4
+      ]
+    },
+    "goal_region": {
+      "x": [
+        19,
+        23
+      ],
+      "y": [
+        -4,
+        4
+      ]
+    },
+    "min_distance_m": 38,
+    "max_distance_m": 47,
+    "heading_jitter_rad": 0.2,
+    "max_attempts": 16,
+    "additional_probability": 0.5,
+    "additional_pairs": [
+      {
+        "start_region": {
+          "x": [
+            -21,
+            -19
+          ],
+          "y": [
+            -18,
+            -16
+          ]
+        },
+        "goal_region": {
+          "x": [
+            -21,
+            -19
+          ],
+          "y": [
+            16,
+            18
+          ]
+        },
+        "min_distance_m": 31,
+        "max_distance_m": 37,
+        "allow_reverse": true
+      },
+      {
+        "start_region": {
+          "x": [
+            19,
+            21
+          ],
+          "y": [
+            -18,
+            -16
+          ]
+        },
+        "goal_region": {
+          "x": [
+            19,
+            21
+          ],
+          "y": [
+            16,
+            18
+          ]
+        },
+        "min_distance_m": 31,
+        "max_distance_m": 37,
+        "allow_reverse": true
+      },
+      {
+        "start_region": {
+          "x": [
+            -23,
+            -21
+          ],
+          "y": [
+            -13,
+            -11
+          ]
+        },
+        "goal_region": {
+          "x": [
+            -23,
+            -21
+          ],
+          "y": [
+            11,
+            13
+          ]
+        },
+        "min_distance_m": 21,
+        "max_distance_m": 27,
+        "allow_reverse": true
+      }
+    ]
+  },
+  "task_markers": {
+    "start": "drl_episode_start",
+    "goal": "drl_episode_goal"
+  }
+}
