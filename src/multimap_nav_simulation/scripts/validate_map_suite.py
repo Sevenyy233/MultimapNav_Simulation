@@ -128,8 +128,7 @@ def validate(package):
     records = metadata["maps"]
     expected = {f"{category}_{i}" for category,count in [('flat',5),('terrain',5),('floor',7)] for i in range(1,count+1)}
     assert set(records) == expected
-    # Standalone robot test worlds (worlds/clearing_robot) are validated by
-    # their own tests; the navigation catalog covers these three families.
+    # The navigation catalog covers these three map families.
     suite_worlds = {p.stem for category in ("flat", "terrain", "floor")
                     for p in (package / "worlds" / category).rglob("*.world")}
     assert suite_worlds == expected
