@@ -1,0 +1,16 @@
+{"episode": 2, "sim_time": 142.83, "error": "PlanningTimeout('未在候选目标中找到可行路径')"}
+{"episode": 7, "sim_time": 351.14000000000004, "error": "RuntimeError('estimator reset: FAST-LIO 未在 30 秒内输出新里程计')"}
+{"episode": 7, "sim_time": 48.46, "error": "PlanningTimeout('随机起点在复位后持续被判为碰撞: 有效=True 碰撞=True 观测=48.430s 复位=47.140s 原因=')"}
+{"episode": 15, "sim_time": 353.95000000000005, "error": "RuntimeError('planner timeout: cancellation not acknowledged')"}
+{"episode": 15, "sim_time": 456.05, "error": "RuntimeError('planner timeout: cancellation not acknowledged')"}
+{"episode": 19, "sim_time": 451.57000000000005, "error": "PlanningTimeout('随机起点在复位后持续被判为碰撞: 有效=True 碰撞=True 观测=451.540s 复位=450.250s 原因=')"}
+{"episode": 21, "sim_time": 482.57000000000005, "error": "PlanningTimeout('随机起点在复位后持续被判为碰撞: 有效=True 碰撞=True 观测=482.540s 复位=481.450s 原因=')"}
+{"episode": 25, "sim_time": 611.24, "error": "RuntimeError('planner timeout: cancellation not acknowledged')"}
+{"episode": 25, "sim_time": 658.23, "error": "RuntimeError('planner timeout: cancellation not acknowledged')"}
+{"episode": 25, "sim_time": 712.2800000000001, "error": "RuntimeError('planner timeout: cancellation not acknowledged')"}
+{"episode": 25, "sim_time": 1062.22, "error": "RuntimeError('planner timeout: cancellation not acknowledged')"}
+{"episode": 25, "sim_time": 62.11000000000001, "error": "RuntimeError('estimator reset: FAST-LIO 未在 30 秒内输出新里程计')"}
+{"episode": 25, "stop_error": "RCLError(\"failed to check service availability: rcl node's context is invalid, at ./src/rcl/node.c:428\")"}
+{"episode": 28, "sim_time": 568.5600000000001, "error": "TimeoutError(\"底盘未能在复位前停稳: {'clock_at_entry': 556.5500000000001, 'stop_request_stamp': 556.5600000000001, 'clock_wait_wall': 0.007150847000048088, 'stop_acknowledged': True, 'result': 'gazebo_body_in_motion', 'sim_stamp': 568.56, 'sim_wait': 11.999999999999886, 'wall_wait': 20.437333765999938, 'applied': [0.0, 0.0], 'applied_stamp': 568.54, 'gazebo_linear': [-0.05110356947121768, -0.012720915841279032, -0.007136242842292538], 'gazebo_angular': [-0.0014937622165491927, -0.0010107195898417748, 0.00618571174911554], 'timeout_limit': 'sim_time'}\")"}
+{"episode": 29, "sim_time": 63.940000000000005, "error": "TimeoutError(\"底盘未能在复位前停稳: {'clock_at_entry': 51.93, 'stop_request_stamp': 51.940000000000005, 'clock_wait_wall': 0.009535457000310998, 'stop_acknowledged': True, 'result': 'waiting_for_sim_time', 'sim_stamp': 63.94, 'sim_wait': 11.999999999999993, 'wall_wait': 21.54361608199997, 'applied': [-3.1035287187397564e-18, 0.0], 'applied_stamp': 63.92, 'gazebo_linear': [-0.056970602489729794, -0.004512715361552466, -0.0075292606952074926], 'gazebo_angular': [-0.0008556702212867334, -0.00046434772600004165, 0.004236825749649666], 'timeout_limit': 'sim_time'}\")"}
+{"episode": 30, "stop_error": "RCLError(\"failed to check service availability: rcl node's context is invalid, at ./src/rcl/node.c:428\")"}
