@@ -1,0 +1,8 @@
+{
+  "reason": "runtime_error",
+  "episode": 25,
+  "partial_episode": true,
+  "training_step": 3330,
+  "weights": "/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_drl/records/sac-hp-training_rough_v2-bc11558c31da/weights/sac-hp-training_rough_v2-bc11558c31da-step-000000003330-episode-000025-runtime_error-1c91b273-weights.pt",
+  "checkpoint": "/data/projects/ros2_ws/MultiMapNav_Simulation/src/clearing_robot_drl/records/sac-hp-training_rough_v2-bc11558c31da/checkpoints/sac-hp-training_rough_v2-bc11558c31da-step-000000003330-episode-000025-runtime_error-1c91b273-checkpoint.pt"
+}
