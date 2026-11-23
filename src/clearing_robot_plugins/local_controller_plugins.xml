@@ -1,0 +1,8 @@
+<library path="clearing_local_control">
+  <class name="clearing_robot::MppiController" type="clearing_robot::MppiController" base_class_type="multimap_nav_core::LocalControllerBase">
+    <description>清舱机器人滚动路径规划与 MPPI 控制。</description>
+  </class>
+  <class name="clearing_robot::DrlController" type="clearing_robot::DrlController" base_class_type="multimap_nav_core::LocalControllerBase">
+    <description>共享 MPPI 先验的 SAC-HP ONNX 局部控制。</description>
+  </class>
+</library>
