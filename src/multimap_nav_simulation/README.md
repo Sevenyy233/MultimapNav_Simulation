@@ -2,30 +2,7 @@
 
 # 多场景导航仿真地图
 
-新增基础几何体大型清障机器人：
-`ros2 launch multimap_nav_simulation clearing_robot_primitives.launch.py`。
-默认加载 `worlds/clearing_robot/clearing_enclosed.world`（内部 50 × 50 × 20 m 封闭场景），
-机械臂启动时收起并保持，履带与七轴机械臂均接入 ros2_control；五个定向 Avia 与 IMU 默认接入 FAST-LIO2。该入口不加载 Gazebo 真值里程计插件，`/odom` 和定位 TF 由 FAST-LIO2 接入桥提供。雷达射线在 Gazebo 中隐藏，五路三维点云仍正常发布。
-模型、参数及接口详见 [基础几何体清障机器人](docs/clearing_robot_primitives.md)。
-
-大型清障机器人完整导航使用本工作区的统一入口，它同时启动仿真、FAST-LIO2和原 MultiMapNav 服务器：
-
-```bash
-ros2 launch clearing_robot_plugins navigation.launch.py forced_mode:=auto
-```
-
-仿真和FAST-LIO2在线建图使用：
-
-```bash
-ros2 launch clearing_robot_plugins mapping.launch.py map_name:=clearing_enclosed
-# 另一场景示例，出生位置按大型车体设置
-ros2 launch clearing_robot_plugins mapping.launch.py map_name:=flat_3 spawn_x:=-6.0 spawn_y:=-7.0
-```
-
-建图时用 `/map_save` (`std_srvs/srv/Trigger`) 保存PCD；输出位置与控制命令见[清障导航及建图说明](../clearing_robot_plugins/docs/README.md)。
-
-默认场景自动选择 OctoMap；`forced_mode` 可设为 `costmap2d`、`gridmap`、`octomap` 强制选择。
-清障机器人的三模式配置和插件位于 `clearing_robot_plugins`，详见[清障导航说明](../clearing_robot_plugins/docs/README.md)和[地图模式验证](../clearing_robot_plugins/docs/map_modes_validation.md)。
+清舱机器人的模型、场景和启动入口已迁入 clearing_robot_simulation 包。导航命令见 [清舱导航](../clearing_robot_plugins/README.md)。
 
 ROS 2 Humble + Gazebo Classic，当前共 **17 张**：flat 5 张、terrain 5 张、floor 7 张。
 场景版本：`compact_mixed_floors_dynamic_20261008_v3`。长度单位为米，world、STL 与 PCD 坐标一致。
@@ -66,11 +43,8 @@ flat_3 与 floor_3 速度范围 0.25–0.95 m/s，terrain_3 为 0.25–0.80 m/s�
 | --- | --- | --- | --- |
 | 小型轮式差速 | `robot/robot.xacro` | `robot.launch.py` | `config/robot.yaml` |
 | 小型履带 | `robot/tracked_robot.xacro` | `tracked_robot.launch.py` | `config/tracked_robot.yaml` |
-| STL 清障机器人 | `robot/clearing_robot.xacro` | `clearing_robot.launch.py` | `config/clearing_robot.yaml` |
-| 基础几何体清障机器人 | `robot/clearing_robot_primitives.xacro` | `clearing_robot_primitives.launch.py` | `config/clearing_robot_primitives.yaml` |
 
-每份 YAML 包含对应机器人的控制器与节点参数。基础几何体机器人的驱动、机械臂初始位置、
-行驶包络同在其 YAML 内。仿真配置只保存控制器及仿真节点参数；履带导航适配参数位于导航工程的 `bring_up/config/tracked_robot_nav_params.yaml`。
+每份 YAML 包含对应机器人的控制器与节点参数。仿真配置只保存控制器及仿真节点参数；履带导航适配参数位于导航工程的 `bring_up/config/tracked_robot_nav_params.yaml`。
 地图和出生位姿数据位于 `worlds/catalog.json`，场景设计记录位于 `worlds/scene_design.json`。
 共享的零件、传感器宏、运行脚本及地图生成/验证工具保留在各自目录中。
 
@@ -126,43 +100,13 @@ world_to_mesh.py 导出静态几何时会排除运动插件控制的实体。
 
 ```bash
 python3 src/multimap_nav_simulation/scripts/validate_map_suite.py
-# 同时检查四个模型/启动入口/YAML 的对应关系及清障模型：
-python3 src/multimap_nav_simulation/test/test_clearing_robot_primitives.py
+# 同时检查两个模型/启动入口/YAML 的对应关系：
 python3 src/multimap_nav_simulation/test/test_robot_layout.py
 ```
 
 检查静态 world/网格几何覆盖、PCD 数据和校验和、初始化位姿地面支撑、动态路径及颜色。
 两张新图通过上下楼的离线碰撞连通性检查；这是几何可行性，实际导航和动态避障需实测。
 旧实验记录对应原场景版本，不自动计入新场景验收。
-
-## 清障机器人
-
-```bash
-ros2 launch multimap_nav_simulation clearing_robot.launch.py world_file_name:=flat_4
-```
-
-机器人模型入口为 `robot/clearing_robot.xacro`，STL 位于 `meshes/clearing_robot/`。
-该机器人宽约 3.3 m、底盘长约 5 m，零位机械臂向前伸出约 7.8 m。
-原 `flat_1`、`floor_1` 及部分窄通道是小型履带/差速机器人的实验场景；
-清障机器人测试优先使用空间足够的 `flat_4` 或地形地图。
-
-`stiff_ground:=true` 默认提高临时 world 副本的接触刚度，适应约 29 吨的机器人。
-`arm_controller` 在启动时保持七个机械臂关节的 URDF 零位，
-向 `/arm_controller/follow_joint_trajectory` 发送目标可活动机械臂。
-关节布局和视觉网格保留原模型；底盘、机械臂采用简化碰撞体，适用于导航仿真。
-
-| 接口 | 用途 |
-| --- | --- |
-| `/cmd_vel` | 底盘速度指令 |
-| `/odom` | Gazebo 三维真值里程计 |
-| `/odom_diff_drive` | 差速轮式里程计 |
-| `/joint_states` | 车轮和机械臂关节 |
-| `/points_raw` | 导航用 3D 点云，`lidar_link` |
-| `/livox/imu_raw` | IMU，`imu_link` |
-
-默认发布 `odom -> base_link` 真值 TF；定位系统也发布同一 TF 时，
-可设置 `publish_odom_tf:=false`。
-
 
 ## tracked_robot：主分支传感器估计链路
 
